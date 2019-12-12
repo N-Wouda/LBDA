@@ -16,6 +16,7 @@ set(SOURCES
 		ald_affine.dep
 		ald_cut.cpp
 		ald_solve.cpp
+		benders.cpp
 		compute_gomory.cpp
 		computeTx.cpp
 		copy_ctor.cpp

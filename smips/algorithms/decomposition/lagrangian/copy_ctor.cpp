@@ -9,7 +9,7 @@ Lagrangian::Lagrangian(const Lagrangian &other) :
 {
     GRBVar *vars = d_model.getVars();  // heap allocated
 
-    d_z_vars = new GRBVar[d_n1];  // heap allocated (deallocated in dtor)
+    d_z_vars = new GRBVar[d_n1];        // heap allocated (deallocated in dtor)
     std::copy_n(vars, d_n1, d_z_vars);  // we only need the first d_n1
 
     delete[] vars;

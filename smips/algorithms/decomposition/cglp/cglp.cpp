@@ -33,7 +33,7 @@ Cglp::Cglp(GRBEnv &env, Master &master) :
     for (size_t term = 0; term != nTerms; ++term)
     {
         GRBVar *lambda = d_model.addVars(nCuts);  // multipliers
-            
+
         // constraint corresponding to pi_theta
         GRBLinExpr lambda_sum;
         lambda_sum.addTerms(ones, lambda, nCuts);

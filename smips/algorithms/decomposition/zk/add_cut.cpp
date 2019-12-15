@@ -11,7 +11,7 @@ void ZK::add_cut(double *coef_x,
 {
     // updating cut coefficients
     d_omega.push_back(coef_rhs);
-    d_Tmat.push_back(vector<double>{coef_x, coef_x + d_n1});
+    d_Tmat.push_back(std::vector<double>{coef_x, coef_x + d_n1});
     d_tau.push_back(coef_theta);
 
     // adding cut
@@ -21,7 +21,7 @@ void ZK::add_cut(double *coef_x,
         rhs -= coef_x[var] * x[var];
 
     int cind[d_nVars];  // variable indices
-    iota(cind, cind + d_nVars, 0);
+    std::iota(cind, cind + d_nVars, 0);
     GRBaddconstr(d_model, d_nVars, cind, coef_y, GRB_EQUAL, rhs, NULL);
 
     // adding slack

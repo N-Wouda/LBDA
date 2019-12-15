@@ -4,16 +4,9 @@
 #include "smips/algorithms/decomposition/benders.h"
 #include "smips/algorithms/deqform/deqform.h"
 #include "smips/problem_data/data.h"
-#include "smips/problem_data/problem.h"
 
-#include <chrono>
-#include <iostream>
-#include <string>
-#include <vector>
 
-using namespace std;
-
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
     Data rand(31415);
 
@@ -36,31 +29,26 @@ int main(int argc, char *argv[])
         DEF.solve(900.0);
         x = DEF.d_xVals;
         for (size_t var = 0; var != n1; ++var)
-            cout << x[var] << ' ';
-        cout << '\n';
-        cout << "cx + Q(x) = " << problem.evaluate(x) << '\n';
+            std::cout << x[var] << ' ';
+        std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
 
         Benders lshaped(env, c_env, problem);
         lshaped.lpSolve();
         x = lshaped.d_xvals;
         for (size_t var = 0; var != n1; ++var)
-            cout << x[var] << ' ';
-        cout << '\n';
-        double cxlpQxlp = problem.evaluate(x);
-        cout << "cx + Q(x) = " << cxlpQxlp << '\n';
+            std::cout << x[var] << ' ';
+        std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
 
         size_t m2 = problem.d_m2;
         double alpha[m2];
-        fill_n(alpha, m2, 0);
+        std::fill_n(alpha, m2, 0);
 
         Benders lbda = lshaped;
         lbda.lbda(alpha, 1.0);
         x = lbda.d_xvals;
         for (size_t var = 0; var != n1; ++var)
-            cout << x[var] << ' ';
-        cout << '\n';
-        double g_x_zero = problem.evaluate(x);
-        cout << "cx + Q(x) = " << g_x_zero << '\n';
+            std::cout << x[var] << ' ';
+        std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
     }
 
     GRBfreeenv(c_env);

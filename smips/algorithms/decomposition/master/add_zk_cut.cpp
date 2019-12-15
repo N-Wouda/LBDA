@@ -11,9 +11,9 @@ bool Master::add_zk_cut(double *beta,
     for (size_t var = 0; var != d_n1; ++var)
         betaxgamma += beta[var] * x[var];
 
-    cout << "kappa = " << kappa << '\n';
-    cout << "old theta = " << theta
-         << ". new theta = " << betaxgamma - (kappa - 1) * theta << ".\n";
+    std::cout << "kappa = " << kappa << '\n';
+    std::cout << "old theta = " << theta
+              << ". new theta = " << betaxgamma - (kappa - 1) * theta << ".\n";
 
     if (betaxgamma > kappa * theta + tol)  // then add cut and return false
     {
@@ -33,7 +33,7 @@ bool Master::add_zk_cut(double *beta,
         size_t numVars = d_n1 + 2;  // theta, x-vars, and slack
 
         int cind[numVars];
-        iota(cind, cind + d_n1 + 1, 0);
+        std::iota(cind, cind + d_n1 + 1, 0);
         cind[d_n1 + 1] = d_n1 + d_nSlacks;
 
         double cval[numVars];
@@ -46,7 +46,7 @@ bool Master::add_zk_cut(double *beta,
 
         // update slack identities
         d_kappa.push_back(kappa);
-        d_beta.push_back(vector<double>{beta, beta + d_n1});
+        d_beta.push_back(std::vector<double>{beta, beta + d_n1});
         d_gamma.push_back(gamma);
 
         return false;

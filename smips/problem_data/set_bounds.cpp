@@ -1,9 +1,9 @@
 #include "problem.h"
 
-void Problem::set_bounds(vector<double> &l1,
-                         vector<double> &u1,
-                         vector<double> &l2,
-                         vector<double> &u2)
+void Problem::set_bounds(std::vector<double> &l1,
+                         std::vector<double> &u1,
+                         std::vector<double> &l2,
+                         std::vector<double> &u2)
 {
     d_l1 = l1;
     d_u1 = u1;

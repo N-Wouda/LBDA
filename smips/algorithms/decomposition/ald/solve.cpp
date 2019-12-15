@@ -1,35 +1,34 @@
 #include "ald.h"
 
-Ald::AldCut Ald::solve(double *xbar, vector<double> omega, size_t maxRounds)
+Ald::AldCut Ald::solve(double *xbar, std::vector<double> omega, size_t maxRounds)
 {
     size_t nVars = d_n2;
     size_t nConstrs = d_m2;
     double yvals[d_p2];
 
-    vector<vector<double>> Tmat = d_Tmat;  // cuts have to be appended
-    vector<double> tau(nConstrs, 0);
+    std::vector<std::vector<double>> Tmat = d_Tmat;  // cuts have to be appended
+    std::vector<double> tau(nConstrs, 0);
 
     bool stop = false;
-
     size_t round = 0;
+
     while (not stop)
     {
         ++round;
         stop = true;
         GRBoptimize(d_model);  // solve the model
 
-
         if (round >= maxRounds)
             break;
 
         int bhead[nConstrs];
+
         GRBgetBasisHead(d_model, bhead);  // extract basis info
         GRBgetdblattrarray(d_model,
                            GRB_DBL_ATTR_X,
                            0,
                            d_p2,
                            yvals);  // extract values of integer variables
-
 
         size_t nCuts = 0;
         // adding a round of cuts
@@ -50,7 +49,6 @@ Ald::AldCut Ald::solve(double *xbar, vector<double> omega, size_t maxRounds)
         double tab_val[nVars + nConstrs];
         tableau.val = tab_val;
 
-
         for (size_t row = 0; row != nConstrs;
              ++row)  // loop over rows of simplex tableau
         {
@@ -68,6 +66,7 @@ Ald::AldCut Ald::solve(double *xbar, vector<double> omega, size_t maxRounds)
             double coef_y[nVars];
             double coef_eta;
             double coef_rhs;  // cut coefficients
+
             gmi_cut(row,
                     yval,
                     xbar,
@@ -82,7 +81,6 @@ Ald::AldCut Ald::solve(double *xbar, vector<double> omega, size_t maxRounds)
                     coef_y,
                     coef_rhs,
                     coef_eta);  // compute cut coefficients
-
 
             add_cut(nVars,
                     nCuts,
@@ -105,8 +103,10 @@ Ald::AldCut Ald::solve(double *xbar, vector<double> omega, size_t maxRounds)
 
     double cons = 0.0;
     double coef_eta = 0.0;
-    vector<double> coef_x(d_n1);
-    fill_n(coef_x.begin(), d_n1, 0.0);
+
+    std::vector<double> coef_x(d_n1);
+    std::fill_n(coef_x.begin(), d_n1, 0.0);
+
     for (size_t con = 0; con != nConstrs; ++con)
     {
         double pi = lambda[con];
@@ -115,6 +115,7 @@ Ald::AldCut Ald::solve(double *xbar, vector<double> omega, size_t maxRounds)
         for (size_t var = 0; var != d_n1; ++var)
             coef_x[var] -= pi * Tmat[con][var];
     }
+
     clean();  // remove cuts and corresponding slacks
 
     return AldCut{cons, coef_eta, coef_x};

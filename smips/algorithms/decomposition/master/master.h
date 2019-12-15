@@ -8,7 +8,6 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
 
 class Master
 {
@@ -19,12 +18,13 @@ public:
     GRBmodel *d_cmodel;
 
     // internal storage: only valid for regular l-shaped and lbda cuts
-    vector<vector<double>> d_xcoefs;
-    vector<double> d_cons;
+    std::vector<std::vector<double>> d_xcoefs;
+    std::vector<double> d_cons;
+
     // slack variable identities s = kappa * theta - beta * x - gamma
-    vector<double> d_kappa;
-    vector<vector<double>> d_beta;
-    vector<double> d_gamma;
+    std::vector<double> d_kappa;
+    std::vector<std::vector<double>> d_beta;
+    std::vector<double> d_gamma;
 
     size_t d_n1;
     size_t d_nSlacks;
@@ -58,7 +58,6 @@ public:
 
     struct Solution
     {
-    public:
         double *xVals;
         double thetaVal;
     };

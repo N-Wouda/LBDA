@@ -5,7 +5,6 @@ set(HEADERS
 
 set(SOURCES
 		copy_ctor.cpp
-		destructor.cpp
 		l_shaped.cpp
 		pslp.cpp
 		strong_zk_cut.cpp

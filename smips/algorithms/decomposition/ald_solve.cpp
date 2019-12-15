@@ -7,7 +7,8 @@ void Benders::ald_solve(double tol, size_t maxRounds)
 
     while (not stop)
     {
-        cout << "iteration: " << iter << '\n';
+        std::cout << "iteration: " << iter << '\n';
+
         ++iter;
         // solve master problem, and collect x and theta
         Master::Solution sol = d_master.solve();
@@ -17,32 +18,33 @@ void Benders::ald_solve(double tol, size_t maxRounds)
 
         double *x = sol.xVals;
         for (size_t var = 0; var != d_n1; ++var)
-            cout << x[var] << ' ';
-        cout << '\n';
+            std::cout << x[var] << ' ';
+        std::cout << '\n';
 
         double theta = sol.thetaVal;
         // derive ald cut
         double beta[d_n1], tau, gamma;
         ald_cut(x, beta, tau, gamma, maxRounds);
-        cout << "beta:";
+        std::cout << "beta:";
         for (size_t var = 0; var != d_n1; ++var)
-            cout << ' ' << beta[var];
-        cout << ", tau: " << tau << ", gamma: " << gamma << '\n';
+            std::cout << ' ' << beta[var];
+        std::cout << ", tau: " << tau << ", gamma: " << gamma << '\n';
 
 
         // add ald cut
         stop = d_master.add_ald_cut(beta, gamma, tau, x, theta, tol);
 
-        vector<double> c = d_problem.d_c;
+        std::vector<double> c = d_problem.d_c;
         double cx = 0;
         for (size_t var = 0; var != d_n1; ++var)
             cx += c[var] * x[var];
-        cout << "true Q(x) = " << d_problem.evaluate(x) - cx << "\n\n";
+        std::cout << "true Q(x) = " << d_problem.evaluate(x) - cx << "\n\n";
 
         if (stop)
-            copy(x, x + d_n1, d_xvals);
+            std::copy(x, x + d_n1, d_xvals);
+
         delete[] x;
     }
 
-    cout << "Number of ald cuts: " << iter << '\n';
+    std::cout << "Number of ald cuts: " << iter << '\n';
 }

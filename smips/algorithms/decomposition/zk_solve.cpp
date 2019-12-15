@@ -9,19 +9,18 @@ void Benders::zk_solve(bool strong, double tau_bar, double tol, size_t maxRounds
 
     while (not stop)
     {
-        cout << '\n';
-        cout << "zk iteration: " << iter << '\n';
+        std::cout << "\nzk iteration: " << iter << '\n';
         ++iter;
+
         // solve master problem, and collect x and theta
         Master::Solution sol = d_master.solve();
 
-
         double *x = sol.xVals;
 
-        cout << "current solution: ";
+        std::cout << "current solution: ";
         for (size_t var = 0; var != d_n1; ++var)
-            cout << x[var] << ' ';
-        cout << '\n';
+            std::cout << x[var] << ' ';
+        std::cout << '\n';
 
         double cx = 0;
         for (size_t var = 0; var != d_n1; ++var)
@@ -49,21 +48,13 @@ void Benders::zk_solve(bool strong, double tau_bar, double tol, size_t maxRounds
 
         stop = d_master.add_zk_cut(beta, gamma, kappa, x, theta, tol);
 
-        cout << "Q(x) = " << Q << '\n';
+        std::cout << "Q(x) = " << Q << '\n';
 
         if (stop)
-            copy(x, x + d_n1, d_xvals);
+            std::copy(x, x + d_n1, d_xvals);
+
         delete[] x;
-
-        /*
-        double cx = 0;
-        for (size_t var = 0; var != d_n1; ++var)
-          cx += d_problem.d_c[var] * x[var];
-
-        double Qx = d_problem.evaluate(x) - cx;
-        cout << "actual Q(x) = " << Qx << '\n';
-        */
     }
 
-    cout << "Number of zk cuts: " << iter << '\n';
+    std::cout << "Number of zk cuts: " << iter << '\n';
 }

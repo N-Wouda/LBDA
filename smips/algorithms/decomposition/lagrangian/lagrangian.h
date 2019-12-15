@@ -4,7 +4,6 @@
 #include "../../../problem_data/problem.h"
 #include "gurobi_c++.h"
 
-using namespace std;
 
 class Lagrangian
 {

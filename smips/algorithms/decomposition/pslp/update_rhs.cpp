@@ -10,6 +10,7 @@ void Pslp::update_rhs(double *x, double theta)
     for (size_t cut = 0; cut != d_nCuts; ++cut)
     {
         rhs[cut] = d_gamma[cut] - d_nu[cut] * theta;
+
         for (size_t var = 0; var != d_n1; ++var)
             rhs[cut] += d_kappa[cut][var] * x[var];
     }

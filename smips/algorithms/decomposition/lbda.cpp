@@ -4,7 +4,7 @@ void Benders::lbda(double *alpha, double gomoryTimeLimit, double tol)
 {
     d_gomory.setTimeLimit(gomoryTimeLimit);
 
-    auto t1 = chrono::high_resolution_clock::now();
+    auto t1 = std::chrono::high_resolution_clock::now();
 
     bool stop = false;
     size_t iter = 0;
@@ -31,13 +31,14 @@ void Benders::lbda(double *alpha, double gomoryTimeLimit, double tol)
             tol);  // if no cut was added, then while loop is exited
 
         if (stop)
-            copy(x, x + d_n1, d_xvals);
+            std::copy(x, x + d_n1, d_xvals);
         delete[] x;
     }
 
-    auto t2 = chrono::high_resolution_clock::now();
+    auto t2 = std::chrono::high_resolution_clock::now();
 
-    d_runTime += chrono::duration_cast<chrono::milliseconds>(t2 - t1).count()
+    d_runTime += std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)
+                     .count()
                  / 1000.0;
     d_nCuts += iter - 1;
 

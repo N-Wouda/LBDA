@@ -2,9 +2,9 @@
 
 void Benders::sb_cut(double *x, double *beta, double &gamma)
 {
-    vector<vector<double>> &omega = d_problem.d_omega;
-    vector<vector<double>> &Tmat = d_problem.d_Tmat;
-    vector<double> &probs = d_problem.d_probs;
+    auto &omega = d_problem.d_omega;
+    auto &Tmat = d_problem.d_Tmat;
+    auto &probs = d_problem.d_probs;
 
     double Tx[d_m2];
     computeTx(x, Tx);
@@ -17,7 +17,8 @@ void Benders::sb_cut(double *x, double *beta, double &gamma)
         double *ws = omega[s].data();  // scenario (c-style array pointer)
         double prob = probs[s];
 
-        double rhs[d_m2];                         // rhs vector (c-style array)
+        double rhs[d_m2];  // rhs vector (c-style array)
+
         for (size_t row = 0; row != d_m2; ++row)  // compute element-by-element
             rhs[row] = ws[row] - Tx[row];
 
@@ -34,18 +35,17 @@ void Benders::sb_cut(double *x, double *beta, double &gamma)
                 pi[var] += lambda[row] * Tmat[row][var];
             beta[var] += -prob * pi[var];
         }
+
         d_lr.update(ws, pi);
         double Lpiw = d_lr.solve();
         gamma += prob * Lpiw;
 
-
         for (size_t row = 0; row != d_m2; ++row)
             lw += prob * lambda[row] * ws[row];
-
 
         delete[] lambda;
         delete[] pi_u;
     }
 
-    cout << "lw =  " << lw << ". L(pi, w) = " << gamma << '\n';
+    std::cout << "lw =  " << lw << ". L(pi, w) = " << gamma << '\n';
 }

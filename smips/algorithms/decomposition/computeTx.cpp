@@ -2,7 +2,7 @@
 
 void Benders::computeTx(double *x, double *Tx)
 {
-    vector<vector<double>> &Tmat = d_problem.d_Tmat;
+    std::vector<std::vector<double>> &Tmat = d_problem.d_Tmat;
 
     for (size_t zvar = 0; zvar != d_m2; ++zvar)
     {

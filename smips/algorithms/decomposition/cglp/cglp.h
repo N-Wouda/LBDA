@@ -14,28 +14,28 @@ class Cglp
      */
 
 public:
+    size_t d_n1;
+
     GRBModel d_model;
 
     GRBVar d_lambda;  // corresponds to the last row
-
-    size_t d_n1;
-
     GRBVar d_pi_theta;
     GRBVar *d_pi_x;
     GRBVar d_pi_0;
 
-    vector<GRBConstr> d_constrs_theta;
-    vector<GRBConstr *> d_constrs_x;
-    vector<GRBConstr> d_constrs_cons;
+    std::vector<GRBConstr> d_constrs_theta;
+    std::vector<GRBConstr *> d_constrs_x;
+    std::vector<GRBConstr> d_constrs_cons;
 
     Cglp(GRBEnv &env, Master &master);
     ~Cglp();
 
     void add_disjunction(
         double *x, double theta, double *beta, double tau, double gamma);
-    void chg_row(
-        double *x_coefs,
-        double cons);  // changes the last row of the constraint matrix of d_model
+
+    // changes the last row of the constraint matrix of d_model
+    void chg_row(double *x_coefs, double cons);
+
     void solve(double &pi_theta, double *pi_x, double &pi_0);
 };
 

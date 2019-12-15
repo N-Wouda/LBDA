@@ -10,9 +10,10 @@ void Pslp::zk_cut(double *x,
 {
     kappa = 1;
     gamma = 0;
-    fill_n(beta, d_n1, 0);
 
+    std::fill_n(beta, d_n1, 0);
 
+    // TODO: range based for loop?
     for (size_t scenario = 0; scenario != d_S; ++scenario)
     {
         d_zk[scenario].update(x, theta);
@@ -23,6 +24,7 @@ void Pslp::zk_cut(double *x,
                              master.d_beta,
                              master.d_gamma,
                              maxRounds);
+
         d_zk[scenario].subgradient(gamma, beta, kappa, d_probs[scenario]);
     }
 }

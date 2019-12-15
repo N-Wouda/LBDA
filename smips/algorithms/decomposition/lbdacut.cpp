@@ -2,9 +2,9 @@
 
 double Benders::lbdaCut(double *x, double *beta, double *alpha)
 {
-    vector<vector<double>> &omega = d_problem.d_omega;
-    vector<vector<double>> &Tmat = d_problem.d_Tmat;
-    vector<double> &probs = d_problem.d_probs;
+    auto &omega = d_problem.d_omega;
+    auto &Tmat = d_problem.d_Tmat;
+    auto &probs = d_problem.d_probs;
 
 
     double Tx[d_m2];
@@ -13,7 +13,7 @@ double Benders::lbdaCut(double *x, double *beta, double *alpha)
     // cut coefficients: initialize to zero
     double gamma = 0.0;
     double dual[d_m2];
-    fill(dual, dual + d_m2, 0.0);
+    std::fill(dual, dual + d_m2, 0.0);
 
 
     for (size_t s = 0; s != d_S; ++s)
@@ -28,10 +28,13 @@ double Benders::lbdaCut(double *x, double *beta, double *alpha)
         Sub::GomInfo info = d_sub.solve2();  // solve subproblem
 
         double *lambda = info.lambda;  // extract lambda (for optimality cut)
-        int *vBasis
-            = info.vBasis;  // extract vBasis (to update gomory relaxation)
-        int *cBasis
-            = info.cBasis;  // extract vBasis (to update gomory relaxation)
+
+        // extract vBasis (to update gomory relaxation)
+        int *vBasis = info.vBasis;
+
+        // extract vBasis (to update gomory relaxation)
+        int *cBasis = info.cBasis;
+
         double gom_obj = compute_gomory(s, vBasis, cBasis, ws, alpha);
 
         double prob = probs[s];

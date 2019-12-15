@@ -11,27 +11,19 @@ void Benders::ald_affine(double tol, size_t maxRounds)
   while (not stop)
   {
     ++count;
+
     Master::Solution sol = d_master.solve();
     double *x = sol.xVals;    
-    cout << "x: " << *x << '\n';
+    std::cout << "x: " << *x << '\n';
     double theta = sol.thetaVal;        
       // derive ald cut
     double beta[d_n1], tau, gamma;      // ALD cut coefficients
     ald_cut(x, beta, tau, gamma, maxRounds);
     
-    cout << "START\n";
-    cout << "beta: " << *beta << '\n';
-    cout << "gamma: " << gamma << '\n';
-    cout << "tau: " << tau << '\n'; 
-      
-      
-    /*
-    if (tau == 0)      // up to a tolerance?
-    {
-      d_master.addCut(beta, gamma, x, theta, tol);
-      continue;    
-    }
-    */ // not correct: cglp is not updated
+    std::cout << "START\n";
+    std::cout << "beta: " << *beta << '\n';
+    std::cout << "gamma: " << gamma << '\n';
+    std::cout << "tau: " << tau << '\n';
 
     cglp.add_disjunction(x, theta, beta, tau, gamma);
     
@@ -45,8 +37,8 @@ void Benders::ald_affine(double tol, size_t maxRounds)
       x_coefs[var] = -pi_x[var] / pi_theta;
     double cons = pi_0 / pi_theta;     
     
-    cout << "beta: " << x_coefs[0] << '\n';
-    cout << "cons: " << cons << '\n';
+    std::cout << "beta: " << x_coefs[0] << '\n';
+    std::cout << "cons: " << cons << '\n';
     
     d_master.addCut(x_coefs, cons, x, theta, tol);
       
@@ -55,9 +47,8 @@ void Benders::ald_affine(double tol, size_t maxRounds)
     stop = (count == 10);
     
     if (stop)
-      copy(x, x + d_n1, d_xvals);
-    delete[] x;   
-    
-  }
+      std::copy(x, x + d_n1, d_xvals);
 
+    delete[] x;
+  }
 }

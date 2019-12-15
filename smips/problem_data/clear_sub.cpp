@@ -5,7 +5,6 @@ void Problem::clear_sub()
     if (not d_sub_initialized)  // if not already initialized
         return;                 // then do nothing
 
-
     // else, clear variables and cosnstraints
     GRBConstr *constrs = d_sub.getConstrs();
     GRBVar *vars = d_sub.getVars();
@@ -23,7 +22,8 @@ void Problem::clear_sub()
     delete[] vars;
 
     delete[] d_constrs;  // heap allocated, but d_sub is cleared
-    d_sub_initialized
-        = false;  // this ensures that: (1) init_sub() is called if evaluate()
-                  // is called, and destructor does not call delete[] d_constrs
+
+    // this ensures that: (1) init_sub() is called if evaluate()
+    // is called, and destructor does not call delete[] d_constrs
+    d_sub_initialized = false;
 }

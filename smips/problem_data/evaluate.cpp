@@ -36,6 +36,5 @@ double Problem::evaluate(double *x)
     }
     // d_sub.write("sub.lp");
 
-
     return cx + Q;
 }

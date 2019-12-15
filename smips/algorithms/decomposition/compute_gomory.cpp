@@ -3,11 +3,11 @@
 double Benders::compute_gomory(
     size_t s, int *vBasis, int *cBasis, double *ws, double *alpha)
 {
-    vector<double> basis(d_n2 + d_m2);
+    std::vector<double> basis(d_n2 + d_m2);
     copy(vBasis, vBasis + d_n2, basis.begin());
     copy(cBasis, cBasis + d_m2, basis.begin() + d_n2);
 
-    vector<vector<double>> &visited_bases = d_visited[s];
+    std::vector<std::vector<double>> &visited_bases = d_visited[s];
 
     auto end = visited_bases.end();
     auto begin = visited_bases.begin();

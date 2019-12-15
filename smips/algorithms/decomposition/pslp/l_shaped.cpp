@@ -15,7 +15,7 @@ void Pslp::l_shaped(Master &master, size_t maxRounds, double tol)
         double nu = 0;
         double gamma = 0;
         double kappa[d_n1];
-        fill_n(kappa, d_n1, 0);
+        std::fill_n(kappa, d_n1, 0);
 
         for (size_t scenario = 0; scenario != d_S; ++scenario)
         {
@@ -36,7 +36,6 @@ void Pslp::l_shaped(Master &master, size_t maxRounds, double tol)
                             d_probs[scenario]);  // compute subgradient inequality
         }
 
-
         double rhs = gamma - nu * d_theta;
 
         for (size_t var = 0; var != d_n1; ++var)
@@ -53,7 +52,7 @@ void Pslp::l_shaped(Master &master, size_t maxRounds, double tol)
 
             // add the cut, and append it to internal storage
             d_gamma.push_back(gamma);
-            d_kappa.push_back(vector<double>{kappa, kappa + d_n1});
+            d_kappa.push_back(std::vector<double>{kappa, kappa + d_n1});
             d_nu.push_back(nu);
         }
     }

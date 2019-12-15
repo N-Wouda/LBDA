@@ -19,23 +19,23 @@ void Problem::ssv95(size_t S,
     d_ss_geq = 0;
     d_S = S * S;
 
-    vector<double> l1(d_n1, 0.0);
-    vector<double> l2(d_n2, 0.0);
-    vector<double> u1(d_n1, 5.0);
+    std::vector<double> l1(d_n1, 0.0);
+    std::vector<double> l2(d_n2, 0.0);
+    std::vector<double> u1(d_n1, 5.0);
     double ub = ss_binary ? 1.0 : 1e20;
-    vector<double> u2(d_n2, ub);
+    std::vector<double> u2(d_n2, ub);
 
-    vector<double> fs_costs = {-1.5, -4};
-    vector<double> ss_costs = {-16, -19, -23, -28};
-    vector<vector<double>> T_standard = {{1, 0}, {0, 1}};
-    vector<vector<double>> T_alternative = {{2.0 / 3, 1.0 / 3},
-                                            {1.0 / 3, 2.0 / 3}};
-    vector<vector<double>> Wmat = {{2, 3, 4, 5}, {6, 1, 3, 2}};
+    std::vector<double> fs_costs = {-1.5, -4};
+    std::vector<double> ss_costs = {-16, -19, -23, -28};
+    std::vector<std::vector<double>> T_standard = {{1, 0}, {0, 1}};
+    std::vector<std::vector<double>> T_alternative = {{2.0 / 3, 1.0 / 3},
+                                                      {1.0 / 3, 2.0 / 3}};
+    std::vector<std::vector<double>> Wmat = {{2, 3, 4, 5}, {6, 1, 3, 2}};
 
-    vector<vector<double>> omega(d_S);
+    std::vector<std::vector<double>> omega(d_S);
 
     double jump = 10.0 / (S - 1);
-    vector<double> omega_vals(S);
+    std::vector<double> omega_vals(S);
     for (size_t s = 0; s != S; ++s)
         omega_vals[s] = 5 + s * jump;
 
@@ -49,7 +49,7 @@ void Problem::ssv95(size_t S,
         }
     }
 
-    vector<double> probs(d_S, 1.0 / d_S);
+    std::vector<double> probs(d_S, 1.0 / d_S);
 
     d_L = -320;
 

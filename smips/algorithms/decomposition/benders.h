@@ -13,7 +13,6 @@
 #include <chrono>
 #include <memory>
 
-using namespace std;
 
 class Benders
 {
@@ -31,25 +30,23 @@ public:
     size_t d_nCuts;
     double d_runTime;
 
+    // for each scenario, we store the basis matrices that we
+    // have visited (encoded by vBasis, cBasis)
+    std::vector<std::vector<std::vector<double>>> d_visited;
 
-    vector<vector<vector<double>>>
-        d_visited;  // for each scenario, we store the basis matrices that we
-                    // have visited (encoded by vBasis, cBasis)
-    vector<vector<double>>
-        d_objectives;  // for each visited basis matrix, we store the
-                       // corresponding gomory objective value
+    // for each visited basis matrix, we store the
+    // corresponding gomory objective value
+    std::vector<std::vector<double>> d_objectives;
 
     double *d_xvals;
 
-    void computeTx(double *x, double *Tx);  // computes Tx (rba)
-
-    Benders(GRBEnv &env,
-            GRBenv *c_env,
-            Problem &
-                problem);  // initializes d_master and d_sub with both arguments
+    // initializes d_master and d_sub with both arguments
+    Benders(GRBEnv &env, GRBenv *c_env, Problem &problem);
     Benders(const Benders &other);
 
     ~Benders();
+
+    void computeTx(double *x, double *Tx);  // computes Tx (rba)
 
     // return gamma. beta is returned by argument
     double lpCut(double *x, double *beta);
@@ -65,7 +62,6 @@ public:
     double lbdaCut(double *x, double *beta, double *alpha);
     double compute_gomory(
         size_t s, int *vBasis, int *cBasis, double *ws, double *alpha);
-
 
     void lpSolve(double tol = 1e-4);
     void strong_benders(double tol = 1e-4);  // L-shaped algorithm

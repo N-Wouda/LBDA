@@ -9,12 +9,12 @@ void DeqForm::init_fs(size_t n1,
                       double *ub,
                       double *c,
                       double *rhs,
-                      vector<vector<double>> &Amat)
+                      std::vector<std::vector<double>> &Amat)
 {
     // variables
     char vTypes[n1];
-    fill_n(vTypes, p1, GRB_INTEGER);
-    fill_n(vTypes + p1, n1 - p1, GRB_CONTINUOUS);
+    std::fill_n(vTypes, p1, GRB_INTEGER);
+    std::fill_n(vTypes + p1, n1 - p1, GRB_CONTINUOUS);
     d_xVars = d_model.addVars(lb, ub, c, vTypes, NULL, n1);
 
     // constraints
@@ -26,9 +26,9 @@ void DeqForm::init_fs(size_t n1,
     }
 
     char senses[m1];
-    fill(senses, senses + fs_leq, GRB_LESS_EQUAL);
-    fill(senses + fs_leq, senses + fs_leq + fs_geq, GRB_GREATER_EQUAL);
-    fill(senses + fs_leq + fs_geq, senses + m1, GRB_EQUAL);
+    std::fill(senses, senses + fs_leq, GRB_LESS_EQUAL);
+    std::fill(senses + fs_leq, senses + fs_leq + fs_geq, GRB_GREATER_EQUAL);
+    std::fill(senses + fs_leq + fs_geq, senses + m1, GRB_EQUAL);
 
     GRBConstr *constrs = d_model.addConstrs(lhsExprs, senses, rhs, NULL, m1);
     delete[] constrs;

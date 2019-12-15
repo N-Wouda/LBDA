@@ -7,7 +7,8 @@ void ZK::update(double *x, double theta)  // updates rhs
     for (size_t con = 0; con != d_nConstrs; ++con)
     {
         rhs[con] = d_omega[con] - d_tau[con] * theta;
-        vector<double> &Trow = d_Tmat[con];
+        std::vector<double> &Trow = d_Tmat[con];
+
         for (size_t var = 0; var != Trow.size(); ++var)
             rhs[con] -= Trow[var] * x[var];
     }

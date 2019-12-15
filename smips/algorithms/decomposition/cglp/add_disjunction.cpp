@@ -17,7 +17,7 @@ void Cglp::add_disjunction(
 
         // pi_x
         GRBVar lambda_vector[d_n1];
-        fill_n(lambda_vector, d_n1, lambda);
+        std::fill_n(lambda_vector, d_n1, lambda);
 
 
         d_model.chgCoeffs(d_constrs_x[2 * var], lambda_vector, minus_beta, d_n1);
@@ -44,7 +44,6 @@ void Cglp::add_disjunction(
                          lambda,
                          gamma + tau * x[var]);
     }
-
 
     // set coefficients of the pi variables
     d_pi_theta.set(GRB_DoubleAttr_Obj, theta);

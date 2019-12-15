@@ -1,12 +1,12 @@
 #include "deqform.h"
 
-DeqForm::DeqForm(GRBEnv &env, Problem &problem)
-    : d_status(1)
-    , d_model(GRBModel(env))
+DeqForm::DeqForm(GRBEnv &env, Problem &problem) :
+    d_model(GRBModel(env)),
+    d_status(status::UNSOLVED)
 {
     size_t n1 = problem.d_n1;
     d_n1 = n1;
-    d_MIP = (problem.d_p1 == 0 && problem.d_p2 == 0) ? false : true;
+    d_MIP = problem.d_p1 != 0 && problem.d_p2 != 0;
 
     init_fs(n1,
             problem.d_p1,

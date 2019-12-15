@@ -5,8 +5,6 @@
 #include "gurobi_c++.h"
 
 
-using namespace std;
-
 class Gomory
 {
 public:

@@ -1,7 +1,6 @@
 #include "ald.h"
 
-Ald::Ald(GRBenv *env, Problem &problem)
-    : d_Tmat(problem.d_Tmat)
+Ald::Ald(GRBenv *env, Problem &problem) : d_Tmat(problem.d_Tmat)
 {
     GRBnewmodel(env, &d_model, NULL, 0, NULL, NULL, NULL, NULL, NULL);
 
@@ -36,7 +35,7 @@ Ald::Ald(GRBenv *env, Problem &problem)
 
     // adding constraints
     int cind[n2];
-    iota(cind, cind + n2, 0);
+    std::iota(cind, cind + n2, 0);
 
     for (size_t con = 0; con != m2; ++con)
         GRBaddconstr(d_model,
@@ -48,11 +47,12 @@ Ald::Ald(GRBenv *env, Problem &problem)
                      NULL);
     // adding slacks
     int vbeg[nSlacks];
-    iota(vbeg, vbeg + nSlacks, 0);
+    std::iota(vbeg, vbeg + nSlacks, 0);
+
     int *vind = vbeg;
     double vval[nSlacks];
-    fill_n(vval, nLeq, 1);
-    fill_n(vval + nLeq, nGeq, -1);
+    std::fill_n(vval, nLeq, 1);
+    std::fill_n(vval + nLeq, nGeq, -1);
 
     GRBaddvars(d_model,
                nSlacks,
@@ -65,5 +65,6 @@ Ald::Ald(GRBenv *env, Problem &problem)
                NULL,
                NULL,
                NULL);
+
     GRBupdatemodel(d_model);
 }

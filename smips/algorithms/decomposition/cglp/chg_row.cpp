@@ -6,7 +6,7 @@ void Cglp::chg_row(double *x_coefs, double cons)
     {
         d_model.chgCoeff(d_constrs_cons[term], d_lambda, cons);
         GRBVar lambda_vector[d_n1];
-        fill_n(lambda_vector, d_n1, d_lambda);
+        std::fill_n(lambda_vector, d_n1, d_lambda);
         d_model.chgCoeffs(d_constrs_x[term], lambda_vector, x_coefs, d_n1);
     }
 }

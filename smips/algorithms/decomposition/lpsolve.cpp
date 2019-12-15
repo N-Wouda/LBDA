@@ -2,7 +2,7 @@
 
 void Benders::lpSolve(double tol)
 {
-    auto t1 = chrono::high_resolution_clock::now();
+    auto t1 = std::chrono::high_resolution_clock::now();
 
     bool stop = false;
     size_t iter = 0;
@@ -11,8 +11,10 @@ void Benders::lpSolve(double tol)
     {
         // cout << "iteration: " << iter << '\n';
         ++iter;
+
         // solve master problem, and collect x and theta
         Master::Solution sol = d_master.solve();
+
         double *x = sol.xVals;
         double theta = sol.thetaVal;
         // derive cut
@@ -31,12 +33,13 @@ void Benders::lpSolve(double tol)
 
 
         if (stop)
-            copy(x, x + d_n1, d_xvals);
+            std::copy(x, x + d_n1, d_xvals);
         delete[] x;
     }
 
-    auto t2 = chrono::high_resolution_clock::now();
-    d_runTime += chrono::duration_cast<chrono::milliseconds>(t2 - t1).count()
+    auto t2 = std::chrono::high_resolution_clock::now();
+    d_runTime += std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)
+                     .count()
                  / 1000.0;
     d_nCuts += iter - 1;
 

@@ -4,19 +4,21 @@
 #include "../../../problem_data/problem.h"
 #include "gurobi_c++.h"
 
-using namespace std;
 
 class Sub
 {
 public:
+    size_t d_m2;
+    size_t d_n2;
+
+    std::vector<double> &d_q;
+
     GRBModel d_model;
-    size_t d_m2, d_n2;
     GRBConstr *d_constrs;
     GRBVar *d_vars;
-    vector<double> &d_q;
 
     Sub(GRBEnv &env, Problem &problem);
-    Sub(const Sub &other);
+    Sub(Sub const &other);
     ~Sub();
 
     void update(double *rhs);
@@ -33,7 +35,6 @@ public:
         double *lambda;
         double *pi_u;
     };
-
 
     Multipliers solve();
     GomInfo solve2();

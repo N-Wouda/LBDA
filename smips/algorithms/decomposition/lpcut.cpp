@@ -2,16 +2,16 @@
 
 double Benders::lpCut(double *x, double *beta)
 {
-    vector<vector<double>> &omega = d_problem.d_omega;
-    vector<vector<double>> &Tmat = d_problem.d_Tmat;
-    vector<double> &probs = d_problem.d_probs;
+    auto &omega = d_problem.d_omega;
+    auto &Tmat = d_problem.d_Tmat;
+    auto &probs = d_problem.d_probs;
 
     double Tx[d_m2];
     computeTx(x, Tx);
 
     double gamma = 0.0;
     double dual[d_m2];
-    fill(dual, dual + d_m2, 0.0);
+    std::fill(dual, dual + d_m2, 0.0);
 
     for (size_t s = 0; s != d_S; ++s)
     {
@@ -21,14 +21,13 @@ double Benders::lpCut(double *x, double *beta)
         for (size_t row = 0; row != d_m2; ++row)  // compute element-by-element
             rhs[row] = ws[row] - Tx[row];
 
-
         d_sub.update(rhs);
         Sub::Multipliers info = d_sub.solve();
+
         double *lambda = info.lambda;
         double *pi_u = info.pi_u;
-
-
         double prob = probs[s];
+
         for (size_t row = 0; row != d_m2; ++row)
         {
             dual[row] -= prob * lambda[row];

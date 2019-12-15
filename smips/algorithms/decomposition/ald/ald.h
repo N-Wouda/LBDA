@@ -6,26 +6,28 @@
 #include "gurobi_c.h"
 
 #include <algorithm>
-#include <cstdio>
-#include <iostream>
-#include <math.h>
 
-
-using namespace std;
 
 class Ald
 {
 public:
-    size_t d_n1, d_n2, d_p2, d_m2;
-    vector<vector<double>> &d_Tmat;
+    size_t d_m2;
+    size_t d_n1;
+    size_t d_n2;
+    size_t d_p2;
+
+    std::vector<std::vector<double>> &d_Tmat;
+
     GRBmodel *d_model;
 
     Ald(GRBenv *env, Problem &problem);
     Ald(const Ald &other);
     ~Ald();
+
     void update(double *rhs);
 
     bool is_integer(double val);
+
     void gmi_cut(int row,
                  double yval,
                  double *xbar,
@@ -34,31 +36,33 @@ public:
                  GRBsvec &e_i,
                  GRBsvec &B_row,
                  GRBsvec &tableau,
-                 vector<vector<double>> &Tmat,
-                 vector<double> &tau,
+                 std::vector<std::vector<double>> &Tmat,
+                 std::vector<double> &tau,
                  double *coef_x,
                  double *coef_y,
                  double &coef_rhs,
                  double &coef_eta);
+
     void add_cut(size_t nVars,
                  size_t nCuts,
                  double *coef_x,
                  double *coef_y,
                  double coef_eta,
                  double coef_rhs,
-                 vector<vector<double>> &Tmat,
-                 vector<double> &tau,
-                 vector<double> &omega);
+                 std::vector<std::vector<double>> &Tmat,
+                 std::vector<double> &tau,
+                 std::vector<double> &omega);
+
     void clean();
 
     struct AldCut
     {
         double cons;
         double coef_eta;
-        vector<double> coef_x;
+        std::vector<double> coef_x;
     };
-    AldCut solve(double *xbar, vector<double> omega, size_t maxRounds);
-};
 
+    AldCut solve(double *xbar, std::vector<double> omega, size_t maxRounds);
+};
 
 #endif

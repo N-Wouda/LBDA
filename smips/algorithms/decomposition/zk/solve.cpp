@@ -3,9 +3,9 @@
 void ZK::solve(double *x,
                double theta,
                GRBmodel *master,
-               vector<double> &kappa,
-               vector<vector<double>> &beta,
-               vector<double> &gamma,
+               std::vector<double> &kappa,
+               std::vector<std::vector<double>> &beta,
+               std::vector<double> &gamma,
                size_t maxRounds)
 {
     double yvals[d_p2];  // to store values of integer decision vars
@@ -30,7 +30,6 @@ void ZK::solve(double *x,
                            d_p2,
                            yvals);  // extract values of integer variables
 
-
         size_t nCuts = 0;
         for (size_t row = 0; row != d_nConstrs;
              ++row)  // loop over rows of simplex tableau
@@ -50,8 +49,6 @@ void ZK::solve(double *x,
             GRBgetintattr(master, "NumVars", &nVarsMaster);
 
             // computing tableau row
-
-
             double tab_row_x[nVarsMaster];
             compute_tab_row_x(
                 tab_row_x,
@@ -68,12 +65,6 @@ void ZK::solve(double *x,
             double coef_rhs = 1;  // cut coefficients
 
             double a0 = yval;
-            /*
-            double a0 = yval + tab_row_x[0] * theta;
-            for (size_t var = 1; var != nVarsMaster; ++var)
-              a0 += tab_row_x[var] * x[var - 1];
-            cout << "a0 = " << a0 << " yval = " << yval << '\n';
-            */
 
             gmi_cut(tab_row_x,
                     tab_row_y,
@@ -82,6 +73,7 @@ void ZK::solve(double *x,
                     coef_y,
                     coef_theta,
                     nVarsMaster);
+
             transform_cut(coef_x,
                           coef_theta,
                           coef_rhs,
@@ -102,6 +94,7 @@ void ZK::solve(double *x,
 
             ++nCuts;
         }
+
         d_nConstrs += nCuts;
         d_nVars += nCuts;  // slacks
     }

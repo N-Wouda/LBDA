@@ -1,7 +1,6 @@
 #include "lagrangian.h"
 
-Lagrangian::Lagrangian(GRBEnv &env, Problem &problem)
-    : d_model(env)
+Lagrangian::Lagrangian(GRBEnv &env, Problem &problem) : d_model(env)
 {
     size_t n1 = problem.d_n1;
     size_t p1 = problem.d_p1;
@@ -19,22 +18,24 @@ Lagrangian::Lagrangian(GRBEnv &env, Problem &problem)
 
     // adding first-stage variables (z)
     char zTypes[n1];
-    fill_n(zTypes, p1, GRB_INTEGER);
-    fill_n(zTypes + p1, n1 - p1, GRB_CONTINUOUS);
+    std::fill_n(zTypes, p1, GRB_INTEGER);
+    std::fill_n(zTypes + p1, n1 - p1, GRB_CONTINUOUS);
+
     d_z_vars = d_model.addVars(problem.d_l1.data(),
                                problem.d_u1.data(),
                                NULL,
                                zTypes,
                                NULL,
                                n1);  // cost coeffs set by update()
-    // TODO: include first-stage constraints
 
+    // TODO: include first-stage constraints
 
     // adding second-stage variables (y)
     // variable types
     char yTypes[n2];
-    fill_n(yTypes, p2, GRB_INTEGER);
-    fill_n(yTypes + p2, n2 - p2, GRB_CONTINUOUS);
+    std::fill_n(yTypes, p2, GRB_INTEGER);
+    std::fill_n(yTypes + p2, n2 - p2, GRB_CONTINUOUS);
+
     // cost vector
     double *q = problem.d_q.data();  // transform cost vector and omega to
                                      // c-style array add variables
@@ -47,25 +48,28 @@ Lagrangian::Lagrangian(GRBEnv &env, Problem &problem)
 
     // constraint senses
     char senses[m2];
-    fill(senses, senses + ss_leq, GRB_LESS_EQUAL);
-    fill(senses + ss_leq, senses + ss_leq + ss_geq, GRB_GREATER_EQUAL);
-    fill(senses + ss_leq + ss_geq, senses + m2, GRB_EQUAL);
+    std::fill(senses, senses + ss_leq, GRB_LESS_EQUAL);
+    std::fill(senses + ss_leq, senses + ss_leq + ss_geq, GRB_GREATER_EQUAL);
+    std::fill(senses + ss_leq + ss_geq, senses + m2, GRB_EQUAL);
 
     // constraint rhs
     double rhs[m2];
-    fill(rhs, rhs + m2, 0.0);
+    std::fill(rhs, rhs + m2, 0.0);
 
     // constraint lhs
-    vector<vector<double>> &Wmat = problem.d_Wmat;
-    vector<vector<double>> &Tmat = problem.d_Tmat;
+    std::vector<std::vector<double>> &Wmat = problem.d_Wmat;
+    std::vector<std::vector<double>> &Tmat = problem.d_Tmat;
+
     GRBLinExpr TxWy[m2];
     for (size_t conIdx = 0; conIdx != m2; ++conIdx)
     {
         TxWy[conIdx].addTerms(Tmat[conIdx].data(), d_z_vars, n1);
         TxWy[conIdx].addTerms(Wmat[conIdx].data(), y_vars, n2);
     }
+
     // add constraints
     d_constrs = d_model.addConstrs(TxWy, senses, rhs, NULL, m2);
     d_model.update();
+
     delete[] y_vars;
 }

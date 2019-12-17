@@ -6,6 +6,7 @@ bool Master::add_ald_cut(
     double betaxgamma = gamma;
     for (size_t var = 0; var != d_n1; ++var)
         betaxgamma += beta[var] * x[var];
+
     std::cout << "x = " << *x << '\n';
     std::cout << "theta = " << theta << '\n';
     std::cout << "outer Q(x) = " << betaxgamma << '\n';

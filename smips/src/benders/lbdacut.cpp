@@ -15,7 +15,6 @@ double Benders::lbdaCut(double *x, double *beta, double *alpha)
     double dual[d_m2];
     std::fill(dual, dual + d_m2, 0.0);
 
-
     for (size_t s = 0; s != d_S; ++s)
     {
         double *ws = omega[s].data();  // scenario (c-style array pointer)
@@ -24,6 +23,7 @@ double Benders::lbdaCut(double *x, double *beta, double *alpha)
 
         for (size_t row = 0; row != d_m2; ++row)  // compute element-by-element
             rhs[row] = ws[row] - Tx[row];
+
         d_sub.update(rhs);
         Sub::GomInfo info = d_sub.solve2();  // solve subproblem
 
@@ -36,7 +36,6 @@ double Benders::lbdaCut(double *x, double *beta, double *alpha)
         int *cBasis = info.cBasis;
 
         double gom_obj = compute_gomory(s, vBasis, cBasis, ws, alpha);
-
         double prob = probs[s];
 
 
@@ -55,10 +54,10 @@ double Benders::lbdaCut(double *x, double *beta, double *alpha)
         delete[] cBasis;
     }
 
-
     for (size_t col = 0; col != d_n1; ++col)
     {
         beta[col] = 0.0;
+
         for (size_t row = 0; row != d_m2; ++row)
             beta[col] += dual[row] * Tmat[row][col];
     }

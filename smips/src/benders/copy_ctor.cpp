@@ -13,8 +13,6 @@ Benders::Benders(const Benders &other) :
     d_sub(other.d_sub),
     d_lr(other.d_lr),
     d_gomory(other.d_gomory),
-    d_ald(other.d_ald),
-    d_pslp(other.d_pslp),
     d_visited(other.d_visited),
     d_objectives(other.d_objectives)
 {

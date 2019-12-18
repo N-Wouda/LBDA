@@ -40,22 +40,6 @@ public:
     // else cut is not added (ret = false).
     bool addCut(double *beta, double gamma, double *x, double theta, double tol);
 
-    bool add_ald_cut(double *beta,
-                     double gamma,
-                     double tau,
-                     double *x,
-                     double theta,
-                     double tol);
-
-    // adds the cut kappa theta >= beta^T (x,s) + gamma (this cuts also
-    // features slacks)
-    bool add_zk_cut(double *beta,
-                    double gamma,
-                    double kappa,
-                    double *x,
-                    double theta,
-                    double tol);
-
     struct Solution
     {
         double *xVals;

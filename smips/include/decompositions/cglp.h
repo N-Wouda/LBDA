@@ -5,6 +5,7 @@
 
 #include <gurobi_c++.h>
 
+// TODO I'm not sure what to do with this class.
 class Cglp
 {
     /*

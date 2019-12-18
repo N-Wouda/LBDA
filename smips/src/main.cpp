@@ -43,5 +43,12 @@ int main(int argc, char **argv)
         std::cout << x[var] << ' ';
     std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
 
+    Benders sb = lshaped;
+    sb.strong_benders();
+    x = sb.d_xvals;
+    for (size_t var = 0; var != n1; ++var)
+        std::cout << x[var] << ' ';
+    std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
+
     GRBfreeenv(c_env);
 }

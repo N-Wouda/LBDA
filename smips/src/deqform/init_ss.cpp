@@ -43,23 +43,24 @@ void DeqForm::init_ss(size_t n1,
             costs[var] = prob * q[var];
 
         double *rhsOmega = omega[s].data();
+
         // add variables
         GRBVar *yVars = d_model.addVars(lb, ub, costs, vTypes2, nullptr, n2);
 
-        // lhs expression of second-stage constraints, Wy will be added in a loop
-        GRBLinExpr TxWy[m2] = Tx;
-
+        // lhs expression of second-stage constraints, including Wy
+        // TODO: I've removed a duplication for TxWy here, which did not compile
         for (size_t conIdx = 0; conIdx != m2; ++conIdx)
         {
             double *row = Wmat[conIdx].data();
-            TxWy[conIdx].addTerms(row, yVars, n2);
+            Tx[conIdx].addTerms(row, yVars, n2);
         }
 
-        GRBConstr *constrs = d_model.addConstrs(TxWy,
+        GRBConstr *constrs = d_model.addConstrs(Tx,
                                                 senses2,
                                                 rhsOmega,
                                                 nullptr,
                                                 m2);
+
         delete[] yVars;
         delete[] constrs;
     }

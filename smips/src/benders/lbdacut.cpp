@@ -6,7 +6,6 @@ double Benders::lbdaCut(double *x, double *beta, double *alpha)
     auto &Tmat = d_problem.d_Tmat;
     auto &probs = d_problem.d_probs;
 
-
     double Tx[d_m2];
     computeTx(x, Tx);  // Tx is rba
 

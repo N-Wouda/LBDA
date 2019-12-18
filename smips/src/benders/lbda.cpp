@@ -29,7 +29,8 @@ void Benders::lbda(double *alpha, double gomoryTimeLimit, double tol)
         // derive cut
         double gamma = lbdaCut(x, beta, alpha);  // beta is RBA
 
-        // add the cut (conditional on it being violated by the current solution)
+        // add the cut (conditional on it being violated by the current
+        // solution)
         stop = d_master.addCut(beta, gamma, x, theta, tol);
 
         if (stop)

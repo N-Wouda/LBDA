@@ -10,7 +10,7 @@ void Problem::init_sub()
     double *qPtr = d_q.data();  // transform cost vector and omega to c-style
                                 // array add variables
     GRBVar *vars
-        = d_sub.addVars(d_l2.data(), d_u2.data(), qPtr, vTypes, NULL, d_n2);
+        = d_sub.addVars(d_l2.data(), d_u2.data(), qPtr, vTypes, nullptr, d_n2);
 
     // constraint senses
     char senses[d_m2];
@@ -32,7 +32,7 @@ void Problem::init_sub()
     }
 
     // add constraints
-    d_constrs = d_sub.addConstrs(Wy, senses, rhs, NULL, d_m2);
+    d_constrs = d_sub.addConstrs(Wy, senses, rhs, nullptr, d_m2);
     d_sub_initialized = true;
 
     delete[] vars;

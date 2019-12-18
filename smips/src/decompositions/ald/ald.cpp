@@ -2,7 +2,15 @@
 
 Ald::Ald(GRBenv *env, Problem &problem) : d_Tmat(problem.d_Tmat)
 {
-    GRBnewmodel(env, &d_model, NULL, 0, NULL, NULL, NULL, NULL, NULL);
+    GRBnewmodel(env,
+                &d_model,
+                nullptr,
+                0,
+                nullptr,
+                nullptr,
+                nullptr,
+                nullptr,
+                nullptr);
 
     // Gomory cuts are derived from the simplex tableau, which is easiest to
     // construct in a problem with only equality constraints (given the
@@ -24,14 +32,14 @@ Ald::Ald(GRBenv *env, Problem &problem) : d_Tmat(problem.d_Tmat)
     GRBaddvars(d_model,
                n2,
                0,
-               NULL,
-               NULL,
-               NULL,
+               nullptr,
+               nullptr,
+               nullptr,
                problem.d_q.data(),
-               NULL,
-               NULL,
-               NULL,
-               NULL);
+               nullptr,
+               nullptr,
+               nullptr,
+               nullptr);
 
     // adding constraints
     int cind[n2];
@@ -44,7 +52,8 @@ Ald::Ald(GRBenv *env, Problem &problem) : d_Tmat(problem.d_Tmat)
                      problem.d_Wmat[con].data(),
                      GRB_EQUAL,
                      0,
-                     NULL);
+                     nullptr);
+
     // adding slacks
     int vbeg[nSlacks];
     std::iota(vbeg, vbeg + nSlacks, 0);
@@ -60,11 +69,11 @@ Ald::Ald(GRBenv *env, Problem &problem) : d_Tmat(problem.d_Tmat)
                vbeg,
                vind,
                vval,
-               NULL,
-               NULL,
-               NULL,
-               NULL,
-               NULL);
+               nullptr,
+               nullptr,
+               nullptr,
+               nullptr,
+               nullptr);
 
     GRBupdatemodel(d_model);
 }

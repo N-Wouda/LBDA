@@ -25,7 +25,9 @@ void Cglp::add_disjunction(
                          minus_beta[var] - tau);
 
         // pi_0
-        d_model.chgCoeff(d_constrs_cons[2 * var], d_lambda, gamma - tau * x[var]);
+        d_model.chgCoeff(d_constrs_cons[2 * var],
+                         d_lambda,
+                         gamma - tau * x[var]);
 
 
         // \bar x_i - x_i

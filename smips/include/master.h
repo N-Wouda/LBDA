@@ -26,7 +26,6 @@ public:
     size_t d_n1;
     size_t d_nSlacks;
 
-
     // storing the optimality cut coefficients
     // vector<vector<double>> d_xcoefs;
 

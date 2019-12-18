@@ -36,8 +36,8 @@ void ZK::compute_tab_row_x(double *tab_row_x,
 
         if (basic_var == 0)  // then multiply by tau (column 0 of (tau, Tmat))
         {
-            for (size_t nz = 0; nz != Brow.len;
-                 ++nz)  // loop over nonzeros of Brow
+            // loop over nonzeros of Brow
+            for (size_t nz = 0; nz != Brow.len; ++nz)
             {
                 size_t pos = Brow.ind[nz];  // position of nonzero element
                 BinvTBA[idx] += Brow.val[nz] * d_tau[pos];
@@ -64,6 +64,7 @@ void ZK::compute_tab_row_x(double *tab_row_x,
         int BA_col_ind[nConsMaster];
         double BA_col_val[nConsMaster];
         GRBsvec BA_col{nConsMaster, BA_col_ind, BA_col_val};
+
         GRBBinvColj(master, col, &BA_col);
 
         for (size_t idx = 0; idx != BA_col.len; ++idx)

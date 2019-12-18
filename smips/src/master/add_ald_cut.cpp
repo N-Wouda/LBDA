@@ -11,23 +11,24 @@ bool Master::add_ald_cut(
     std::cout << "theta = " << theta << '\n';
     std::cout << "outer Q(x) = " << betaxgamma << '\n';
 
-    if (betaxgamma <= theta + tol)
+    if (betaxgamma <= theta + tol)  // don't add cut
         return true;
 
     double bigM = 1e4;
 
-    // c-api:
+    // eta
     GRBaddvar(d_cmodel,
               0,
-              NULL,
-              NULL,
+              nullptr,
+              nullptr,
               0.0,
               0.0,
               1e20,
               GRB_CONTINUOUS,
-              NULL);  // eta
-                      // retrieve variable index
+              nullptr);
     GRBupdatemodel(d_cmodel);
+
+    // retrieve variable index
     int numVars;
     GRBgetintattr(d_cmodel, "NumVars", &numVars);
 
@@ -38,14 +39,14 @@ bool Master::add_ald_cut(
     GRBaddvars(d_cmodel,
                2 * d_n1,
                0,
-               NULL,
-               NULL,
-               NULL,
-               NULL,
-               NULL,
-               NULL,
+               nullptr,
+               nullptr,
+               nullptr,
+               nullptr,
+               nullptr,
+               nullptr,
                types,
-               NULL);  // binary yvars (first y+ then y-)
+               nullptr);  // binary yvars (first y+ then y-)
 
     for (size_t var = 0; var != d_n1; ++var)
     {
@@ -54,12 +55,13 @@ bool Master::add_ald_cut(
         cind[1] = var + 1;  // refers to the var-th x-variable (theta precedes)
         cind[2] = numVars + var;  // refers to y+[var]
         double cval[] = {1, -1, -bigM};
-        GRBaddconstr(d_cmodel, 3, cind, cval, GRB_LESS_EQUAL, -x[var], NULL);
+        GRBaddconstr(d_cmodel, 3, cind, cval, GRB_LESS_EQUAL, -x[var], nullptr);
 
         cind[2] = numVars + d_n1 + var;  // refers to y-[var]
         cval[1] = 1;
-        GRBaddconstr(d_cmodel, 3, cind, cval, GRB_LESS_EQUAL, x[var], NULL);
+        GRBaddconstr(d_cmodel, 3, cind, cval, GRB_LESS_EQUAL, x[var], nullptr);
     }
+
     // force sum(y) = 2*d_n1 - 1
     int cind[2 * d_n1];
     std::iota(cind, cind + 2 * d_n1, numVars);
@@ -67,7 +69,13 @@ bool Master::add_ald_cut(
     double cval[2 * d_n1];
     std::fill_n(cval, 2 * d_n1, 1);
 
-    GRBaddconstr(d_cmodel, 2 * d_n1, cind, cval, GRB_EQUAL, 2 * d_n1 - 1, NULL);
+    GRBaddconstr(d_cmodel,
+                 2 * d_n1,
+                 cind,
+                 cval,
+                 GRB_EQUAL,
+                 2 * d_n1 - 1,
+                 nullptr);
 
     // add actual ald cut
     int ald_cind[d_n1 + 2];
@@ -88,7 +96,7 @@ bool Master::add_ald_cut(
                  ald_cval,
                  GRB_GREATER_EQUAL,
                  gamma,
-                 NULL);
+                 nullptr);
 
     return false;
 }

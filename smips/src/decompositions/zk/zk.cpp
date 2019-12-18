@@ -10,20 +10,28 @@ ZK::ZK(GRBenv *env, Problem &problem, size_t scenario) :
     d_Tmat(problem.d_Tmat),
     d_tau(problem.d_m2)
 {
-    GRBnewmodel(env, &d_model, NULL, 0, NULL, NULL, NULL, NULL, NULL);
+    GRBnewmodel(env,
+                &d_model,
+                nullptr,
+                0,
+                nullptr,
+                nullptr,
+                nullptr,
+                nullptr,
+                nullptr);
 
     // adding variables  (assumed continuous, lower and upper bounds ignored)
     GRBaddvars(d_model,
                problem.d_n2,
                0,
-               NULL,
-               NULL,
-               NULL,
+               nullptr,
+               nullptr,
+               nullptr,
                problem.d_q.data(),
-               NULL,
-               NULL,
-               NULL,
-               NULL);
+               nullptr,
+               nullptr,
+               nullptr,
+               nullptr);
 
     // adding constraints
     int cind[problem.d_n2];
@@ -36,7 +44,7 @@ ZK::ZK(GRBenv *env, Problem &problem, size_t scenario) :
                      problem.d_Wmat[con].data(),
                      GRB_EQUAL,
                      0,
-                     NULL);
+                     nullptr);
 
     int nSlacks = problem.d_ss_leq + problem.d_ss_geq;
 
@@ -57,11 +65,11 @@ ZK::ZK(GRBenv *env, Problem &problem, size_t scenario) :
                vbeg,
                vbeg,
                vval,
-               NULL,
-               NULL,
-               NULL,
-               NULL,
-               NULL);
+               nullptr,
+               nullptr,
+               nullptr,
+               nullptr,
+               nullptr);
 
     GRBupdatemodel(d_model);
 }

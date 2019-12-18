@@ -14,7 +14,7 @@ bool Master::addCut(
     ++d_nSlacks;
 
     // slack
-    GRBaddvar(d_cmodel, 0, NULL, NULL, 0, 0, 1e20, GRB_CONTINUOUS, NULL);
+    GRBaddvar(d_cmodel, 0, nullptr, nullptr, 0, 0, 1e20, GRB_CONTINUOUS, nullptr);
 
     // slack variable index (there are d_n1 + 1 + nSlacks variables in the
     // Gurobi model)
@@ -33,7 +33,7 @@ bool Master::addCut(
     cval[0] = 1;
     cval[d_n1 + 1] = -1;  // >= constraint, so slack features with -1
 
-    GRBaddconstr(d_cmodel, d_n1 + 2, cind, cval, GRB_EQUAL, gamma, NULL);
+    GRBaddconstr(d_cmodel, d_n1 + 2, cind, cval, GRB_EQUAL, gamma, nullptr);
 
     // add cut to internal storage of master
     d_xcoefs.push_back(std::vector<double>(beta, beta + d_n1));

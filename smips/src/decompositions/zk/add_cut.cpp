@@ -22,11 +22,11 @@ void ZK::add_cut(double *coef_x,
 
     int cind[d_nVars];  // variable indices
     std::iota(cind, cind + d_nVars, 0);
-    GRBaddconstr(d_model, d_nVars, cind, coef_y, GRB_EQUAL, rhs, NULL);
+    GRBaddconstr(d_model, d_nVars, cind, coef_y, GRB_EQUAL, rhs, nullptr);
 
     // adding slack
     int vind[1];
     vind[0] = conIdx;
     double vval[] = {-1};
-    GRBaddvar(d_model, 1, vind, vval, 0, 0, 1e20, GRB_CONTINUOUS, NULL);
+    GRBaddvar(d_model, 1, vind, vval, 0, 0, 1e20, GRB_CONTINUOUS, nullptr);
 }

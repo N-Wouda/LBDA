@@ -18,7 +18,7 @@ Cglp::Cglp(GRBEnv &env, Master &master) :
 
     std::fill_n(lb, d_n1, -1.0);
     std::fill_n(ub, d_n1, 1.0);
-    d_pi_x = d_model.addVars(lb, ub, NULL, NULL, NULL, d_n1);
+    d_pi_x = d_model.addVars(lb, ub, nullptr, nullptr, nullptr, d_n1);
     d_pi_0 = d_model.addVar(-1.0, 1.0, -1.0, GRB_CONTINUOUS);
 
     double ones[nCuts];
@@ -59,7 +59,11 @@ Cglp::Cglp(GRBEnv &env, Master &master) :
         double rhs[d_n1];
         std::fill_n(rhs, d_n1, 0.0);
 
-        GRBConstr *x_constrs = d_model.addConstrs(lhs, senses, rhs, NULL, d_n1);
+        GRBConstr *x_constrs = d_model.addConstrs(lhs,
+                                                  senses,
+                                                  rhs,
+                                                  nullptr,
+                                                  d_n1);
         d_constrs_x[term] = x_constrs;
 
         // constraint corresponding to pi_0

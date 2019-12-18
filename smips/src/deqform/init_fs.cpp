@@ -15,7 +15,7 @@ void DeqForm::init_fs(size_t n1,
     char vTypes[n1];
     std::fill_n(vTypes, p1, GRB_INTEGER);
     std::fill_n(vTypes + p1, n1 - p1, GRB_CONTINUOUS);
-    d_xVars = d_model.addVars(lb, ub, c, vTypes, NULL, n1);
+    d_xVars = d_model.addVars(lb, ub, c, vTypes, nullptr, n1);
 
     // constraints
     GRBLinExpr lhsExprs[m1];
@@ -30,6 +30,6 @@ void DeqForm::init_fs(size_t n1,
     std::fill(senses + fs_leq, senses + fs_leq + fs_geq, GRB_GREATER_EQUAL);
     std::fill(senses + fs_leq + fs_geq, senses + m1, GRB_EQUAL);
 
-    GRBConstr *constrs = d_model.addConstrs(lhsExprs, senses, rhs, NULL, m1);
+    GRBConstr *constrs = d_model.addConstrs(lhsExprs, senses, rhs, nullptr, m1);
     delete[] constrs;
 }

@@ -23,7 +23,7 @@ Sub::Sub(GRBEnv &env, Problem &problem) :
                              problem.d_u2.data(),
                              q,
                              vTypes,
-                             NULL,
+                             nullptr,
                              n2);
 
     // constraint senses
@@ -47,6 +47,6 @@ Sub::Sub(GRBEnv &env, Problem &problem) :
     }
 
     // add constraints
-    d_constrs = d_model.addConstrs(Wy, senses, rhs, NULL, m2);
+    d_constrs = d_model.addConstrs(Wy, senses, rhs, nullptr, m2);
     d_model.update();
 }

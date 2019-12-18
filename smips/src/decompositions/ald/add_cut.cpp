@@ -12,13 +12,13 @@ void Ald::add_cut(size_t nVars,
 {
     GRBaddvar(d_model,
               0,
-              NULL,
-              NULL,
+              nullptr,
+              nullptr,
               0.0,
               0.0,
               1e20,
               GRB_CONTINUOUS,
-              NULL);  // slack variable
+              nullptr);  // slack variable
 
     int cind[nVars + 1];
 
@@ -32,7 +32,7 @@ void Ald::add_cut(size_t nVars,
     std::copy(coef_y, coef_y + nVars, cval);
     cval[nVars] = -1;
 
-    GRBaddconstr(d_model, nVars + 1, cind, cval, GRB_EQUAL, 1, NULL);
+    GRBaddconstr(d_model, nVars + 1, cind, cval, GRB_EQUAL, 1, nullptr);
 
     // appending cut to T and tau and omega, for future cuts
     std::vector<double> cut_row(coef_x, coef_x + d_n1);

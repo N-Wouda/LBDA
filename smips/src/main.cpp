@@ -9,7 +9,7 @@ int main(int argc, char **argv)
     env.set(GRB_IntParam_Threads, 1);
 
     GRBenv *c_env;
-    GRBloadenv(&c_env, NULL);
+    GRBloadenv(&c_env, nullptr);
     GRBsetintparam(c_env, "OutputFlag", 0);
     GRBsetintparam(c_env, "Threads", 1);
 

@@ -8,7 +8,7 @@ void ZK::gmi_cut(double *tab_row_x,
                  double &coef_theta,
                  int nVarsMaster)
 {
-    double f0 = a0 - floor(a0);
+    double f0 = a0 - std::floor(a0);
 
     // theta
     double a_theta = tab_row_x[0];
@@ -22,7 +22,7 @@ void ZK::gmi_cut(double *tab_row_x,
         double aj = tab_row_x[var];
         if (xvar < d_p1)  // check if integer variable
         {
-            double fj = aj - floor(aj);
+            double fj = aj - std::floor(aj);
             coef_x[xvar] = std::min(fj / f0, (1 - fj) / (1 - f0));
         }
         else
@@ -36,7 +36,7 @@ void ZK::gmi_cut(double *tab_row_x,
 
         if (var < d_p2)
         {
-            double fj = aj - floor(aj);
+            double fj = aj - std::floor(aj);
             coef_y[var] = std::min(fj / f0, (1 - fj) / (1 - f0));
         }
         else

@@ -9,7 +9,7 @@ Master::Master(GRBEnv &env, GRBenv *c_env, Problem &problem) :
     double *c = problem.d_c.data();
     double *rhs = problem.d_b.data();
 
-    // The C API gives access to advanced simplex routines
+    // The C API gives access to advanced simplex routines.
     GRBnewmodel(c_env,
                 &d_cmodel,
                 nullptr,

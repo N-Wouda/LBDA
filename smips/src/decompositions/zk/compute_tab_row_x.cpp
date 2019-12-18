@@ -24,7 +24,7 @@ void ZK::compute_tab_row_x(double *tab_row_x,
     GRBgetintattr(master, "NumConstrs", &nConsMaster);
 
     int master_bhead[nConsMaster];
-    GRBgetBasisHead(master, master_bhead);
+    GRBgetBasisHead(master, master_bhead);  // extract basis info
 
     // computing (BW^-1)_i * T_{BA}
     double BinvTBA[nConsMaster];

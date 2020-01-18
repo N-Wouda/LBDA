@@ -6,7 +6,7 @@ project(smips
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_definitions(-Wall)
+add_definitions(-Wall -Wextra)
 
 if(CMAKE_BUILD_TYPE MATCHES RELEASE)
 	add_definitions(-O3)

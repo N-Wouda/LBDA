@@ -36,12 +36,12 @@ bool Master::addCut(
     GRBaddconstr(d_cmodel, d_n1 + 2, cind, cval, GRB_EQUAL, gamma, nullptr);
 
     // add cut to internal storage of master
-    d_xCoeffs.push_back(std::vector<double>(beta, beta + d_n1));
-    d_cuts.push_back(gamma);
+    d_xCoeffs.emplace_back(beta, beta + d_n1);
+    d_cuts.emplace_back(gamma);
 
-    d_kappa.push_back(1);
-    d_beta.push_back(std::vector<double>{beta, beta + d_n1});
-    d_gamma.push_back(gamma);
+    d_kappa.emplace_back(1);
+    d_beta.emplace_back(beta, beta + d_n1);
+    d_gamma.emplace_back(gamma);
 
     return false;
 }

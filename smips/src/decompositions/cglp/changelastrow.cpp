@@ -1,6 +1,6 @@
 #include "decompositions/cglp.h"
 
-void Cglp::chg_row(double *x_coefs, double cons)
+void Cglp::changeLastRow(double *x_coefs, double cons)
 {
     for (size_t term = 0; term != 2 * d_n1; ++term)
     {

@@ -1,6 +1,6 @@
 #include "decompositions/cglp.h"
 
-void Cglp::add_disjunction(
+void Cglp::addDisjunction(
     double *x, double theta, double *beta, double tau, double gamma)
 {
     double minus_beta[d_n1];

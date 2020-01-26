@@ -1,14 +1,15 @@
 #include "decompositions/cglp.h"
 
 Cglp::Cglp(GRBEnv &env, Master &master) :
-    d_n1(master.d_n1),
+    d_n1(master.n1()),
     d_model(env),
     d_constrs_theta(2 * d_n1),
     d_constrs_x(2 * d_n1),
     d_constrs_cons(2 * d_n1)
 {
     d_pi_theta = d_model.addVar(-1.0, 1.0, 0.0, GRB_CONTINUOUS);
-    double lb[d_n1], ub[d_n1];
+    double lb[d_n1];
+    double ub[d_n1];
 
     std::fill_n(lb, d_n1, -1.0);
     std::fill_n(ub, d_n1, 1.0);
@@ -52,18 +53,17 @@ Cglp::Cglp(GRBEnv &env, Master &master) :
             lhs[col] = GRBLinExpr(d_pi_x[col]);
             lhs[col].addTerms(Gamma_column, lambda, nCuts);
         }
+
         char senses[d_n1];
         std::fill_n(senses, d_n1, GRB_GREATER_EQUAL);
 
         double rhs[d_n1];
         std::fill_n(rhs, d_n1, 0.0);
-
-        GRBConstr *x_constrs = d_model.addConstrs(lhs,
-                                                  senses,
-                                                  rhs,
-                                                  nullptr,
-                                                  d_n1);
-        d_constrs_x[term] = x_constrs;
+        d_constrs_x[term] = d_model.addConstrs(lhs,
+                                               senses,
+                                               rhs,
+                                               nullptr,
+                                               d_n1);;
 
         // constraint corresponding to pi_0
         GRBLinExpr lambda_delta;

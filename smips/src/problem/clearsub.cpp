@@ -1,6 +1,6 @@
 #include "problem.h"
 
-void Problem::clear_sub()
+void Problem::clearSub()
 {
     if (not d_sub_initialized)  // if not already initialized
         return;                 // then do nothing
@@ -23,7 +23,7 @@ void Problem::clear_sub()
 
     delete[] d_constrs;  // heap allocated, but d_sub is cleared
 
-    // this ensures that: (1) init_sub() is called if evaluate()
+    // this ensures that: (1) initSub() is called if evaluate()
     // is called, and destructor does not call delete[] d_constrs
     d_sub_initialized = false;
 }

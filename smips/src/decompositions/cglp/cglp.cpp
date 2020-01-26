@@ -7,12 +7,6 @@ Cglp::Cglp(GRBEnv &env, Master &master) :
     d_constrs_x(2 * d_n1),
     d_constrs_cons(2 * d_n1)
 {
-    std::vector<std::vector<double>> &Gamma = master.d_xcoefs;
-    std::vector<double> &Delta = master.d_cons;
-
-    size_t nTerms = 2 * d_n1;
-    size_t nCuts = Delta.size();
-
     d_pi_theta = d_model.addVar(-1.0, 1.0, 0.0, GRB_CONTINUOUS);
     double lb[d_n1], ub[d_n1];
 
@@ -20,6 +14,9 @@ Cglp::Cglp(GRBEnv &env, Master &master) :
     std::fill_n(ub, d_n1, 1.0);
     d_pi_x = d_model.addVars(lb, ub, nullptr, nullptr, nullptr, d_n1);
     d_pi_0 = d_model.addVar(-1.0, 1.0, -1.0, GRB_CONTINUOUS);
+
+    auto const &Delta = master.cuts();
+    size_t nCuts = Delta.size();
 
     double ones[nCuts];
     std::fill_n(ones, nCuts, 1.0);
@@ -30,7 +27,9 @@ Cglp::Cglp(GRBEnv &env, Master &master) :
     // pi_x,i >= -lambda^T Gamma_i (i-th column of gamma)
     // pi_0 <= lambda^T Delta
 
-    for (size_t term = 0; term != nTerms; ++term)
+    auto const &Gamma = master.xCoeffs();
+
+    for (size_t term = 0; term != 2 * d_n1; ++term)
     {
         GRBVar *lambda = d_model.addVars(nCuts);  // multipliers
 

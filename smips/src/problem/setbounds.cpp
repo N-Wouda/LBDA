@@ -1,6 +1,6 @@
 #include "problem.h"
 
-void Problem::set_bounds(std::vector<double> &l1,
+void Problem::setBounds(std::vector<double> &l1,
                          std::vector<double> &u1,
                          std::vector<double> &l2,
                          std::vector<double> &u2)

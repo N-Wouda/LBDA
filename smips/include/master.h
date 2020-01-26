@@ -14,17 +14,16 @@ class Master
         double thetaVal;
     };
 
-public:
     // GRBVar *d_xVars;
     // GRBVar d_theta;
     // GRBModel d_model;
     GRBmodel *d_cmodel;
 
     // internal storage: only valid for regular l-shaped and lbda cuts
-    std::vector<std::vector<double>> d_xcoefs;
-    std::vector<double> d_cons;
+    std::vector<std::vector<double>> d_xCoeffs;
+    std::vector<double> d_cuts;
 
-    // slack variable identities s = kappa * theta - beta * x - gamma
+    // slack variable identities slack = kappa * theta - beta * x - gamma
     std::vector<double> d_kappa;
     std::vector<std::vector<double>> d_beta;
     std::vector<double> d_gamma;
@@ -33,20 +32,28 @@ public:
     size_t d_nSlacks;
 
     // storing the optimality cut coefficients
-    // vector<vector<double>> d_xcoefs;
+    // vector<vector<double>> d_xCoeffs;
 
-    // initializes d_model and its variables
+public:
     Master(GRBEnv &env, GRBenv *c_env, Problem &problem);
 
     Master(Master const &other);
 
     ~Master();
 
-    // adds cut theta >= beta^T x + gamma, if this cut is violated (ret = true),
-    // else cut is not added (ret = false).
+    /**
+     * Adds cut <code>theta >= beta^T x + gamma</code> if this cut is violated.
+     * @return  Is the cut violated? If true, the cut was added; else not.
+     */
     bool addCut(double *beta, double gamma, double *x, double theta, double tol);
 
-    Solution solve();  // solves the gurobimodel
+    [[nodiscard]] std::vector<double> const &cuts() const;
+
+    [[nodiscard]] std::vector<std::vector<double>> const &xCoeffs() const;
+
+    [[nodiscard]] size_t n1() const;
+
+    Solution const solve();
 };
 
 #endif

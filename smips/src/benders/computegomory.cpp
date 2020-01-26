@@ -20,22 +20,16 @@ double Benders::computeGomory(
         return d_objectives[s][idx];
     }
 
-    double omega_alpha[d_m2];  // rhs vector of gomory relaxation
+    double rhs[d_m2];
 
-    for (size_t row = 0; row != d_m2; ++row)  // compute element-by-element
-        omega_alpha[row] = ws[row] - alpha[row];
+    for (size_t row = 0; row != d_m2; ++row)
+        rhs[row] = ws[row] - alpha[row];
 
-    // update gomory relaxation
-    d_gomory.update(omega_alpha, vBasis, cBasis);
-
-    // solve gomory relaxation and store objective bound
+    d_gomory.update(rhs, vBasis, cBasis);
     double gom_obj = d_gomory.solve();
 
-    // basis is now visited: store it
-    visited_bases.push_back(basis);
-
-    // store corresponding objective value
-    d_objectives[s].push_back(gom_obj);
+    visited_bases.emplace_back(basis);
+    d_objectives[s].emplace_back(gom_obj);
 
     return gom_obj;
 }

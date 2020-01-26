@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 
 set(SOURCES
-		copy_ctor.cpp
+		copyconstructor.cpp
 		destructor.cpp
 		solve.cpp
 		gominfo.cpp

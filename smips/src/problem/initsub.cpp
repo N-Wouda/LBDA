@@ -1,6 +1,6 @@
 #include "problem.h"
 
-void Problem::init_sub()
+void Problem::initSub()
 {
     char vTypes[d_n2];
     std::fill(vTypes, vTypes + d_p2, GRB_INTEGER);

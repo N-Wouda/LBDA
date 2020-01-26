@@ -1,8 +1,8 @@
 #include "master.h"
 
 Master::Master(Master const &other) :
-    d_xcoefs(other.d_xcoefs),
-    d_cons(other.d_cons),
+    d_xCoeffs(other.d_xCoeffs),
+    d_cuts(other.d_cuts),
     d_kappa(other.d_kappa),
     d_beta(other.d_beta),
     d_gamma(other.d_gamma),

@@ -4,13 +4,7 @@ Master::Master(GRBEnv &env, GRBenv *c_env, Problem &problem) :
     d_n1(problem.d_n1),
     d_nSlacks(problem.d_fs_leq + problem.d_fs_geq)
 {
-    std::vector<std::vector<double>> &Amat = problem.d_Amat;
-
-    double *c = problem.d_c.data();
-    double *rhs = problem.d_b.data();
-
-    // The C API gives access to advanced simplex routines.
-    GRBnewmodel(c_env,
+    GRBnewmodel(c_env,  // The C API gives access to advanced simplex routines.
                 &d_cmodel,
                 nullptr,
                 0,
@@ -20,8 +14,7 @@ Master::Master(GRBEnv &env, GRBenv *c_env, Problem &problem) :
                 nullptr,
                 nullptr);
 
-    // Theta
-    GRBaddvar(d_cmodel,
+    GRBaddvar(d_cmodel,  // theta
               0,
               nullptr,
               nullptr,
@@ -35,28 +28,29 @@ Master::Master(GRBEnv &env, GRBenv *c_env, Problem &problem) :
     std::fill_n(vtypes, problem.d_p1, GRB_INTEGER);
     std::fill(vtypes + problem.d_p1, vtypes + d_n1, GRB_CONTINUOUS);
 
-    // X variables
-    GRBaddvars(d_cmodel,
+    GRBaddvars(d_cmodel,  // first-stage (x) variables.
                d_n1,
                0,
                nullptr,
                nullptr,
                nullptr,
-               c,
+               problem.d_c.data(),
                problem.d_l1.data(),
                problem.d_u1.data(),
                vtypes,
                nullptr);
 
-    // adding constraints
+    // Add constraints.
     int cind[d_n1];
     std::iota(cind, cind + d_n1, 1);
+
+    double *rhs = problem.d_b.data();
 
     for (size_t con = 0; con != problem.d_m1; ++con)
         GRBaddconstr(d_cmodel,
                      d_n1,
                      cind,
-                     Amat[con].data(),
+                     problem.d_Amat[con].data(),
                      GRB_EQUAL,
                      rhs[con],
                      nullptr);
@@ -89,14 +83,14 @@ Master::Master(GRBEnv &env, GRBenv *c_env, Problem &problem) :
     for (size_t con = 0; con != fs_leq; ++con)
     {
         d_kappa.push_back(0);
-        d_beta.push_back(Amat[con]);
+        d_beta.push_back(problem.d_Amat[con]);
         d_gamma.push_back(-rhs[con]);
     }
 
     for (size_t con = fs_leq; con != d_nSlacks; ++con)
     {
         d_kappa.push_back(0);
-        std::vector<double> &beta = Amat[con];
+        std::vector<double> &beta = problem.d_Amat[con];
         std::vector<double> minus_beta(d_n1);
 
         for (size_t var = 0; var != d_n1; ++var)

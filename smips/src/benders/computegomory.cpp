@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-double Benders::compute_gomory(
-    size_t s, int *vBasis, int *cBasis, double *ws, double *alpha)
+double Benders::computeGomory(
+    size_t s, int *vBasis, int *cBasis, double const *ws, double const *alpha)
 {
     std::vector<double> basis(d_n2 + d_m2);
     std::copy(vBasis, vBasis + d_n2, basis.begin());

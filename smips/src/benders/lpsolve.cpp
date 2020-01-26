@@ -15,14 +15,15 @@ void Benders::lpSolve(double tol)
         ++iter;
 
         // solve master problem, and collect x and theta
-        Master::Solution sol = d_master.solve();
+        auto sol = d_master.solve();
 
         double *x = sol.xVals;
         double theta = sol.thetaVal;
+
         // derive cut
         double beta[d_n1];
-
-        double gamma = lpCut(x, beta);  // beta is RBA
+        double gamma;
+        lpCut(x, beta, gamma);
 
         // add the cut (conditional on it being violated by the current
         // solution)

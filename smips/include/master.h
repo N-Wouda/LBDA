@@ -8,6 +8,12 @@
 
 class Master
 {
+    struct Solution
+    {
+        double *xVals;
+        double thetaVal;
+    };
+
 public:
     // GRBVar *d_xVars;
     // GRBVar d_theta;
@@ -32,19 +38,13 @@ public:
     // initializes d_model and its variables
     Master(GRBEnv &env, GRBenv *c_env, Problem &problem);
 
-    Master(const Master &other);
+    Master(Master const &other);
 
-    ~Master();  // deletes vars and frees d_cmodel
+    ~Master();
 
     // adds cut theta >= beta^T x + gamma, if this cut is violated (ret = true),
     // else cut is not added (ret = false).
     bool addCut(double *beta, double gamma, double *x, double theta, double tol);
-
-    struct Solution
-    {
-        double *xVals;
-        double thetaVal;
-    };
 
     Solution solve();  // solves the gurobimodel
 };

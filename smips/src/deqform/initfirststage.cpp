@@ -1,6 +1,6 @@
 #include "deqform.h"
 
-void DeqForm::init_fs(size_t n1,
+void DeqForm::initFirstStage(size_t n1,
                       size_t p1,
                       size_t m1,
                       size_t fs_leq,

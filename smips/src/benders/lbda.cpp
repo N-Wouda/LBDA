@@ -3,31 +3,32 @@
 #include <chrono>
 
 
-void Benders::lbda(double *alpha, double gomoryTimeLimit, double tol)
+void Benders::lbda(double *alpha, double timeLimit, double tol)
 {
     using clock = std::chrono::high_resolution_clock;
     using seconds = std::chrono::seconds;
 
-    d_gomory.setTimeLimit(gomoryTimeLimit);
+    d_gomory.setTimeLimit(timeLimit);
 
     auto start = clock::now();
 
     bool stop = false;
-    size_t iterations = 0;
+    size_t iterations = 1;
 
     while (not stop)
     {
         ++iterations;
 
         // solve master problem, and collect x and theta
-        Master::Solution sol = d_master.solve();
+        auto sol = d_master.solve();
 
         double *x = sol.xVals;
         double theta = sol.thetaVal;
-        double beta[d_n1];
 
         // derive cut
-        double gamma = lbdaCut(x, beta, alpha);  // beta is RBA
+        double beta[d_n1];
+        double gamma;
+        lbdaCut(x, alpha, beta, gamma);
 
         // add the cut (conditional on it being violated by the current
         // solution)
@@ -42,5 +43,5 @@ void Benders::lbda(double *alpha, double gomoryTimeLimit, double tol)
     auto final = clock::now();
 
     d_runTime += std::chrono::duration_cast<seconds>(final - start).count();
-    d_nCuts += iterations - 1;
+    d_nCuts += iterations;
 }

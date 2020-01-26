@@ -1,6 +1,6 @@
 #include "master.h"
 
-Master::Master(const Master &other) :
+Master::Master(Master const &other) :
     d_xcoefs(other.d_xcoefs),
     d_cons(other.d_cons),
     d_kappa(other.d_kappa),

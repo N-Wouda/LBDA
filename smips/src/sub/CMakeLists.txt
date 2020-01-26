@@ -4,7 +4,8 @@ set(SOURCES
 		copy_ctor.cpp
 		destructor.cpp
 		solve.cpp
-		solve2.cpp
+		gominfo.cpp
+		multipliers.cpp
 		sub.cpp
 		update.cpp)
 

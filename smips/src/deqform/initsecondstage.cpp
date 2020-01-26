@@ -1,6 +1,6 @@
 #include "deqform.h"
 
-void DeqForm::init_ss(size_t n1,
+void DeqForm::initSecondStage(size_t n1,
                       size_t n2,
                       size_t p2,
                       size_t m2,

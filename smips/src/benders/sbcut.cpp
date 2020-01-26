@@ -1,15 +1,15 @@
 #include "benders.h"
 
-void Benders::sb_cut(double *x, double *beta, double &gamma)
+void Benders::sbCut(double *x, double *beta, double &gamma)
 {
     auto &omega = d_problem.d_omega;
     auto &Tmat = d_problem.d_Tmat;
     auto &probs = d_problem.d_probs;
 
+    gamma = 0;
+
     double Tx[d_m2];
     computeTx(x, Tx);
-
-    gamma = 0.0;
 
     double lw = 0;
     for (size_t s = 0; s != d_S; ++s)
@@ -23,7 +23,10 @@ void Benders::sb_cut(double *x, double *beta, double &gamma)
             rhs[row] = ws[row] - Tx[row];
 
         d_sub.update(rhs);
-        Sub::Multipliers info = d_sub.solve();
+        d_sub.solve();
+
+        auto const info = d_sub.multipliers();
+
         double *lambda = info.lambda;
         double *pi_u = info.pi_u;
 

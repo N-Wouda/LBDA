@@ -32,6 +32,5 @@ Sub::Multipliers const Sub::multipliers()
         delete[] vbasis;
     }
 
-    return Multipliers{d_model.get(GRB_DoubleAttr_Pi,d_constrs, d_m2), pi_u};
-
+    return Multipliers{d_model.get(GRB_DoubleAttr_Pi, d_constrs, d_m2), pi_u};
 }

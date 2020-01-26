@@ -1,15 +1,15 @@
 #include "deqform.h"
 
 void DeqForm::initFirstStage(size_t n1,
-                      size_t p1,
-                      size_t m1,
-                      size_t fs_leq,
-                      size_t fs_geq,
-                      double *lb,
-                      double *ub,
-                      double *c,
-                      double *rhs,
-                      std::vector<std::vector<double>> &Amat)
+                             size_t p1,
+                             size_t m1,
+                             size_t fs_leq,
+                             size_t fs_geq,
+                             double *lb,
+                             double *ub,
+                             double *c,
+                             double *rhs,
+                             std::vector<std::vector<double>> &Amat)
 {
     // variables
     char vTypes[n1];

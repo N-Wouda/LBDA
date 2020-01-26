@@ -34,7 +34,7 @@ void Problem::ssv95(size_t S,
 
     d_L = -320;
 
-    d_Wmat = std::vector<std::vector<double>> {{2, 3, 4, 5}, {6, 1, 3, 2}};
+    d_Wmat = std::vector<std::vector<double>>{{2, 3, 4, 5}, {6, 1, 3, 2}};
 
     std::vector<std::vector<double>> T_standard = {{1, 0}, {0, 1}};
     std::vector<std::vector<double>> T_alternative = {{2.0 / 3, 1.0 / 3},

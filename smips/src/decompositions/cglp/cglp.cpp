@@ -59,11 +59,7 @@ Cglp::Cglp(GRBEnv &env, Master &master) :
 
         double rhs[d_n1];
         std::fill_n(rhs, d_n1, 0.0);
-        d_constrs_x[term] = d_model.addConstrs(lhs,
-                                               senses,
-                                               rhs,
-                                               nullptr,
-                                               d_n1);;
+        d_constrs_x[term] = d_model.addConstrs(lhs, senses, rhs, nullptr, d_n1);
 
         // constraint corresponding to pi_0
         GRBLinExpr lambda_delta;

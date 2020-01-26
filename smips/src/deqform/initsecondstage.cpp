@@ -1,19 +1,19 @@
 #include "deqform.h"
 
 void DeqForm::initSecondStage(size_t n1,
-                      size_t n2,
-                      size_t p2,
-                      size_t m2,
-                      size_t S,
-                      size_t ss_leq,
-                      size_t ss_geq,
-                      double *lb,
-                      double *ub,
-                      double *probs,
-                      double *q,
-                      std::vector<std::vector<double>> &Tmat,
-                      std::vector<std::vector<double>> &Wmat,
-                      std::vector<std::vector<double>> &omega)
+                              size_t n2,
+                              size_t p2,
+                              size_t m2,
+                              size_t S,
+                              size_t ss_leq,
+                              size_t ss_geq,
+                              double *lb,
+                              double *ub,
+                              double *probs,
+                              double *q,
+                              std::vector<std::vector<double>> &Tmat,
+                              std::vector<std::vector<double>> &Wmat,
+                              std::vector<std::vector<double>> &omega)
 {
     GRBLinExpr Tx[m2];
     for (size_t conIdx = 0; conIdx != m2; ++conIdx)

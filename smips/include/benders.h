@@ -36,13 +36,13 @@ class Benders
                          double const *ws,
                          double const *alpha);
 
-    void computeTx(double const *x, arma::vec &Tx);
+    void computeTx(arma::vec const &x, arma::vec &Tx);
 
-    void lbdaCut(double *x, double *alpha, double *beta, double &gamma);
+    void lbdaCut(arma::vec const &x, double *alpha, arma::vec &beta, double &gamma);
 
-    void lpCut(double *x, double *beta, double &gamma);
+    void lpCut(arma::vec const &x, arma::vec &beta, double &gamma);
 
-    void sbCut(double *x, double *beta, double &gamma);
+    void sbCut(arma::vec const &x, arma::vec &beta, double &gamma);
 
 public:
     Benders(GRBEnv &env, GRBenv *c_env, Problem &problem);

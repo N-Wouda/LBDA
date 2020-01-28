@@ -1,13 +1,7 @@
 #include "benders.h"
 
-void Benders::lpCut(double *x, double *beta, double &gamma)
+void Benders::lpCut(arma::vec const &x, arma::vec &beta, double &gamma)
 {
-    auto &omega = d_problem.d_omega;
-    auto &Tmat = d_problem.d_Tmat;
-    auto &probs = d_problem.d_probs;
-
-    gamma = 0;
-
     arma::vec Tx(d_problem.d_m2);
     computeTx(x, Tx);
 
@@ -18,7 +12,7 @@ void Benders::lpCut(double *x, double *beta, double &gamma)
 
     for (size_t s = 0; s != d_problem.d_S; ++s)
     {
-        arma::vec ws(omega[s]);
+        arma::vec ws(d_problem.d_omega[s]);
         arma::vec rhs = ws - Tx;
 
         sub.update(rhs);
@@ -28,7 +22,7 @@ void Benders::lpCut(double *x, double *beta, double &gamma)
 
         double *lambda = info.lambda;
         double *pi_u = info.pi_u;
-        double prob = probs[s];
+        double const prob = d_problem.d_probs[s];
 
         for (size_t row = 0; row != d_problem.d_m2; ++row)
         {
@@ -45,8 +39,7 @@ void Benders::lpCut(double *x, double *beta, double &gamma)
 
     for (size_t col = 0; col != d_problem.d_n1; ++col)
     {
-        beta[col] = 0.0;
         for (size_t row = 0; row != d_problem.d_m2; ++row)
-            beta[col] += dual[row] * Tmat[row][col];
+            beta[col] += dual[row] * d_problem.d_Tmat[row][col];
     }
 }

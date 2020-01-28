@@ -1,15 +1,12 @@
 #include "benders.h"
 
-void Benders::lbdaCut(double *x, double *alpha, double *beta, double &gamma)
+void Benders::lbdaCut(arma::vec const &x,
+                      double *alpha,
+                      arma::vec &beta,
+                      double &gamma)
 {
-    auto &omega = d_problem.d_omega;
-    auto &Tmat = d_problem.d_Tmat;
-    auto &probs = d_problem.d_probs;
-
     arma::vec Tx(d_problem.d_m2);
     computeTx(x, Tx);
-
-    gamma = 0;
 
     // cut coefficients: initialize to zero
     double dual[d_problem.d_m2];
@@ -19,7 +16,7 @@ void Benders::lbdaCut(double *x, double *alpha, double *beta, double &gamma)
 
     for (size_t s = 0; s != d_problem.d_S; ++s)
     {
-        arma::vec ws(omega[s]);
+        arma::vec ws(d_problem.d_omega[s]);
         arma::vec rhs = ws - Tx;
 
         sub.update(rhs);
@@ -27,16 +24,17 @@ void Benders::lbdaCut(double *x, double *alpha, double *beta, double &gamma)
 
         auto const info = sub.gomInfo();
 
-        double *lambda = info.lambda;  // extract lambda (for optimality cut)
+        double *lambda = info.lambda;  // lambda (for optimality cut)
+        int *vBasis = info.vBasis;     // vBasis (to update gomory relaxation)
+        int *cBasis = info.cBasis;     // cBasis (to update gomory relaxation)
 
-        // extract vBasis (to update gomory relaxation)
-        int *vBasis = info.vBasis;
+        double const gom_obj = computeGomory(s,
+                                             vBasis,
+                                             cBasis,
+                                             ws.memptr(),
+                                             alpha);
 
-        // extract vBasis (to update gomory relaxation)
-        int *cBasis = info.cBasis;
-
-        double gom_obj = computeGomory(s, vBasis, cBasis, ws.memptr(), alpha);
-        double prob = probs[s];
+        double const prob = d_problem.d_probs[s];
 
         gamma += prob * gom_obj;  // gom_obj = lambda^T (omega - alpha) +
                                   // psi(omega - alpha), thus, we add lambda^T
@@ -55,9 +53,7 @@ void Benders::lbdaCut(double *x, double *alpha, double *beta, double &gamma)
 
     for (size_t col = 0; col != d_problem.d_n1; ++col)
     {
-        beta[col] = 0.0;
-
         for (size_t row = 0; row != d_problem.d_m2; ++row)
-            beta[col] += dual[row] * Tmat[row][col];
+            beta[col] += dual[row] * d_problem.d_Tmat[row][col];
     }
 }

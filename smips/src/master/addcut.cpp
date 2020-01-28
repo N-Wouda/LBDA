@@ -1,12 +1,12 @@
 #include "master.h"
 
-bool Master::addCut(
-    double const *x, double const *beta, double gamma, double theta, double tol)
+bool Master::addCut(arma::vec const &x,
+                    arma::vec const &beta,
+                    double gamma,
+                    double theta,
+                    double tol)
 {
-    double betaxgamma = gamma;
-
-    for (size_t var = 0; var != d_n1; ++var)
-        betaxgamma += beta[var] * x[var];
+    double betaxgamma = gamma + arma::dot(x, beta);
 
     if (betaxgamma <= theta + tol)  // betaxgamma >= theta, no cut added
         return true;
@@ -36,7 +36,7 @@ bool Master::addCut(
     GRBaddconstr(d_cmodel, d_n1 + 2, cind, cval, GRB_EQUAL, gamma, nullptr);
 
     // add cut to internal storage of master
-    d_xCoeffs.emplace_back(beta, beta + d_n1);
+    d_xCoeffs.emplace_back(beta.memptr(), beta.memptr() + d_n1);
     d_cuts.emplace_back(gamma);
 
     return false;

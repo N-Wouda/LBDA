@@ -15,15 +15,14 @@ std::unique_ptr<arma::vec> Benders::strongBenders(double tol)
         iterations++;
 
         auto sol = d_master.solve();
-        double *x = sol.x->memptr();
 
         // derive cut
-        double beta[d_problem.d_n1];
-        double gamma;
-        sbCut(x, beta, gamma);
+        arma::vec beta(d_problem.d_n1, arma::fill::zeros);
+        double gamma = 0;
+        sbCut(*sol.x, beta, gamma);
 
         // add the cut conditional on it being violated by the current solution
-        if (d_master.addCut(x, beta, gamma, sol.theta, tol))
+        if (d_master.addCut(*sol.x, beta, gamma, sol.theta, tol))
         {
             auto t2 = clock::now();
 

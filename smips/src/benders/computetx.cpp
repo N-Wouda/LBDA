@@ -1,6 +1,6 @@
 #include "benders.h"
 
-void Benders::computeTx(double const *x, arma::vec &Tx)
+void Benders::computeTx(arma::vec const &x, arma::vec &Tx)
 {
     auto &Tmat = d_problem.d_Tmat;
 

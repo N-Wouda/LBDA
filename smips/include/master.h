@@ -46,8 +46,8 @@ public:
      * Adds cut <code>theta >= beta^T x + gamma</code> if this cut is violated.
      * @return  Is the cut violated? If true, the cut was added; else not.
      */
-    bool addCut(double const *x,
-                double const *beta,
+    bool addCut(arma::vec const &x,
+                arma::vec const &beta,
                 double gamma,
                 double theta,
                 double tol);

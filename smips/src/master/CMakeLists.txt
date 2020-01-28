@@ -11,3 +11,4 @@ set(SOURCES
 		xcoeffs.cpp)
 
 add_library(master ${SOURCES})
+target_link_libraries(master armadillo)

@@ -1,13 +1,7 @@
 #include "benders.h"
 
-void Benders::sbCut(double *x, double *beta, double &gamma)
+void Benders::sbCut(arma::vec const &x, arma::vec &beta, double &gamma)
 {
-    auto &omega = d_problem.d_omega;
-    auto &Tmat = d_problem.d_Tmat;
-    auto &probs = d_problem.d_probs;
-
-    gamma = 0;
-
     arma::vec Tx(d_problem.d_m2);
     computeTx(x, Tx);
 
@@ -17,8 +11,8 @@ void Benders::sbCut(double *x, double *beta, double &gamma)
 
     for (size_t s = 0; s != d_problem.d_S; ++s)
     {
-        arma::vec ws(omega[s]);
-        double const prob = probs[s];
+        arma::vec ws(d_problem.d_omega[s]);
+        double const prob = d_problem.d_probs[s];
 
         arma::vec rhs = ws - Tx;
 
@@ -27,15 +21,14 @@ void Benders::sbCut(double *x, double *beta, double &gamma)
 
         auto const info = sub.multipliers();
 
-        arma::vec pi(d_problem.d_n1);
+        arma::vec pi(d_problem.d_n1, arma::fill::zeros);
 
         for (size_t var = 0; var != d_problem.d_n1; ++var)
         {
-            pi[var] = 0.0;
             for (size_t row = 0; row != d_problem.d_m2; ++row)
-                pi[var] += info.lambda[row] * Tmat[row][var];
+                pi[var] += info.lambda[row] * d_problem.d_Tmat[row][var];
 
-            beta[var] += -prob * pi[var];
+            beta[var] -= prob * pi[var];
         }
 
         d_lr.update(ws, pi);

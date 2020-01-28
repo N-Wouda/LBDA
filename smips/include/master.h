@@ -12,10 +12,11 @@ class Master
 {
     struct Solution
     {
-        std::unique_ptr<arma::vec> xVals;
-        double thetaVal;
+        std::unique_ptr<arma::vec> x;
+        double theta;
     };
 
+    // TODO is this useful?
     // GRBVar *d_xVars;
     // GRBVar d_theta;
     // GRBModel d_model;
@@ -27,9 +28,9 @@ class Master
 
     // slack variable identities slack = kappa * theta - beta * x - gamma
     // TODO is this useful?
-    std::vector<double> d_kappa;
-    std::vector<std::vector<double>> d_beta;
-    std::vector<double> d_gamma;
+    // std::vector<double> d_kappa;
+    // std::vector<std::vector<double>> d_beta;
+    // std::vector<double> d_gamma;
 
     size_t d_n1;
     size_t d_nSlacks;

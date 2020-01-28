@@ -14,26 +14,23 @@ std::unique_ptr<arma::vec> Benders::strongBenders(double tol)
     {
         iterations++;
 
-        // solve master problem, and collect x and theta
         auto sol = d_master.solve();
-
-        double *x = sol.xVals->memptr();
-        double theta = sol.thetaVal;
+        double *x = sol.x->memptr();
 
         // derive cut
         double beta[d_problem.d_n1];
         double gamma;
-        sbCut(x, beta, gamma);  // beta and gamma are RBA
+        sbCut(x, beta, gamma);
 
         // add the cut conditional on it being violated by the current solution
-        if (d_master.addCut(x, beta, gamma, theta, tol))
+        if (d_master.addCut(x, beta, gamma, sol.theta, tol))
         {
             auto t2 = clock::now();
 
             d_runTime += std::chrono::duration_cast<seconds>(t2 - t1).count();
             d_nCuts += iterations;
 
-            return std::move(sol.xVals);
+            return std::move(sol.x);
         }
     }
 }

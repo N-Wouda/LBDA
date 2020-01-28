@@ -79,26 +79,5 @@ Master::Master(GRBEnv &env, GRBenv *c_env, Problem &problem) :
                nullptr,
                nullptr);
 
-    // Store slack identities
-    for (size_t con = 0; con != fs_leq; ++con)
-    {
-        d_kappa.push_back(0);
-        d_beta.push_back(problem.d_Amat[con]);
-        d_gamma.push_back(-rhs[con]);
-    }
-
-    for (size_t con = fs_leq; con != d_nSlacks; ++con)
-    {
-        d_kappa.push_back(0);
-        std::vector<double> &beta = problem.d_Amat[con];
-        std::vector<double> minus_beta(d_n1);
-
-        for (size_t var = 0; var != d_n1; ++var)
-            minus_beta[var] = -beta[var];
-
-        d_beta.push_back(minus_beta);
-        d_gamma.push_back(rhs[con]);
-    }
-
     GRBupdatemodel(d_cmodel);
 }

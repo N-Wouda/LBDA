@@ -39,9 +39,5 @@ bool Master::addCut(
     d_xCoeffs.emplace_back(beta, beta + d_n1);
     d_cuts.emplace_back(gamma);
 
-    d_kappa.emplace_back(1);
-    d_beta.emplace_back(beta, beta + d_n1);
-    d_gamma.emplace_back(gamma);
-
     return false;
 }

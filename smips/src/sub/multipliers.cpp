@@ -3,6 +3,8 @@
 
 Sub::Multipliers const Sub::multipliers()
 {
+    // TODO clean this up
+    
     // computing shadow prices of upper bounds of y variables
     double *pi_u;
 
@@ -32,5 +34,6 @@ Sub::Multipliers const Sub::multipliers()
         delete[] vbasis;
     }
 
-    return Multipliers{d_model.get(GRB_DoubleAttr_Pi, d_constrs, d_m2), pi_u};
+    arma::vec lambda(d_model.get(GRB_DoubleAttr_Pi, d_constrs, d_m2), d_m2);
+    return Multipliers{lambda, arma::vec{pi_u, d_n2}};
 }

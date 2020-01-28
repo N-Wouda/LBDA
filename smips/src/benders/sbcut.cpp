@@ -24,21 +24,15 @@ void Benders::sbCut(arma::vec const &x, arma::vec &beta, double &gamma)
         arma::vec pi = arma::zeros(d_problem.d_n1);
 
         for (size_t var = 0; var != d_problem.d_n1; ++var)
-        {
             for (size_t row = 0; row != d_problem.d_m2; ++row)
                 pi[var] += info.lambda[row] * d_problem.d_Tmat[row][var];
 
-            beta[var] -= prob * pi[var];
-        }
+        beta -= prob * pi;
 
         d_lr.update(ws, pi);
         gamma += prob * d_lr.solve();
 
-        for (size_t row = 0; row != d_problem.d_m2; ++row)
-            lw += prob * info.lambda[row] * ws[row];
-
-        delete[] info.lambda;
-        delete[] info.pi_u;
+        lw += prob * arma::dot(info.lambda, ws);
     }
 
     std::cout << "lw = " << lw << ". L(pi, w) = " << gamma << '\n';

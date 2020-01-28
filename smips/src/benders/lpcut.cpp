@@ -18,22 +18,11 @@ void Benders::lpCut(arma::vec const &x, arma::vec &beta, double &gamma)
         sub.solve();
 
         auto const info = sub.multipliers();
-
-        double *lambda = info.lambda;
-        double *pi_u = info.pi_u;
         double const prob = d_problem.d_probs[s];
 
-        for (size_t row = 0; row != d_problem.d_m2; ++row)
-        {
-            dual[row] -= prob * lambda[row];
-            gamma += prob * lambda[row] * ws[row];
-        }
-
-        for (size_t var = 0; var != d_problem.d_n2; ++var)
-            gamma += prob * pi_u[var] * d_problem.d_u2[var];
-
-        delete[] lambda;
-        delete[] pi_u;
+        dual -= prob * info.lambda;
+        gamma += prob * arma::dot(info.lambda, ws);
+        gamma += prob * arma::dot(info.pi_u, d_problem.d_u2);
     }
 
     for (size_t col = 0; col != d_problem.d_n1; ++col)

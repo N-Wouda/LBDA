@@ -3,9 +3,9 @@
 
 #include "problem.h"
 
+#include <armadillo>
 #include <gurobi_c++.h>
 #include <iosfwd>
-#include <armadillo>
 
 class Sub
 {
@@ -18,7 +18,7 @@ class Sub
     GRBConstr *d_constrs;
     GRBVar *d_vars;
 
-    struct GomInfo
+    struct GomInfo  // TODO make this use arma as well, maybe combine with Multipliers?
     {
         double *lambda;
         int *vBasis;
@@ -27,8 +27,8 @@ class Sub
 
     struct Multipliers
     {
-        double *lambda;
-        double *pi_u;
+        arma::vec lambda;
+        arma::vec pi_u;
     };
 
 public:

@@ -45,7 +45,8 @@ public:
      * Adds cut <code>theta >= beta^T x + gamma</code> if this cut is violated.
      * @return  Is the cut violated? If true, the cut was added; else not.
      */
-    bool addCut(double *beta, double gamma, double *x, double theta, double tol);
+    bool addCut(
+        double const *x, double const *beta, double gamma, double theta, double tol);
 
     [[nodiscard]] std::vector<double> const &cuts() const;
 

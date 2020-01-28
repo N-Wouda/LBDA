@@ -1,7 +1,7 @@
 #include "master.h"
 
 bool Master::addCut(
-    double *beta, double gamma, double *x, double theta, double tol)
+    double const *x, double const *beta, double gamma, double theta, double tol)
 {
     double betaxgamma = gamma;
 

@@ -27,7 +27,7 @@ void Benders::lpSolve(double tol)
 
         // add the cut (conditional on it being violated by the current
         // solution)
-        stop = d_master.addCut(beta, gamma, x, theta, tol);
+        stop = d_master.addCut(x, beta, gamma, theta, tol);
 
         if (stop)
             std::copy(x, x + d_n1, d_xvals);

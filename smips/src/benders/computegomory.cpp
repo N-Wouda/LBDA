@@ -2,8 +2,7 @@
 
 #include <algorithm>
 
-double Benders::computeGomory(
-    size_t s, int *vBasis, int *cBasis, double const *ws, double const *alpha)
+double Benders::computeGomory(size_t s, int *vBasis, int *cBasis, arma::vec &rhs)
 {
     std::vector<double> basis(d_problem.d_n2 + d_problem.d_m2);
     std::copy(vBasis, vBasis + d_problem.d_n2, basis.begin());
@@ -20,12 +19,7 @@ double Benders::computeGomory(
         return d_objectives[s][idx];
     }
 
-    double rhs[d_problem.d_m2];
-
-    for (size_t row = 0; row != d_problem.d_m2; ++row)
-        rhs[row] = ws[row] - alpha[row];
-
-    d_gomory.update(rhs, vBasis, cBasis);
+    d_gomory.update(rhs.memptr(), vBasis, cBasis);
     double gom_obj = d_gomory.solve();
 
     visited_bases.emplace_back(basis);

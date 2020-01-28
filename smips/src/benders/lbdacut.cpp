@@ -1,25 +1,24 @@
 #include "benders.h"
 
 void Benders::lbdaCut(arma::vec const &x,
-                      double *alpha,
+                      arma::vec const &alpha,
                       arma::vec &beta,
                       double &gamma)
 {
     arma::vec Tx(d_problem.d_m2);
     computeTx(x, Tx);
 
-    // cut coefficients: initialize to zero
-    double dual[d_problem.d_m2];
-    std::fill(dual, dual + d_problem.d_m2, 0.0);
+    arma::vec dual = arma::zeros(d_problem.d_m2);  // cut coefficients
 
     auto sub = Sub(d_env, d_problem);
 
     for (size_t s = 0; s != d_problem.d_S; ++s)
     {
         arma::vec ws(d_problem.d_omega[s]);
-        arma::vec rhs = ws - Tx;
 
+        arma::vec rhs = ws - Tx;
         sub.update(rhs);
+
         sub.solve();
 
         auto const info = sub.gomInfo();
@@ -28,11 +27,8 @@ void Benders::lbdaCut(arma::vec const &x,
         int *vBasis = info.vBasis;     // vBasis (to update gomory relaxation)
         int *cBasis = info.cBasis;     // cBasis (to update gomory relaxation)
 
-        double const gom_obj = computeGomory(s,
-                                             vBasis,
-                                             cBasis,
-                                             ws.memptr(),
-                                             alpha);
+        rhs = ws - alpha;
+        double const gom_obj = computeGomory(s, vBasis, cBasis, rhs);
 
         double const prob = d_problem.d_probs[s];
 

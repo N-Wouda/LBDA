@@ -5,8 +5,7 @@ void Benders::lpCut(arma::vec const &x, arma::vec &beta, double &gamma)
     arma::vec Tx(d_problem.d_m2);
     computeTx(x, Tx);
 
-    double dual[d_problem.d_m2];
-    std::fill(dual, dual + d_problem.d_m2, 0.0);
+    arma::vec dual = arma::zeros(d_problem.d_m2);  // cut coefficients
 
     auto sub = Sub(d_env, d_problem);
 

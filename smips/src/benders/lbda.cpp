@@ -3,7 +3,7 @@
 #include <chrono>
 
 
-std::unique_ptr<arma::vec> Benders::lbda(double *alpha,
+std::unique_ptr<arma::vec> Benders::lbda(arma::vec const &alpha,
                                          double timeLimit,
                                          double tol)
 {
@@ -23,7 +23,7 @@ std::unique_ptr<arma::vec> Benders::lbda(double *alpha,
         auto sol = d_master.solve();
 
         // derive cut
-        arma::vec beta(d_problem.d_n1, arma::fill::zeros);
+        arma::vec beta = arma::zeros(d_problem.d_n1);
         double gamma = 0;
         lbdaCut(*sol.x, alpha, beta, gamma);
 

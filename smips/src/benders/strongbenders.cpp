@@ -17,7 +17,7 @@ std::unique_ptr<arma::vec> Benders::strongBenders(double tol)
         auto sol = d_master.solve();
 
         // derive cut
-        arma::vec beta(d_problem.d_n1, arma::fill::zeros);
+        arma::vec beta = arma::zeros(d_problem.d_n1);
         double gamma = 0;
         sbCut(*sol.x, beta, gamma);
 

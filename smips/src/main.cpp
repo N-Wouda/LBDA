@@ -33,9 +33,7 @@ int main()
         std::cout << res[var] << ' ';
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res.memptr()) << '\n';
 
-    size_t m2 = problem.d_m2;
-    double alpha[m2];
-    std::fill_n(alpha, m2, 0);
+    arma::vec alpha = arma::zeros(problem.d_m2);
 
     Benders lbda = lshaped;
     ptr = lbda.lbda(alpha, 1.0);

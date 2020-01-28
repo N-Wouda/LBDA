@@ -21,7 +21,7 @@ void Benders::sbCut(arma::vec const &x, arma::vec &beta, double &gamma)
 
         auto const info = sub.multipliers();
 
-        arma::vec pi(d_problem.d_n1, arma::fill::zeros);
+        arma::vec pi = arma::zeros(d_problem.d_n1);
 
         for (size_t var = 0; var != d_problem.d_n1; ++var)
         {

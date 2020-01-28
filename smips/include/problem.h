@@ -53,9 +53,9 @@ public:
     arma::vec d_l2;
     arma::vec d_u2;
 
-    std::vector<double> d_c;
-    std::vector<double> d_b;
-    std::vector<double> d_q;
+    arma::vec d_c;
+    arma::vec d_b;
+    arma::vec d_q;
 
     std::vector<std::vector<double>> d_Amat;
     std::vector<std::vector<double>> d_Tmat;
@@ -63,7 +63,7 @@ public:
 
     // rows of d_omega correspond to scenarios
     std::vector<std::vector<double>> d_omega;
-    std::vector<double> d_probs;
+    arma::vec d_probs;
 
     Problem(Data &generator, GRBEnv &env);
 

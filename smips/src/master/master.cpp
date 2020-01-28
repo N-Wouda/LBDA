@@ -34,7 +34,7 @@ Master::Master(GRBEnv &env, GRBenv *c_env, Problem &problem) :
                nullptr,
                nullptr,
                nullptr,
-               problem.d_c.data(),
+               problem.d_c.memptr(),
                problem.d_l1.memptr(),
                problem.d_u1.memptr(),
                vtypes,
@@ -44,7 +44,7 @@ Master::Master(GRBEnv &env, GRBenv *c_env, Problem &problem) :
     int cind[d_n1];
     std::iota(cind, cind + d_n1, 1);
 
-    double *rhs = problem.d_b.data();
+    double *rhs = problem.d_b.memptr();
 
     for (size_t con = 0; con != problem.d_m1; ++con)
         GRBaddconstr(d_cmodel,

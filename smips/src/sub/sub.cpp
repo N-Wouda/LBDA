@@ -10,13 +10,9 @@ Sub::Sub(GRBEnv &env, Problem &problem) :
     char vTypes[d_n2];
     std::fill(vTypes, vTypes + d_n2, GRB_CONTINUOUS);
 
-    // cost vector
-    double *q = problem.d_q.data();  // transform cost vector and omega to
-                                     // c-style array add variables
-
     d_vars = d_model.addVars(problem.d_l2.memptr(),
                              problem.d_u2.memptr(),
-                             q,
+                             problem.d_q.memptr(),
                              vTypes,
                              nullptr,
                              d_n2);

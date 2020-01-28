@@ -26,9 +26,8 @@ Lagrangian::Lagrangian(GRBEnv &env, Problem &problem) :
     std::fill_n(yTypes, problem.d_p2, GRB_INTEGER);
     std::fill_n(yTypes + problem.d_p2, d_n2 - problem.d_p2, GRB_CONTINUOUS);
 
-    // cost vector
-    double *q = problem.d_q.data();  // transform cost vector and omega to
-                                     // c-style array add variables
+    double *q = problem.d_q.memptr();  // cost vector
+
     GRBVar *y_vars = d_model.addVars(problem.d_l2.memptr(),
                                      problem.d_u2.memptr(),
                                      q,

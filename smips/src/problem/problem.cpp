@@ -32,8 +32,10 @@ Problem::Problem(size_t n1,
     d_u1(n1),
     d_l2(n2, arma::fill::zeros),
     d_u2(n2),
-    d_probs(S, 1.0 / S)
+    d_probs(S)
 {
     d_u1.fill(arma::datum::inf);
     d_u2.fill(arma::datum::inf);
+
+    d_probs.fill(1.0 / S);
 }

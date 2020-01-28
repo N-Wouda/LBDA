@@ -6,12 +6,9 @@ void Problem::initSub()
     std::fill(vTypes, vTypes + d_p2, GRB_INTEGER);
     std::fill(vTypes + d_p2, vTypes + d_n2, GRB_CONTINUOUS);
 
-    // cost vector
-    double *qPtr = d_q.data();  // transform cost vector and omega to c-style
-                                // array add variables
     GRBVar *vars = d_sub.addVars(d_l2.memptr(),
                                  d_u2.memptr(),
-                                 qPtr,
+                                 d_q.memptr(),
                                  vTypes,
                                  nullptr,
                                  d_n2);

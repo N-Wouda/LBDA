@@ -14,11 +14,12 @@ Gomory::Gomory(GRBEnv &env, Problem &problem) :
     std::fill(vTypes, vTypes + problem.d_p2, GRB_INTEGER);
     std::fill(vTypes + problem.d_p2, vTypes + d_n2, GRB_CONTINUOUS);
 
-    // cost vector
-    double *q = problem.d_q.data();  // transform cost vector and omega to
-                                     // c-style array add variables
-
-    d_vars = d_model.addVars(d_l2, d_u2, q, vTypes, nullptr, d_n2);
+    d_vars = d_model.addVars(d_l2,
+                             d_u2,
+                             problem.d_q.memptr(),
+                             vTypes,
+                             nullptr,
+                             d_n2);
 
     // constraint senses
     char senses[d_m2];

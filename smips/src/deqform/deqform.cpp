@@ -13,8 +13,8 @@ DeqForm::DeqForm(GRBEnv &env, Problem &problem) :
                    problem.d_fs_geq,
                    problem.d_l1.memptr(),
                    problem.d_u1.memptr(),
-                   problem.d_c.data(),
-                   problem.d_b.data(),
+                   problem.d_c.memptr(),
+                   problem.d_b.memptr(),
                    problem.d_Amat);
 
     initSecondStage(d_n1,
@@ -26,8 +26,8 @@ DeqForm::DeqForm(GRBEnv &env, Problem &problem) :
                     problem.d_ss_geq,
                     problem.d_l2.memptr(),
                     problem.d_u2.memptr(),
-                    problem.d_probs.data(),
-                    problem.d_q.data(),
+                    problem.d_probs.memptr(),
+                    problem.d_q.memptr(),
                     problem.d_Tmat,
                     problem.d_Wmat,
                     problem.d_omega);

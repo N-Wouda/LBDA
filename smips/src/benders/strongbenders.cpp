@@ -1,33 +1,39 @@
 #include "benders.h"
 
-void Benders::strongBenders(double tol)
-{
-    bool stop = false;
-    size_t iterations = 0;
+#include <chrono>
 
-    while (not stop)
+std::unique_ptr<arma::vec> Benders::strongBenders(double tol)
+{
+    using seconds = std::chrono::seconds;
+    using clock = std::chrono::high_resolution_clock;
+
+    auto t1 = clock::now();
+    size_t iterations = 1;
+
+    while (true)
     {
-        ++iterations;
+        iterations++;
 
         // solve master problem, and collect x and theta
         auto sol = d_master.solve();
 
-        double *x = sol.xVals;
+        double *x = sol.xVals->memptr();
         double theta = sol.thetaVal;
 
         // derive cut
-        double beta[d_n1];
+        double beta[d_problem.d_n1];
         double gamma;
         sbCut(x, beta, gamma);  // beta and gamma are RBA
 
         // add the cut conditional on it being violated by the current solution
-        stop = d_master.addCut(x, beta, gamma, theta, tol);
+        if (d_master.addCut(x, beta, gamma, theta, tol))
+        {
+            auto t2 = clock::now();
 
-        if (stop)
-            std::copy(x, x + d_n1, d_xvals);
+            d_runTime += std::chrono::duration_cast<seconds>(t2 - t1).count();
+            d_nCuts += iterations;
 
-        delete[] x;
+            return std::move(sol.xVals);
+        }
     }
-
-    std::cout << "Number of strong benders cuts: " << iterations << '\n';
 }

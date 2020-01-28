@@ -26,29 +26,32 @@ int main()
     std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
 
     Benders lshaped(env, c_env, problem);
-    lshaped.lpSolve();
-    x = lshaped.d_xvals;
+    auto ptr = lshaped.lpSolve();
+    auto res = *ptr;
+
     for (size_t var = 0; var != n1; ++var)
-        std::cout << x[var] << ' ';
-    std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
+        std::cout << res[var] << ' ';
+    std::cout << "\ncx + Q(x) = " << problem.evaluate(res.memptr()) << '\n';
 
     size_t m2 = problem.d_m2;
     double alpha[m2];
     std::fill_n(alpha, m2, 0);
 
     Benders lbda = lshaped;
-    lbda.lbda(alpha, 1.0);
-    x = lbda.d_xvals;
+    ptr = lbda.lbda(alpha, 1.0);
+    res = *ptr;
+
     for (size_t var = 0; var != n1; ++var)
-        std::cout << x[var] << ' ';
-    std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
+        std::cout << res[var] << ' ';
+    std::cout << "\ncx + Q(x) = " << problem.evaluate(res.memptr()) << '\n';
 
     Benders sb = lshaped;
-    sb.strongBenders();
-    x = sb.d_xvals;
+    ptr = sb.strongBenders();
+    res = *ptr;
+
     for (size_t var = 0; var != n1; ++var)
-        std::cout << x[var] << ' ';
-    std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
+        std::cout << res[var] << ' ';
+    std::cout << "\ncx + Q(x) = " << problem.evaluate(res.memptr()) << '\n';
 
     GRBfreeenv(c_env);
 }

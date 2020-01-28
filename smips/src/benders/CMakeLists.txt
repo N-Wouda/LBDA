@@ -5,7 +5,6 @@ set(SOURCES
 		computegomory.cpp
 		computetx.cpp
 		copyconstructor.cpp
-		destructor.cpp
 		lbda.cpp
 		lbdacut.cpp
 		lpcut.cpp

@@ -2,14 +2,15 @@
 
 #include <chrono>
 
-void Benders::lpSolve(double tol)
+std::unique_ptr<arma::vec> Benders::lpSolve(double tol)
 {
-    auto t1 = std::chrono::high_resolution_clock::now();
+    using seconds = std::chrono::seconds;
+    using clock = std::chrono::high_resolution_clock;
 
-    bool stop = false;
-    size_t iter = 0;
+    auto t1 = clock::now();
+    size_t iter = 1;
 
-    while (not stop)
+    while (true)
     {
         // cout << "iteration: " << iter << '\n';
         ++iter;
@@ -17,29 +18,24 @@ void Benders::lpSolve(double tol)
         // solve master problem, and collect x and theta
         auto sol = d_master.solve();
 
-        double *x = sol.xVals;
+        double *x = sol.xVals->memptr();
         double theta = sol.thetaVal;
 
         // derive cut
-        double beta[d_n1];
+        double beta[d_problem.d_n1];
         double gamma;
         lpCut(x, beta, gamma);
 
         // add the cut (conditional on it being violated by the current
         // solution)
-        stop = d_master.addCut(x, beta, gamma, theta, tol);
+        if (d_master.addCut(x, beta, gamma, theta, tol))
+        {
+            auto t2 = clock::now();
 
-        if (stop)
-            std::copy(x, x + d_n1, d_xvals);
+            d_runTime += std::chrono::duration_cast<seconds>(t2 - t1).count();
+            d_nCuts += iter;
 
-        delete[] x;
+            return std::move(sol.xVals);
+        }
     }
-
-    auto t2 = std::chrono::high_resolution_clock::now();
-    d_runTime += std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)
-                     .count()
-                 / 1000.0;
-    d_nCuts += iter - 1;
-
-    // cout << "Number of L-shaped iterations: " << iter << '\n';
 }

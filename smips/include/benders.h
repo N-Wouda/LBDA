@@ -8,14 +8,10 @@
 #include "problem.h"
 #include "sub.h"
 
+#include <armadillo>
 
 class Benders
 {
-    size_t d_n1;
-    size_t d_n2;
-    size_t d_m2;
-    size_t d_S;
-
     size_t d_nCuts;
     double d_runTime;
 
@@ -50,19 +46,15 @@ class Benders
     void sbCut(double *x, double *beta, double &gamma);
 
 public:
-    double *d_xvals;  // TODO make private
-
     Benders(GRBEnv &env, GRBenv *c_env, Problem &problem);
 
     Benders(const Benders &other);
 
-    ~Benders();
+    std::unique_ptr<arma::vec> lpSolve(double tol = 1e-4);
 
-    void lpSolve(double tol = 1e-4);
+    std::unique_ptr<arma::vec> strongBenders(double tol = 1e-4);
 
-    void strongBenders(double tol = 1e-4);
-
-    void lbda(double *alpha, double timeLimit = 1e6, double tol = 1e-4);
+    std::unique_ptr<arma::vec> lbda(double *alpha, double timeLimit = 1e6, double tol = 1e-4);
 };
 
 #endif

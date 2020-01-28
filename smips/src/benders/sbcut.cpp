@@ -8,18 +8,18 @@ void Benders::sbCut(double *x, double *beta, double &gamma)
 
     gamma = 0;
 
-    double Tx[d_m2];
+    double Tx[d_problem.d_m2];
     computeTx(x, Tx);
 
     double lw = 0;
-    for (size_t s = 0; s != d_S; ++s)
+    for (size_t s = 0; s != d_problem.d_S; ++s)
     {
         double *ws = omega[s].data();  // scenario (c-style array pointer)
         double prob = probs[s];
 
-        double rhs[d_m2];  // rhs vector (c-style array)
+        double rhs[d_problem.d_m2];
 
-        for (size_t row = 0; row != d_m2; ++row)  // compute element-by-element
+        for (size_t row = 0; row != d_problem.d_m2; ++row)
             rhs[row] = ws[row] - Tx[row];
 
         d_sub.update(rhs);
@@ -30,11 +30,11 @@ void Benders::sbCut(double *x, double *beta, double &gamma)
         double *lambda = info.lambda;
         double *pi_u = info.pi_u;
 
-        double pi[d_n1];  // pi = lambda T
-        for (size_t var = 0; var != d_n1; ++var)
+        double pi[d_problem.d_n1];  // pi = lambda T
+        for (size_t var = 0; var != d_problem.d_n1; ++var)
         {
             pi[var] = 0.0;
-            for (size_t row = 0; row != d_m2; ++row)
+            for (size_t row = 0; row != d_problem.d_m2; ++row)
                 pi[var] += lambda[row] * Tmat[row][var];
             beta[var] += -prob * pi[var];
         }
@@ -43,7 +43,7 @@ void Benders::sbCut(double *x, double *beta, double &gamma)
         double Lpiw = d_lr.solve();
         gamma += prob * Lpiw;
 
-        for (size_t row = 0; row != d_m2; ++row)
+        for (size_t row = 0; row != d_problem.d_m2; ++row)
             lw += prob * lambda[row] * ws[row];
 
         delete[] lambda;

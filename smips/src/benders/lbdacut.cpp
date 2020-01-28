@@ -6,22 +6,22 @@ void Benders::lbdaCut(double *x, double *alpha, double *beta, double &gamma)
     auto &Tmat = d_problem.d_Tmat;
     auto &probs = d_problem.d_probs;
 
-    double Tx[d_m2];
+    double Tx[d_problem.d_m2];
     computeTx(x, Tx);
 
     gamma = 0;
 
     // cut coefficients: initialize to zero
-    double dual[d_m2];
-    std::fill(dual, dual + d_m2, 0.0);
+    double dual[d_problem.d_m2];
+    std::fill(dual, dual + d_problem.d_m2, 0.0);
 
-    for (size_t s = 0; s != d_S; ++s)
+    for (size_t s = 0; s != d_problem.d_S; ++s)
     {
         double *ws = omega[s].data();  // scenario (c-style array pointer)
                                        // compute rhs, update subproblem
-        double rhs[d_m2];  // rhs vector of subproblem (c-style array)
+        double rhs[d_problem.d_m2];  // rhs vector of subproblem
 
-        for (size_t row = 0; row != d_m2; ++row)  // compute element-by-element
+        for (size_t row = 0; row != d_problem.d_m2; ++row)
             rhs[row] = ws[row] - Tx[row];
 
         d_sub.update(rhs);
@@ -45,7 +45,7 @@ void Benders::lbdaCut(double *x, double *alpha, double *beta, double &gamma)
                                   // psi(omega - alpha), thus, we add lambda^T
                                   // alpha in the following loop
 
-        for (size_t row = 0; row != d_m2; ++row)
+        for (size_t row = 0; row != d_problem.d_m2; ++row)
         {
             dual[row] -= prob * lambda[row];
             gamma += prob * lambda[row] * alpha[row];
@@ -56,11 +56,11 @@ void Benders::lbdaCut(double *x, double *alpha, double *beta, double &gamma)
         delete[] cBasis;
     }
 
-    for (size_t col = 0; col != d_n1; ++col)
+    for (size_t col = 0; col != d_problem.d_n1; ++col)
     {
         beta[col] = 0.0;
 
-        for (size_t row = 0; row != d_m2; ++row)
+        for (size_t row = 0; row != d_problem.d_m2; ++row)
             beta[col] += dual[row] * Tmat[row][col];
     }
 }

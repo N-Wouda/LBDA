@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.2)
 set(SOURCES
 		classic_ri.cpp
 		clearsub.cpp
-		../data/data.cpp
 		destructor.cpp
 		evaluate.cpp
 		initsub.cpp

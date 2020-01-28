@@ -2,7 +2,7 @@
 
 void Benders::computeTx(double const *x, arma::vec &Tx)
 {
-    std::vector<std::vector<double>> &Tmat = d_problem.d_Tmat;
+    auto &Tmat = d_problem.d_Tmat;
 
     for (size_t zvar = 0; zvar != d_problem.d_m2; ++zvar)
     {

@@ -28,9 +28,9 @@ Problem::Problem(size_t n1,
     d_fs_geq(fs_geq),
     d_ss_leq(ss_leq),
     d_ss_geq(ss_geq),
-    d_l1(n1, arma::fill::zeros),
+    d_l1(arma::zeros(n1)),
     d_u1(n1),
-    d_l2(n2, arma::fill::zeros),
+    d_l2(arma::zeros(n2)),
     d_u2(n2),
     d_probs(S)
 {

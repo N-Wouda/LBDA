@@ -69,6 +69,7 @@ void Problem::sizes(size_t S)
         std::vector<double> Arow(nVars, 0);
         Amat.push_back(Arow);
     }
+
     start = x_start;
     for (size_t idx = 1; idx != N + 1; ++idx)
     {

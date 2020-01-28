@@ -12,6 +12,9 @@ void Benders::sbCut(double *x, double *beta, double &gamma)
     computeTx(x, Tx);
 
     double lw = 0;
+
+    auto sub = Sub(d_env, d_problem);
+
     for (size_t s = 0; s != d_problem.d_S; ++s)
     {
         double *ws = omega[s].data();  // scenario (c-style array pointer)
@@ -22,10 +25,10 @@ void Benders::sbCut(double *x, double *beta, double &gamma)
         for (size_t row = 0; row != d_problem.d_m2; ++row)
             rhs[row] = ws[row] - Tx[row];
 
-        d_sub.update(rhs);
-        d_sub.solve();
+        sub.update(rhs);
+        sub.solve();
 
-        auto const info = d_sub.multipliers();
+        auto const info = sub.multipliers();
 
         double *lambda = info.lambda;
         double *pi_u = info.pi_u;

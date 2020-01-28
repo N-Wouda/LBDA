@@ -19,7 +19,6 @@ class Benders
 
     Problem &d_problem;  // contains problem data
     Master d_master;     // master problem
-    Sub d_sub;           // sub-problem
     Lagrangian d_lr;     // lagrangian relaxation
     Gomory d_gomory;     // Gomory relaxation
 
@@ -48,13 +47,15 @@ class Benders
 public:
     Benders(GRBEnv &env, GRBenv *c_env, Problem &problem);
 
-    Benders(const Benders &other);
+    Benders(Benders const &other);
 
     std::unique_ptr<arma::vec> lpSolve(double tol = 1e-4);
 
     std::unique_ptr<arma::vec> strongBenders(double tol = 1e-4);
 
-    std::unique_ptr<arma::vec> lbda(double *alpha, double timeLimit = 1e6, double tol = 1e-4);
+    std::unique_ptr<arma::vec> lbda(double *alpha,
+                                    double timeLimit = 1e6,
+                                    double tol = 1e-4);
 };
 
 #endif

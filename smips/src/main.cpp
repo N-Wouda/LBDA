@@ -45,6 +45,7 @@ int main()
         std::cout << res[var] << ' ';
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res.memptr()) << '\n';
 
+    // TODO fix valgrind here (it's probably a small issue).
     Benders sb = lshaped;
     ptr = sb.strongBenders();
     res = *ptr;

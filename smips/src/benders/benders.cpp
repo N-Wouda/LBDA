@@ -6,7 +6,6 @@ Benders::Benders(GRBEnv &env, GRBenv *c_env, Problem &problem) :
     d_env(env),
     d_problem(problem),
     d_master(env, c_env, problem),
-    d_sub(env, problem),
     d_lr(env, problem),
     d_gomory(env, problem),
     d_visited(problem.d_S),

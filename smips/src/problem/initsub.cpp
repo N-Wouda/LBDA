@@ -9,8 +9,12 @@ void Problem::initSub()
     // cost vector
     double *qPtr = d_q.data();  // transform cost vector and omega to c-style
                                 // array add variables
-    GRBVar *vars
-        = d_sub.addVars(d_l2.data(), d_u2.data(), qPtr, vTypes, nullptr, d_n2);
+    GRBVar *vars = d_sub.addVars(d_l2.memptr(),
+                                 d_u2.memptr(),
+                                 qPtr,
+                                 vTypes,
+                                 nullptr,
+                                 d_n2);
 
     // constraint senses
     char senses[d_m2];

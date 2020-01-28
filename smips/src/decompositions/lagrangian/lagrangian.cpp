@@ -1,18 +1,18 @@
 #include "decompositions/lagrangian.h"
 
 Lagrangian::Lagrangian(GRBEnv &env, Problem &problem) :
+    Relaxation(env),
     d_m2(problem.d_m2),
     d_n1(problem.d_n1),
-    d_n2(problem.d_n2),
-    d_model(env)
+    d_n2(problem.d_n2)
 {
     // adding first-stage variables (z)
     char zTypes[d_n1];
     std::fill_n(zTypes, problem.d_p1, GRB_INTEGER);
     std::fill_n(zTypes + problem.d_p1, d_n1 - problem.d_p1, GRB_CONTINUOUS);
 
-    d_z_vars = d_model.addVars(problem.d_l1.data(),
-                               problem.d_u1.data(),
+    d_z_vars = d_model.addVars(problem.d_l1.memptr(),
+                               problem.d_u1.memptr(),
                                nullptr,
                                zTypes,
                                nullptr,
@@ -29,8 +29,8 @@ Lagrangian::Lagrangian(GRBEnv &env, Problem &problem) :
     // cost vector
     double *q = problem.d_q.data();  // transform cost vector and omega to
                                      // c-style array add variables
-    GRBVar *y_vars = d_model.addVars(problem.d_l2.data(),
-                                     problem.d_u2.data(),
+    GRBVar *y_vars = d_model.addVars(problem.d_l2.memptr(),
+                                     problem.d_u2.memptr(),
                                      q,
                                      yTypes,
                                      nullptr,

@@ -5,6 +5,7 @@
 
 #include <gurobi_c++.h>
 #include <iosfwd>
+#include <armadillo>
 
 class Sub
 {
@@ -37,7 +38,7 @@ public:
 
     ~Sub();
 
-    void update(double *rhs);
+    void update(arma::vec &rhs);
 
     void solve();
 

@@ -7,7 +7,6 @@ set(SOURCES
 		copyconstructor.cpp
 		destructor.cpp
 		lagrangian.cpp
-		solve.cpp
 		update.cpp)
 
 add_library(lagrangian ${HEADERS} ${SOURCES})

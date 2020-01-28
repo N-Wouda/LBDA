@@ -1,13 +1,13 @@
 #include "decompositions/gomory.h"
 
 Gomory::Gomory(GRBEnv &env, Problem &problem) :
+    Relaxation(env),
     d_m2(problem.d_m2),
     d_n2(problem.d_n2),
     d_ss_leq(problem.d_ss_leq),
     d_ss_geq(problem.d_ss_geq),
-    d_l2(problem.d_l2.data()),
-    d_u2(problem.d_u2.data()),
-    d_model(env)
+    d_l2(problem.d_l2.memptr()),
+    d_u2(problem.d_u2.memptr())
 {
     // variable types
     char vTypes[d_n2];

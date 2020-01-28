@@ -36,7 +36,7 @@ class Benders
                          double const *ws,
                          double const *alpha);
 
-    void computeTx(double const *x, double *Tx);
+    void computeTx(double const *x, arma::vec &Tx);
 
     void lbdaCut(double *x, double *alpha, double *beta, double &gamma);
 

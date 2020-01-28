@@ -8,7 +8,7 @@ void Benders::lpCut(double *x, double *beta, double &gamma)
 
     gamma = 0;
 
-    double Tx[d_problem.d_m2];
+    arma::vec Tx(d_problem.d_m2);
     computeTx(x, Tx);
 
     double dual[d_problem.d_m2];
@@ -18,12 +18,8 @@ void Benders::lpCut(double *x, double *beta, double &gamma)
 
     for (size_t s = 0; s != d_problem.d_S; ++s)
     {
-        double *ws = omega[s].data();  // scenario (c-style array pointer)
-
-        double rhs[d_problem.d_m2];  // rhs vector
-
-        for (size_t row = 0; row != d_problem.d_m2; ++row)
-            rhs[row] = ws[row] - Tx[row];
+        arma::vec ws(omega[s]);
+        arma::vec rhs = ws - Tx;
 
         sub.update(rhs);
         sub.solve();

@@ -35,8 +35,8 @@ Master::Master(GRBEnv &env, GRBenv *c_env, Problem &problem) :
                nullptr,
                nullptr,
                problem.d_c.data(),
-               problem.d_l1.data(),
-               problem.d_u1.data(),
+               problem.d_l1.memptr(),
+               problem.d_u1.memptr(),
                vtypes,
                nullptr);
 

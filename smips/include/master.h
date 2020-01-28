@@ -26,15 +26,13 @@ class Master
     std::vector<double> d_cuts;
 
     // slack variable identities slack = kappa * theta - beta * x - gamma
+    // TODO is this useful?
     std::vector<double> d_kappa;
     std::vector<std::vector<double>> d_beta;
     std::vector<double> d_gamma;
 
     size_t d_n1;
     size_t d_nSlacks;
-
-    // storing the optimality cut coefficients
-    // vector<vector<double>> d_xCoeffs;
 
 public:
     Master(GRBEnv &env, GRBenv *c_env, Problem &problem);

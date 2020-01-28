@@ -1,6 +1,7 @@
-#include "decompositions/lagrangian.h"
+#include "decompositions/relaxation.h"
 
-double Lagrangian::solve()
+
+double Relaxation::solve()
 {
     d_model.optimize();
     return d_model.get(GRB_DoubleAttr_ObjVal);

@@ -2,11 +2,12 @@
 #define GOMORY_H
 
 #include "problem.h"
+#include "relaxation.h"
 
 #include <gurobi_c++.h>
 
 
-class Gomory
+class Gomory : public Relaxation
 {
     size_t d_m2;
     size_t d_n2;
@@ -16,20 +17,17 @@ class Gomory
     double *d_l2;
     double *d_u2;
 
-    GRBModel d_model;
     GRBConstr *d_constrs;
     GRBVar *d_vars;
 
 public:
     Gomory(GRBEnv &env, Problem &problem);
 
-    Gomory(const Gomory &other);
+    Gomory(Gomory const &other);
 
-    ~Gomory();
+    ~Gomory() override;
 
     void update(double *rhs, int *vBasis, int *cBasis);
-
-    double solve();
 
     void setTimeLimit(double timeLimit);
 };

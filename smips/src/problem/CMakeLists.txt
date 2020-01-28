@@ -5,7 +5,6 @@ set(SOURCES
 		clearsub.cpp
 		../data/data.cpp
 		destructor.cpp
-		enforce_ccr.cpp
 		evaluate.cpp
 		initsub.cpp
 		problem.cpp

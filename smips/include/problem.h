@@ -3,10 +3,10 @@
 
 #include "data.h"
 
+#include <armadillo>
 #include <gurobi_c++.h>
 #include <iosfwd>
 
-// TODO: enforce CCR assumption
 
 class Problem
 {
@@ -37,7 +37,7 @@ public:
     size_t d_p1;
     size_t d_p2;
     size_t d_q1;  // TODO unused?
-    size_t d_q2;
+    size_t d_q2;  // TODO unused?
     size_t d_S;
 
     double d_L;  // lb of Q
@@ -48,10 +48,10 @@ public:
     size_t d_ss_leq;
     size_t d_ss_geq;
 
-    std::vector<double> d_l1;
-    std::vector<double> d_u1;
-    std::vector<double> d_l2;
-    std::vector<double> d_u2;
+    arma::vec d_l1;
+    arma::vec d_u1;
+    arma::vec d_l2;
+    arma::vec d_u2;
 
     std::vector<double> d_c;
     std::vector<double> d_b;
@@ -99,15 +99,12 @@ public:
                         int q_low = 5,
                         int q_high = 10);
 
-    void enforceCcr(double penalty);
+    void enforceCcr(double penalty);  // TODO: enforce CCR assumption
 
     // initializes d_omega
     void setGaussianOmega(double mean, double sd);
 
-    void setBounds(std::vector<double> &l1,
-                   std::vector<double> &u1,
-                   std::vector<double> &l2,
-                   std::vector<double> &u2);
+    void setBounds(arma::vec &l1, arma::vec &u1, arma::vec &l2, arma::vec &u2);
 
     void sizes(size_t S);
 

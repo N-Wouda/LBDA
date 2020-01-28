@@ -14,8 +14,8 @@ Sub::Sub(GRBEnv &env, Problem &problem) :
     double *q = problem.d_q.data();  // transform cost vector and omega to
                                      // c-style array add variables
 
-    d_vars = d_model.addVars(problem.d_l2.data(),
-                             problem.d_u2.data(),
+    d_vars = d_model.addVars(problem.d_l2.memptr(),
+                             problem.d_u2.memptr(),
                              q,
                              vTypes,
                              nullptr,

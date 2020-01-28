@@ -12,7 +12,6 @@ std::unique_ptr<arma::vec> Benders::lpSolve(double tol)
 
     while (true)
     {
-        // cout << "iteration: " << iter << '\n';
         ++iter;
 
         // solve master problem, and collect x and theta

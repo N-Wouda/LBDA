@@ -20,7 +20,7 @@ void Problem::ssv95(size_t S,
     d_ss_geq = 0;
     d_S = S * S;
 
-    d_l1 = std::vector<double>(d_n1, 0.0);
+    d_l1 = arma::vec(d_n1, arma::fill::zeros);
     d_l2 = std::vector<double>(d_n2, 0.0);
     d_u1 = std::vector<double>(d_n1, 5.0);
 

@@ -1,11 +1,16 @@
-#include "benders.h"
+#include "cuts/strongbenders.h"
+#include "sub.h"
 
-void Benders::sbCut(arma::vec const &x, arma::vec &beta, double &gamma)
+
+StrongBenders::CutResult StrongBenders::computeCut(arma::vec const &x)
 {
     arma::vec Tx(d_problem.d_m2);
     computeTx(x, Tx);
 
     double lw = 0;
+
+    arma::vec beta = arma::zeros(d_problem.d_n1);
+    double gamma = 0;
 
     auto sub = Sub(d_env, d_problem);
 
@@ -36,4 +41,5 @@ void Benders::sbCut(arma::vec const &x, arma::vec &beta, double &gamma)
     }
 
     std::cout << "lw = " << lw << ". L(pi, w) = " << gamma << '\n';
+    return CutResult{beta, gamma};
 }

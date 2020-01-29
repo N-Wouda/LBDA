@@ -1,6 +1,6 @@
 #include "decompositions/gomory.h"
 
-Gomory::Gomory(GRBEnv &env, Problem &problem) :
+Gomory::Gomory(GRBEnv &env, Problem const &problem) :
     Relaxation(env),
     d_m2(problem.d_m2),
     d_n2(problem.d_n2),
@@ -39,10 +39,7 @@ Gomory::Gomory(GRBEnv &env, Problem &problem) :
     GRBLinExpr Wy[d_m2];
 
     for (size_t conIdx = 0; conIdx != d_m2; ++conIdx)
-    {
-        double *row = problem.d_Wmat[conIdx].data();
-        Wy[conIdx].addTerms(row, d_vars, d_n2);
-    }
+        Wy[conIdx].addTerms(problem.d_Wmat[conIdx].data(), d_vars, d_n2);
 
     // add constraints
     d_constrs = d_model.addConstrs(Wy, senses, rhs, nullptr, d_m2);

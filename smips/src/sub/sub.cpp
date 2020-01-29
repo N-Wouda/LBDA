@@ -1,6 +1,6 @@
 #include "sub.h"
 
-Sub::Sub(GRBEnv &env, Problem &problem) :
+Sub::Sub(GRBEnv &env, Problem const &problem) :
     d_m2(problem.d_m2),
     d_n2(problem.d_n2),
     d_q(problem.d_q),
@@ -31,14 +31,11 @@ Sub::Sub(GRBEnv &env, Problem &problem) :
     std::fill(rhs, rhs + d_m2, 0.0);
 
     // constraint lhs
-    std::vector<std::vector<double>> &Wmat = problem.d_Wmat;
+    auto const &Wmat = problem.d_Wmat;
     GRBLinExpr Wy[d_m2];
 
     for (size_t conIdx = 0; conIdx != d_m2; ++conIdx)
-    {
-        double *row = Wmat[conIdx].data();
-        Wy[conIdx].addTerms(row, d_vars, d_n2);
-    }
+        Wy[conIdx].addTerms(Wmat[conIdx].data(), d_vars, d_n2);
 
     // add constraints
     d_constrs = d_model.addConstrs(Wy, senses, rhs, nullptr, d_m2);

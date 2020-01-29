@@ -18,7 +18,7 @@ class Lagrangian : public Relaxation
     GRBVar *d_z_vars;
 
 public:
-    Lagrangian(GRBEnv &env, Problem &problem);
+    Lagrangian(GRBEnv &env, Problem const &problem);
 
     Lagrangian(Lagrangian const &other);
 

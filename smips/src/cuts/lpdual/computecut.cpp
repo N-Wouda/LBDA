@@ -1,9 +1,14 @@
-#include "benders.h"
+#include "cuts/lpdual.h"
+#include "sub.h"
 
-void Benders::lpCut(arma::vec const &x, arma::vec &beta, double &gamma)
+
+LpDual::CutResult LpDual::computeCut(arma::vec const &x)
 {
     arma::vec Tx(d_problem.d_m2);
     computeTx(x, Tx);
+
+    arma::vec beta = arma::zeros(d_problem.d_n1);
+    double gamma = 0;
 
     arma::vec dual = arma::zeros(d_problem.d_m2);  // cut coefficients
 
@@ -30,4 +35,6 @@ void Benders::lpCut(arma::vec const &x, arma::vec &beta, double &gamma)
         for (size_t row = 0; row != d_problem.d_m2; ++row)
             beta[col] += dual[row] * d_problem.d_Tmat[row][col];
     }
+
+    return CutResult{beta, gamma};
 }

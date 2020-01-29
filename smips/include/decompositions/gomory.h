@@ -14,14 +14,14 @@ class Gomory : public Relaxation
     size_t d_ss_leq;
     size_t d_ss_geq;
 
-    double *d_l2;
-    double *d_u2;
+    double const *d_l2;
+    double const *d_u2;
 
     GRBConstr *d_constrs;
     GRBVar *d_vars;
 
 public:
-    Gomory(GRBEnv &env, Problem &problem);
+    Gomory(GRBEnv &env, Problem const &problem);
 
     Gomory(Gomory const &other);
 

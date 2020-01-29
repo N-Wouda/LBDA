@@ -1,8 +1,11 @@
-#include "benders.h"
+#include "cuts/loosebenders.h"
 
 #include <algorithm>
 
-double Benders::computeGomory(size_t s, int *vBasis, int *cBasis, arma::vec &rhs)
+double LooseBenders::computeGomory(size_t s,
+                                   int *vBasis,
+                                   int *cBasis,
+                                   arma::vec &rhs)
 {
     std::vector<double> basis(d_problem.d_n2 + d_problem.d_m2);
     std::copy(vBasis, vBasis + d_problem.d_n2, basis.begin());

@@ -11,3 +11,4 @@ set(SOURCES
 		update.cpp)
 
 add_library(gomory ${HEADERS} ${SOURCES})
+target_link_libraries(gomory relaxation)

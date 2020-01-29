@@ -1,12 +1,14 @@
-#include "benders.h"
+#include "cuts/loosebenders.h"
+#include "sub.h"
 
-void Benders::lbdaCut(arma::vec const &x,
-                      arma::vec const &alpha,
-                      arma::vec &beta,
-                      double &gamma)
+
+LooseBenders::CutResult LooseBenders::computeCut(arma::vec const &x)
 {
     arma::vec Tx(d_problem.d_m2);
     computeTx(x, Tx);
+
+    arma::vec beta = arma::zeros(d_problem.d_n1);
+    double gamma = 0;
 
     arma::vec dual = arma::zeros(d_problem.d_m2);  // cut coefficients
 
@@ -27,19 +29,19 @@ void Benders::lbdaCut(arma::vec const &x,
         int *vBasis = info.vBasis;     // vBasis (to update gomory relaxation)
         int *cBasis = info.cBasis;     // cBasis (to update gomory relaxation)
 
-        rhs = ws - alpha;
+        rhs = ws - d_alpha;
         double const gom_obj = computeGomory(s, vBasis, cBasis, rhs);
 
         double const prob = d_problem.d_probs[s];
 
         gamma += prob * gom_obj;  // gom_obj = lambda^T (omega - alpha) +
-                                  // psi(omega - alpha), thus, we add lambda^T
-                                  // alpha in the following loop
+        // psi(omega - alpha), thus, we add lambda^T
+        // alpha in the following loop
 
         for (size_t row = 0; row != d_problem.d_m2; ++row)
         {
             dual[row] -= prob * lambda[row];
-            gamma += prob * lambda[row] * alpha[row];
+            gamma += prob * lambda[row] * d_alpha[row];
         }
 
         delete[] lambda;
@@ -52,4 +54,6 @@ void Benders::lbdaCut(arma::vec const &x,
         for (size_t row = 0; row != d_problem.d_m2; ++row)
             beta[col] += dual[row] * d_problem.d_Tmat[row][col];
     }
+
+    return CutResult{beta, gamma};
 }

@@ -1,8 +1,7 @@
 #include "benders.h"
 
-#include <chrono>
 
-std::unique_ptr<arma::vec> Benders::lpSolve(double tol)
+std::unique_ptr<arma::vec> Benders::solve(Cut &cut, double tol)
 {
     using seconds = std::chrono::seconds;
     using clock = std::chrono::high_resolution_clock;
@@ -15,15 +14,12 @@ std::unique_ptr<arma::vec> Benders::lpSolve(double tol)
         ++iter;
 
         auto sol = d_master.solve();
-
-        // derive cut
-        arma::vec beta = arma::zeros(d_problem.d_n1);
-        double gamma = 0;
-        lpCut(*sol.x, beta, gamma);
+        auto cutResult = cut.computeCut(*sol.x);
 
         // add the cut (conditional on it being violated by the current
         // solution)
-        if (d_master.addCut(*sol.x, beta, gamma, sol.theta, tol))
+        if (d_master
+                .addCut(*sol.x, cutResult.beta, cutResult.gamma, sol.theta, tol))
         {
             auto t2 = clock::now();
 

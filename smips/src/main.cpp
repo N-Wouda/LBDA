@@ -1,5 +1,6 @@
 #include "main.h"
 
+
 int main()
 {
     Data rand(31415);
@@ -26,7 +27,8 @@ int main()
     std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
 
     Benders lshaped(env, c_env, problem);
-    auto ptr = lshaped.lpSolve();
+    LpDual lpCut{env, problem};
+    auto ptr = lshaped.solve(lpCut);
     auto res = *ptr;
 
     for (size_t var = 0; var != n1; ++var)
@@ -36,7 +38,8 @@ int main()
     arma::vec alpha = arma::zeros(problem.d_m2);
 
     Benders lbda = lshaped;
-    ptr = lbda.lbda(alpha, 1.0);
+    LooseBenders lbdaCut{env, problem, alpha, 1.0};
+    ptr = lbda.solve(lbdaCut);
     res = *ptr;
 
     for (size_t var = 0; var != n1; ++var)
@@ -45,7 +48,8 @@ int main()
 
     // TODO fix valgrind here (it's probably a small issue).
     Benders sb = lshaped;
-    ptr = sb.strongBenders();
+    StrongBenders sbCut{env, problem};
+    ptr = sb.solve(sbCut);
     res = *ptr;
 
     for (size_t var = 0; var != n1; ++var)

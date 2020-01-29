@@ -1,6 +1,6 @@
 #include "decompositions/lagrangian.h"
 
-Lagrangian::Lagrangian(GRBEnv &env, Problem &problem) :
+Lagrangian::Lagrangian(GRBEnv &env, Problem const &problem) :
     Relaxation(env),
     d_m2(problem.d_m2),
     d_n1(problem.d_n1),
@@ -26,11 +26,9 @@ Lagrangian::Lagrangian(GRBEnv &env, Problem &problem) :
     std::fill_n(yTypes, problem.d_p2, GRB_INTEGER);
     std::fill_n(yTypes + problem.d_p2, d_n2 - problem.d_p2, GRB_CONTINUOUS);
 
-    double *q = problem.d_q.memptr();  // cost vector
-
     GRBVar *y_vars = d_model.addVars(problem.d_l2.memptr(),
                                      problem.d_u2.memptr(),
-                                     q,
+                                     problem.d_q.memptr(),
                                      yTypes,
                                      nullptr,
                                      d_n2);

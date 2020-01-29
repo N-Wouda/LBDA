@@ -12,7 +12,7 @@ class Sub
     size_t d_m2;
     size_t d_n2;
 
-    arma::vec &d_q;
+    arma::vec const &d_q;
 
     GRBModel d_model;
     GRBConstr *d_constrs;
@@ -32,7 +32,7 @@ class Sub
     };
 
 public:
-    Sub(GRBEnv &env, Problem &problem);
+    Sub(GRBEnv &env, Problem const &problem);
 
     Sub(Sub const &other);
 

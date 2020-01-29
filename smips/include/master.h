@@ -1,6 +1,7 @@
 #ifndef MASTER_H
 #define MASTER_H
 
+#include "cuts/cut.h"
 #include "problem.h"
 
 #include <armadillo>
@@ -10,12 +11,6 @@
 
 class Master
 {
-    struct Solution
-    {
-        std::unique_ptr<arma::vec> x;
-        double theta;
-    };
-
     // TODO is this useful?
     // GRBVar *d_xVars;
     // GRBVar d_theta;
@@ -36,6 +31,12 @@ class Master
     size_t d_nSlacks;
 
 public:
+    struct Solution
+    {
+        std::unique_ptr<arma::vec> x;
+        double theta;
+    };
+
     Master(GRBEnv &env, GRBenv *c_env, Problem &problem);
 
     Master(Master const &other);
@@ -43,14 +44,16 @@ public:
     ~Master();
 
     /**
-     * Adds cut <code>theta >= beta^T x + gamma</code> if this cut is violated.
-     * @return  Is the cut violated? If true, the cut was added; else not.
+     * Determines if the proposed cut is violated by the current solution.
      */
-    bool addCut(arma::vec const &x,
-                arma::vec const &beta,
-                double gamma,
-                double theta,
-                double tol);
+    static bool isValidCut(Cut::CutResult const &cutResult,
+                    Master::Solution const &sol,
+                    double tol);
+
+    /**
+     * Adds cut <code>theta >= beta^T x + gamma</code>.
+     */
+    void addCut(Cut::CutResult &cutResult);
 
     [[nodiscard]] std::vector<double> const &cuts() const;
 

@@ -5,6 +5,7 @@ set(SOURCES
 		copyconstructor.cpp
 		cuts.cpp
 		destructor.cpp
+		isvalidcut.cpp
 		master.cpp
 		n1.cpp
 		solve.cpp

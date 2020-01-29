@@ -16,10 +16,9 @@ std::unique_ptr<arma::vec> Benders::solve(Cut &cut, double tol)
         auto sol = d_master.solve();
         auto cutResult = cut.computeCut(*sol.x);
 
-        // add the cut (conditional on it being violated by the current
-        // solution)
-        if (d_master
-                .addCut(*sol.x, cutResult.beta, cutResult.gamma, sol.theta, tol))
+        if (Master::isValidCut(cutResult, sol, tol))
+            d_master.addCut(cutResult);
+        else
         {
             auto t2 = clock::now();
 

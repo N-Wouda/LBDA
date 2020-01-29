@@ -18,6 +18,18 @@ class Sub
     GRBConstr *d_constrs;
     GRBVar *d_vars;
 
+public:
+
+    Sub(GRBEnv &env, Problem const &problem);
+
+    Sub(Sub const &other);
+
+    ~Sub();
+
+    void update(arma::vec &rhs);
+
+    void solve();
+
     struct GomInfo  // TODO make this use arma as well, maybe combine with Multipliers?
     {
         double *lambda;
@@ -30,17 +42,6 @@ class Sub
         arma::vec lambda;
         arma::vec pi_u;
     };
-
-public:
-    Sub(GRBEnv &env, Problem const &problem);
-
-    Sub(Sub const &other);
-
-    ~Sub();
-
-    void update(arma::vec &rhs);
-
-    void solve();
 
     Multipliers const multipliers();
 

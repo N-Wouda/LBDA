@@ -1,16 +1,7 @@
 #include "master.h"
 
-bool Master::addCut(arma::vec const &x,
-                    arma::vec const &beta,
-                    double gamma,
-                    double theta,
-                    double tol)
+void Master::addCut(Cut::CutResult &cutResult)
 {
-    double betaxgamma = gamma + arma::dot(x, beta);
-
-    if (betaxgamma <= theta + tol)  // betaxgamma >= theta, no cut added
-        return true;
-
     ++d_nSlacks;
 
     // slack
@@ -28,16 +19,22 @@ bool Master::addCut(arma::vec const &x,
     double cval[d_n1 + 1];
 
     for (size_t var = 0; var != d_n1; ++var)
-        cval[var + 1] = -beta[var];
+        cval[var + 1] = -cutResult.beta[var];
 
     cval[0] = 1;
     cval[d_n1 + 1] = -1;  // >= constraint, so slack features with -1
 
-    GRBaddconstr(d_cmodel, d_n1 + 2, cind, cval, GRB_EQUAL, gamma, nullptr);
+    GRBaddconstr(d_cmodel,
+                 d_n1 + 2,
+                 cind,
+                 cval,
+                 GRB_EQUAL,
+                 cutResult.gamma,
+                 nullptr);
 
     // add cut to internal storage of master
-    d_xCoeffs.emplace_back(beta.memptr(), beta.memptr() + d_n1);
-    d_cuts.emplace_back(gamma);
+    d_xCoeffs.emplace_back(cutResult.beta.memptr(),
+                           cutResult.beta.memptr() + d_n1);
 
-    return false;
+    d_cuts.emplace_back(cutResult.gamma);
 }

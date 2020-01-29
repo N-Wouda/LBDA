@@ -14,18 +14,18 @@ protected:
 
     Problem const &d_problem;
 
+    explicit Cut(GRBEnv &env, Problem const &problem);
+
+    void computeTx(arma::vec const &x, arma::vec &Tx);
+
+public:
     struct CutResult
     {
         arma::vec beta;
         double gamma;
     };
 
-    explicit Cut(GRBEnv &env, Problem const &problem);
-
-    void computeTx(arma::vec const &x, arma::vec &Tx);
-
-public:
-    virtual CutResult computeCut(arma::vec const &x) = 0;
+    virtual Cut::CutResult computeCut(arma::vec const &x) = 0;
 };
 
 #endif  // CUT_H

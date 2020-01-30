@@ -4,7 +4,7 @@
 Sub::Multipliers const Sub::multipliers()
 {
     // TODO clean this up
-    
+
     // computing shadow prices of upper bounds of y variables
     double *pi_u;
 

@@ -3,13 +3,16 @@
 #include <algorithm>
 
 double LooseBenders::computeGomory(size_t s,
-                                   int *vBasis,
-                                   int *cBasis,
-                                   arma::vec &rhs)
+                                   arma::vec &rhs,
+                                   arma::Col<int> const &vBasis,
+                                   arma::Col<int> const &cBasis)
 {
-    std::vector<double> basis(d_problem.d_n2 + d_problem.d_m2);
-    std::copy(vBasis, vBasis + d_problem.d_n2, basis.begin());
-    std::copy(cBasis, cBasis + d_problem.d_m2, basis.begin() + d_problem.d_n2);
+    // TODO overhaul this method
+    std::vector<int> basis(d_problem.d_n2 + d_problem.d_m2);
+    std::copy(vBasis.memptr(), vBasis.memptr() + d_problem.d_n2, basis.begin());
+    std::copy(cBasis.memptr(),
+              cBasis.memptr() + d_problem.d_m2,
+              basis.begin() + d_problem.d_n2);
 
     auto &visited_bases = d_visited[s];
 
@@ -22,7 +25,7 @@ double LooseBenders::computeGomory(size_t s,
         return d_objectives[s][idx];
     }
 
-    d_gomory.update(rhs.memptr(), vBasis, cBasis);
+    d_gomory.update(rhs.memptr(), vBasis.memptr(), cBasis.memptr());
     double gom_obj = d_gomory.solve();
 
     visited_bases.emplace_back(basis);

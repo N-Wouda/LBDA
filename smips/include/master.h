@@ -47,8 +47,8 @@ public:
      * Determines if the proposed cut is violated by the current solution.
      */
     static bool isValidCut(Cut::CutResult const &cutResult,
-                    Master::Solution const &sol,
-                    double tol);
+                           Master::Solution const &sol,
+                           double tol);
 
     /**
      * Adds cut <code>theta >= beta^T x + gamma</code>.

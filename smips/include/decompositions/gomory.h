@@ -27,7 +27,7 @@ public:
 
     ~Gomory() override;
 
-    void update(double *rhs, int *vBasis, int *cBasis);
+    void update(double *rhs, int const *vBasis, int const *cBasis);
 
     void setTimeLimit(double timeLimit);
 };

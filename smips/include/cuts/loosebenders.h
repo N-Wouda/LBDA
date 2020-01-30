@@ -13,13 +13,16 @@ class LooseBenders : public Cut
 
     // For each scenario, we store the basis matrices that we have visited
     // (encoded by vBasis, cBasis).
-    std::vector<std::vector<std::vector<double>>> d_visited;
+    std::vector<std::vector<std::vector<int>>> d_visited;
 
     // For each visited basis matrix, we store the corresponding Gomory
     // objective value.
     std::vector<std::vector<double>> d_objectives;
 
-    double computeGomory(size_t s, int *vBasis, int *cBasis, arma::vec &rhs);
+    double computeGomory(size_t s,
+                         arma::vec &rhs,
+                         arma::Col<int> const &vBasis,
+                         arma::Col<int> const &cBasis);
 
 public:
     LooseBenders(GRBEnv &env,

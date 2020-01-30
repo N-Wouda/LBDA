@@ -16,37 +16,23 @@ LooseBenders::CutResult LooseBenders::computeCut(arma::vec const &x)
 
     for (size_t s = 0; s != d_problem.d_S; ++s)
     {
-        arma::vec ws(d_problem.d_omega[s]);
+        arma::vec omega(d_problem.d_omega[s]);
 
-        arma::vec rhs = ws - Tx;
+        arma::vec rhs = omega - Tx;
         sub.update(rhs);
 
         sub.solve();
 
         auto const info = sub.gomInfo();
-
-        double *lambda = info.lambda;  // lambda (for optimality cut)
-        int *vBasis = info.vBasis;     // vBasis (to update gomory relaxation)
-        int *cBasis = info.cBasis;     // cBasis (to update gomory relaxation)
-
-        rhs = ws - d_alpha;
-        double const gom_obj = computeGomory(s, vBasis, cBasis, rhs);
-
         double const prob = d_problem.d_probs[s];
 
-        gamma += prob * gom_obj;  // gom_obj = lambda^T (omega - alpha) +
-        // psi(omega - alpha), thus, we add lambda^T
-        // alpha in the following loop
+        // Gomory is lambda^T (omega - alpha) + psi(omega - alpha), so we add
+        // lambda^T alpha.
+        rhs = omega - d_alpha;
+        gamma += prob * computeGomory(s, rhs, info.vBasis, info.cBasis);
+        gamma += prob * arma::dot(info.lambda, d_alpha);
 
-        for (size_t row = 0; row != d_problem.d_m2; ++row)
-        {
-            dual[row] -= prob * lambda[row];
-            gamma += prob * lambda[row] * d_alpha[row];
-        }
-
-        delete[] lambda;
-        delete[] vBasis;
-        delete[] cBasis;
+        dual -= prob * info.lambda;
     }
 
     for (size_t col = 0; col != d_problem.d_n1; ++col)

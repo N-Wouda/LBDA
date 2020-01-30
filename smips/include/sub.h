@@ -19,7 +19,6 @@ class Sub
     GRBVar *d_vars;
 
 public:
-
     Sub(GRBEnv &env, Problem const &problem);
 
     Sub(Sub const &other);
@@ -30,11 +29,11 @@ public:
 
     void solve();
 
-    struct GomInfo  // TODO make this use arma as well, maybe combine with Multipliers?
+    struct GomInfo  // TODO maybe combine with Multipliers?
     {
-        double *lambda;
-        int *vBasis;
-        int *cBasis;
+        arma::vec lambda;
+        arma::Col<int> vBasis;
+        arma::Col<int> cBasis;
     };
 
     struct Multipliers

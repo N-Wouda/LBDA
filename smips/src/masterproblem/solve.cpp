@@ -1,7 +1,7 @@
-#include "master.h"
+#include "masterproblem.h"
 
 
-Master::Solution const Master::solve()
+MasterProblem::Solution const MasterProblem::solve()
 {
     GRBoptimize(d_cmodel);
 

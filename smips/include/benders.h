@@ -2,29 +2,21 @@
 #define BENDERS_H
 
 #include "cuts/cut.h"
-#include "decompositions/cglp.h"
-#include "decompositions/gomory.h"
-#include "decompositions/lagrangian.h"
-#include "master.h"
-#include "problem.h"
-#include "sub.h"
+#include "masterproblem.h"
 
 #include <armadillo>
 
-class Benders
+class Benders  // TODO make obsolete - this can be a single solve() function.
 {
     size_t d_nCuts;
     double d_runTime;
 
-    GRBEnv &d_env;
-
-    Problem &d_problem;  // contains problem data
-    Master d_master;     // master problem
+    MasterProblem d_master;
 
 public:
-    Benders(GRBEnv &env, GRBenv *c_env, Problem &problem);
+    explicit Benders(MasterProblem &master);
 
-    Benders(Benders const &other);
+    Benders(Benders const &other) = default;
 
     std::unique_ptr<arma::vec> solve(Cut &cut, double tol = 1e-4);
 };

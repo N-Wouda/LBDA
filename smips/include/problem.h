@@ -12,6 +12,7 @@ class Problem
 {
     Data d_gen;  // used to generate (random) data
 
+    // TODO this is not the place - should move to the actual solver stuff.
     GRBModel d_sub;  // subproblem, used for evaluation of cx + Q(x) (more
                      // precisely, of v(omega, x)).
 

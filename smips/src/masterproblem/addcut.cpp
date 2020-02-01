@@ -1,6 +1,6 @@
-#include "master.h"
+#include "masterproblem.h"
 
-void Master::addCut(Cut::CutResult &cutResult)
+void MasterProblem::addCut(Cut::CutResult &cutResult)
 {
     ++d_nSlacks;
 

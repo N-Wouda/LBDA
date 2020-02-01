@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.2)
 
 set(SOURCES
 		benders.cpp
-		copyconstructor.cpp
 		solve.cpp)
 
 add_library(benders ${HEADERS} ${SOURCES})

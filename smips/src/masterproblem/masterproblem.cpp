@@ -1,6 +1,6 @@
-#include "master.h"
+#include "masterproblem.h"
 
-Master::Master(GRBEnv &env, GRBenv *c_env, Problem &problem) :
+MasterProblem::MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem) :
     d_n1(problem.d_n1),
     d_nSlacks(problem.d_fs_leq + problem.d_fs_geq)
 {

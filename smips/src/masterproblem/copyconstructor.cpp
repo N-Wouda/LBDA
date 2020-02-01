@@ -1,6 +1,6 @@
-#include "master.h"
+#include "masterproblem.h"
 
-Master::Master(Master const &other) :
+MasterProblem::MasterProblem(MasterProblem const &other) :
     d_xCoeffs(other.d_xCoeffs),
     d_cuts(other.d_cuts),
     d_n1(other.d_n1),

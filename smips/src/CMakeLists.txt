@@ -8,9 +8,9 @@ add_subdirectory(cuts)
 add_subdirectory(data)
 add_subdirectory(decompositions)
 add_subdirectory(deqform)
-add_subdirectory(master)
+add_subdirectory(masterproblem)
 add_subdirectory(problem)
-add_subdirectory(sub)
+add_subdirectory(subproblem)
 
 add_executable(smips main.cpp)
 target_link_libraries(smips

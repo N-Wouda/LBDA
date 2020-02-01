@@ -26,13 +26,14 @@ int main()
         std::cout << x[var] << ' ';
     std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
 
-    Benders lshaped(env, c_env, problem);
+    MasterProblem master{env, c_env, problem};
+
+    Benders lshaped(master);
     LpDual lpCut{env, problem};
     auto ptr = lshaped.solve(lpCut);
     auto res = *ptr;
 
-    for (size_t var = 0; var != n1; ++var)
-        std::cout << res[var] << ' ';
+    std::cout << res;
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res.memptr()) << '\n';
 
     arma::vec alpha = arma::zeros(problem.d_m2);
@@ -42,8 +43,7 @@ int main()
     ptr = lbda.solve(lbdaCut);
     res = *ptr;
 
-    for (size_t var = 0; var != n1; ++var)
-        std::cout << res[var] << ' ';
+    std::cout << res;
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res.memptr()) << '\n';
 
     // TODO fix valgrind here (it's probably a small issue).
@@ -52,8 +52,7 @@ int main()
     ptr = sb.solve(sbCut);
     res = *ptr;
 
-    for (size_t var = 0; var != n1; ++var)
-        std::cout << res[var] << ' ';
+    std::cout << res;
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res.memptr()) << '\n';
 
     GRBfreeenv(c_env);

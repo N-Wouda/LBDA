@@ -16,7 +16,7 @@ std::unique_ptr<arma::vec> Benders::solve(Cut &cut, double tol)
         auto sol = d_master.solve();
         auto cutResult = cut.computeCut(*sol.x);
 
-        if (Master::isValidCut(cutResult, sol, tol))
+        if (MasterProblem::isValidCut(cutResult, sol, tol))
             d_master.addCut(cutResult);
         else
         {

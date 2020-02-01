@@ -1,6 +1,6 @@
-#include "sub.h"
+#include "subproblem.h"
 
-Sub::~Sub()
+SubProblem::~SubProblem()
 {
     delete[] d_vars;
     delete[] d_constrs;

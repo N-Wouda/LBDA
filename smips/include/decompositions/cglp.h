@@ -1,7 +1,7 @@
 #ifndef CGLP_H
 #define CGLP_H
 
-#include "master.h"
+#include "masterproblem.h"
 
 #include <gurobi_c++.h>
 
@@ -27,7 +27,7 @@ class Cglp  // TODO public Relaxation?
     std::vector<GRBConstr> d_constrs_cons;
 
 public:
-    Cglp(GRBEnv &env, Master &master);
+    Cglp(GRBEnv &env, MasterProblem &master);
 
     ~Cglp();
 

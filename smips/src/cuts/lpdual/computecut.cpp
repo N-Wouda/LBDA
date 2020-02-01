@@ -1,5 +1,5 @@
 #include "cuts/lpdual.h"
-#include "sub.h"
+#include "subproblem.h"
 
 
 LpDual::CutResult LpDual::computeCut(arma::vec const &x)
@@ -12,7 +12,7 @@ LpDual::CutResult LpDual::computeCut(arma::vec const &x)
 
     arma::vec dual = arma::zeros(d_problem.d_m2);  // cut coefficients
 
-    auto sub = Sub(d_env, d_problem);
+    auto sub = SubProblem(d_env, d_problem);
 
     for (size_t s = 0; s != d_problem.d_S; ++s)
     {

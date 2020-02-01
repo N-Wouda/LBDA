@@ -1,5 +1,5 @@
-#ifndef MASTER_H
-#define MASTER_H
+#ifndef MASTERPROBLEM_H
+#define MASTERPROBLEM_H
 
 #include "cuts/cut.h"
 #include "problem.h"
@@ -9,7 +9,7 @@
 #include <iosfwd>
 #include <memory>
 
-class Master
+class MasterProblem
 {
     // TODO is this useful?
     // GRBVar *d_xVars;
@@ -27,7 +27,7 @@ class Master
     // std::vector<std::vector<double>> d_beta;
     // std::vector<double> d_gamma;
 
-    size_t d_n1;
+    size_t d_n1;  // TODO make this reference problem?
     size_t d_nSlacks;
 
 public:
@@ -37,17 +37,17 @@ public:
         double theta;
     };
 
-    Master(GRBEnv &env, GRBenv *c_env, Problem &problem);
+    MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem);
 
-    Master(Master const &other);
+    MasterProblem(MasterProblem const &other);
 
-    ~Master();
+    ~MasterProblem();
 
     /**
      * Determines if the proposed cut is violated by the current solution.
      */
     static bool isValidCut(Cut::CutResult const &cutResult,
-                           Master::Solution const &sol,
+                           MasterProblem::Solution const &sol,
                            double tol);
 
     /**

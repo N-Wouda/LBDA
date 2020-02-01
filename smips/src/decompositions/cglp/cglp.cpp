@@ -1,6 +1,6 @@
 #include "decompositions/cglp.h"
 
-Cglp::Cglp(GRBEnv &env, Master &master) :
+Cglp::Cglp(GRBEnv &env, MasterProblem &master) :
     d_n1(master.n1()),
     d_model(env),
     d_constrs_theta(2 * d_n1),

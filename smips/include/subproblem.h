@@ -1,5 +1,5 @@
-#ifndef SUB_H
-#define SUB_H
+#ifndef SUBPROBLEM_H
+#define SUBPROBLEM_H
 
 #include "problem.h"
 
@@ -7,23 +7,20 @@
 #include <gurobi_c++.h>
 #include <iosfwd>
 
-class Sub
+class SubProblem
 {
-    size_t d_m2;
-    size_t d_n2;
-
-    arma::vec const &d_q;
-
     GRBModel d_model;
     GRBConstr *d_constrs;
     GRBVar *d_vars;
 
+    Problem const &d_problem;
+
 public:
-    Sub(GRBEnv &env, Problem const &problem);
+    SubProblem(GRBEnv &env, Problem const &problem);
 
-    Sub(Sub const &other);
+    SubProblem(SubProblem const &other);
 
-    ~Sub();
+    ~SubProblem();
 
     void update(arma::vec &rhs);
 

@@ -1,5 +1,5 @@
 #include "cuts/strongbenders.h"
-#include "sub.h"
+#include "subproblem.h"
 
 
 StrongBenders::CutResult StrongBenders::computeCut(arma::vec const &x)
@@ -12,7 +12,7 @@ StrongBenders::CutResult StrongBenders::computeCut(arma::vec const &x)
     arma::vec beta = arma::zeros(d_problem.d_n1);
     double gamma = 0;
 
-    auto sub = Sub(d_env, d_problem);
+    auto sub = SubProblem(d_env, d_problem);
 
     for (size_t s = 0; s != d_problem.d_S; ++s)
     {

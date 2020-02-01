@@ -6,7 +6,7 @@ set(SOURCES
 		cuts.cpp
 		destructor.cpp
 		isvalidcut.cpp
-		master.cpp
+		masterproblem.cpp
 		n1.cpp
 		solve.cpp
 		xcoeffs.cpp)

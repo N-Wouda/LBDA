@@ -20,10 +20,7 @@ void DeqForm::initFirstStage(size_t n1,
     // constraints
     GRBLinExpr lhsExprs[m1];
     for (size_t conIdx = 0; conIdx != m1; ++conIdx)
-    {
-        double *row = Amat[conIdx].data();
-        lhsExprs[conIdx].addTerms(row, d_xVars, n1);
-    }
+        lhsExprs[conIdx].addTerms(Amat[conIdx].data(), d_xVars, n1);
 
     char senses[m1];
     std::fill(senses, senses + fs_leq, GRB_LESS_EQUAL);

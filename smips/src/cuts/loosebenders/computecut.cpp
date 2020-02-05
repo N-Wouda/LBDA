@@ -18,9 +18,7 @@ LooseBenders::CutResult LooseBenders::computeCut(arma::vec const &x)
     {
         arma::vec omega(d_problem.d_omega[s]);
 
-        arma::vec rhs = omega - Tx;
-        sub.update(rhs);
-
+        sub.update(omega - Tx);
         sub.solve();
 
         auto const info = sub.gomInfo();
@@ -28,7 +26,7 @@ LooseBenders::CutResult LooseBenders::computeCut(arma::vec const &x)
 
         // Gomory is lambda^T (omega - alpha) + psi(omega - alpha), so we add
         // lambda^T alpha.
-        rhs = omega - d_alpha;
+        arma::vec rhs = omega - d_alpha;
         gamma += prob * computeGomory(s, rhs, info.vBasis, info.cBasis);
         gamma += prob * arma::dot(info.lambda, d_alpha);
 

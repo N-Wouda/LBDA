@@ -7,6 +7,7 @@ set(SOURCES
 		gominfo.cpp
 		multipliers.cpp
 		subproblem.cpp
-		update.cpp)
+		update1.cpp
+		update2.cpp)
 
 add_library(sub ${SOURCES})

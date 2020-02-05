@@ -22,7 +22,9 @@ public:
 
     ~SubProblem();
 
-    void update(arma::vec &rhs);
+    void update(arma::vec &rhs);  // 1
+
+    void update(arma::vec &&rhs);  // 2
 
     void solve();
 

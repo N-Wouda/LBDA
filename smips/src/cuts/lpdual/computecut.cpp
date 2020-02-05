@@ -16,17 +16,16 @@ LpDual::CutResult LpDual::computeCut(arma::vec const &x)
 
     for (size_t s = 0; s != d_problem.d_S; ++s)
     {
-        arma::vec ws(d_problem.d_omega[s]);
-        arma::vec rhs = ws - Tx;
+        arma::vec omega(d_problem.d_omega[s]);
 
-        sub.update(rhs);
+        sub.update(omega - Tx);
         sub.solve();
 
         auto const info = sub.multipliers();
         double const prob = d_problem.d_probs[s];
 
         dual -= prob * info.lambda;
-        gamma += prob * arma::dot(info.lambda, ws);
+        gamma += prob * arma::dot(info.lambda, omega);
         gamma += prob * arma::dot(info.pi_u, d_problem.d_u2);
     }
 

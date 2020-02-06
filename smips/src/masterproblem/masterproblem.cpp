@@ -50,7 +50,7 @@ MasterProblem::MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem) :
         GRBaddconstr(d_cmodel,
                      d_n1,
                      cind,
-                     problem.d_Amat[con].data(),
+                     problem.d_Amat.colptr(con),
                      GRB_EQUAL,
                      rhs[con],
                      nullptr);

@@ -16,8 +16,6 @@ protected:
 
     explicit Cut(GRBEnv &env, Problem const &problem);
 
-    void computeTx(arma::vec const &x, arma::vec &Tx);
-
 public:
     struct CutResult
     {

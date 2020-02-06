@@ -16,25 +16,23 @@ int main()
 
     Problem problem(rand, env);
     problem.ssv95(11, true, true, true);
-    size_t n1 = problem.d_n1;
 
-    double *x;
     DeqForm DEF(env, problem);
-    DEF.solve(900.0);
-    x = DEF.d_xVals;
-    for (size_t var = 0; var != n1; ++var)
-        std::cout << x[var] << ' ';
-    std::cout << "\ncx + Q(x) = " << problem.evaluate(x) << '\n';
+    auto ptr = DEF.solve(900.0);
+    auto res = *ptr;
+
+    std::cout << res;
+    std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
 
     MasterProblem master{env, c_env, problem};
 
     Benders lshaped(master);
     LpDual lpCut{env, problem};
-    auto ptr = lshaped.solve(lpCut);
-    auto res = *ptr;
+    ptr = lshaped.solve(lpCut);
+    res = *ptr;
 
     std::cout << res;
-    std::cout << "\ncx + Q(x) = " << problem.evaluate(res.memptr()) << '\n';
+    std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
 
     arma::vec alpha = arma::zeros(problem.d_m2);
 
@@ -44,7 +42,7 @@ int main()
     res = *ptr;
 
     std::cout << res;
-    std::cout << "\ncx + Q(x) = " << problem.evaluate(res.memptr()) << '\n';
+    std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
 
     // TODO fix valgrind here (it's probably a small issue).
     Benders sb = lshaped;
@@ -53,7 +51,7 @@ int main()
     res = *ptr;
 
     std::cout << res;
-    std::cout << "\ncx + Q(x) = " << problem.evaluate(res.memptr()) << '\n';
+    std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
 
     GRBfreeenv(c_env);
 }

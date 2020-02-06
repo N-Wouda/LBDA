@@ -39,7 +39,7 @@ Gomory::Gomory(GRBEnv &env, Problem const &problem) :
     GRBLinExpr Wy[d_m2];
 
     for (size_t conIdx = 0; conIdx != d_m2; ++conIdx)
-        Wy[conIdx].addTerms(problem.d_Wmat[conIdx].data(), d_vars, d_n2);
+        Wy[conIdx].addTerms(problem.d_Wmat.colptr(conIdx), d_vars, d_n2);
 
     // add constraints
     d_constrs = d_model.addConstrs(Wy, senses, rhs, nullptr, d_m2);

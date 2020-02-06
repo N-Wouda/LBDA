@@ -51,8 +51,8 @@ Lagrangian::Lagrangian(GRBEnv &env, Problem const &problem) :
 
     for (size_t conIdx = 0; conIdx != d_m2; ++conIdx)
     {
-        TxWy[conIdx].addTerms(problem.d_Tmat[conIdx].data(), d_z_vars, d_n1);
-        TxWy[conIdx].addTerms(problem.d_Wmat[conIdx].data(), y_vars, d_n2);
+        TxWy[conIdx].addTerms(problem.d_Tmat.colptr(conIdx), d_z_vars, d_n1);
+        TxWy[conIdx].addTerms(problem.d_Wmat.colptr(conIdx), y_vars, d_n2);
     }
 
     // add constraints

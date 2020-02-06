@@ -10,3 +10,4 @@ set(SOURCES
 		update.cpp)
 
 add_library(lagrangian ${HEADERS} ${SOURCES})
+target_link_libraries(lagrangian relaxation)

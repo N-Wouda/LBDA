@@ -27,10 +27,7 @@ void Problem::initSub()
 
     GRBLinExpr Wy[d_m2];
     for (size_t conIdx = 0; conIdx != d_m2; ++conIdx)
-    {
-        double *row = d_Wmat[conIdx].data();
-        Wy[conIdx].addTerms(row, vars, d_n2);
-    }
+        Wy[conIdx].addTerms(d_Wmat.colptr(conIdx), vars, d_n2);
 
     // add constraints
     d_constrs = d_sub.addConstrs(Wy, senses, rhs, nullptr, d_m2);

@@ -58,12 +58,12 @@ public:
     arma::vec d_b;
     arma::vec d_q;
 
-    std::vector<std::vector<double>> d_Amat;
-    std::vector<std::vector<double>> d_Tmat;
-    std::vector<std::vector<double>> d_Wmat;
+    arma::mat d_Amat;
+    arma::mat d_Tmat;
+    arma::mat d_Wmat;
 
     // rows of d_omega correspond to scenarios
-    std::vector<std::vector<double>> d_omega;
+    arma::mat d_omega;
     arma::vec d_probs;
 
     Problem(Data &generator, GRBEnv &env);
@@ -119,7 +119,7 @@ public:
     void classic_ri();
 
     // evaluates cx + Q(x) (does not check feasibility)
-    double evaluate(double const *x);
+    double evaluate(arma::vec const &x);
 };
 
 #endif

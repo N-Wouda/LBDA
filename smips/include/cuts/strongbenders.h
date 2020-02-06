@@ -12,7 +12,7 @@ class StrongBenders : public Cut
 public:
     StrongBenders(GRBEnv &env, Problem const &problem);
 
-    CutResult computeCut(arma::vec const &x) override;
+    Cut::CutResult computeCut(arma::vec const &x) override;
 };
 
 #endif  // STRONGBENDERS_H

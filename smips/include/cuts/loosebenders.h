@@ -30,7 +30,7 @@ public:
                  arma::vec const &alpha,
                  double timeLimit = 1e6);
 
-    CutResult computeCut(arma::vec const &x) override;
+    Cut::CutResult computeCut(arma::vec const &x) override;
 };
 
 #endif  // LOOSEBENDERS_H

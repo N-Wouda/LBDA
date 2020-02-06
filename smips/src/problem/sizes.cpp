@@ -74,7 +74,7 @@ void Problem::sizes(size_t S)
     for (size_t idx = 1; idx != N + 1; ++idx)
     {
         for (size_t nz = 0; nz != idx; ++nz)
-            Amat( start + idx - 1 - nz, 2 * N + 1 + nz) = 1;
+            Amat(start + idx - 1 - nz, 2 * N + 1 + nz) = 1;
         start += idx;
     }
 

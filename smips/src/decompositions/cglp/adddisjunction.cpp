@@ -12,7 +12,7 @@ void Cglp::addDisjunction(
     {
         // theta >= beta^T x + tau (x_i - \bar x_i) + gamma
         // pi_theta
-        d_lambda = d_model.addVar(0.0, 1e20, 0.0, GRB_CONTINUOUS);
+        d_lambda = d_model.addVar(0.0, arma::datum::inf, 0.0, GRB_CONTINUOUS);
         d_model.chgCoeff(d_constrs_theta[2 * var], d_lambda, 1.0);
 
         // pi_x

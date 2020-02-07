@@ -5,7 +5,15 @@ void MasterProblem::addCut(Cut::CutResult &cutResult)
     ++d_nSlacks;
 
     // slack
-    GRBaddvar(d_cmodel, 0, nullptr, nullptr, 0, 0, 1e20, GRB_CONTINUOUS, nullptr);
+    GRBaddvar(d_cmodel,
+              0,
+              nullptr,
+              nullptr,
+              0,
+              0,
+              arma::datum::inf,
+              GRB_CONTINUOUS,
+              nullptr);
 
     // slack variable index (there are d_n1 + 1 + nSlacks variables in the
     // Gurobi model)

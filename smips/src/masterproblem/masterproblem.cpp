@@ -20,7 +20,7 @@ MasterProblem::MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem) :
               nullptr,
               1.0,
               problem.d_L,
-              1e20,
+              arma::datum::inf,
               GRB_CONTINUOUS,
               nullptr);
 
@@ -40,39 +40,32 @@ MasterProblem::MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem) :
                vtypes,
                nullptr);
 
-    // Add constraints.
-    int cind[d_n1];
-    std::iota(cind, cind + d_n1, 1);
+    arma::Col<int> cind = arma::ones<arma::Col<int>>(d_n1);
 
-    double *rhs = problem.d_b.memptr();
-
-    for (size_t con = 0; con != problem.d_m1; ++con)
+    for (size_t con = 0; con != problem.d_m1; ++con)  // constraints
         GRBaddconstr(d_cmodel,
                      d_n1,
-                     cind,
+                     cind.memptr(),
                      problem.d_Amat.colptr(con),
                      GRB_EQUAL,
-                     rhs[con],
+                     problem.d_b(con),
                      nullptr);
 
     // Add slack variables.
-    int vbeg[d_nSlacks];
-    std::iota(vbeg, vbeg + d_nSlacks, 0);
+    arma::Col<int> vbeg = arma::linspace<arma::Col<int>>(0,
+                                                         d_nSlacks,
+                                                         d_nSlacks);
 
-    size_t fs_leq = problem.d_fs_leq;
-    size_t fs_geq = problem.d_fs_geq;
-
-    int *vind = vbeg;
-    double vval[d_nSlacks];
-    std::fill_n(vval, fs_leq, 1);
-    std::fill_n(vval + fs_leq, fs_geq, -1);
+    arma::vec vval(d_nSlacks);
+    vval.head(problem.d_fs_leq).fill(1);
+    vval.tail(d_nSlacks - problem.d_fs_leq).fill(-1);
 
     GRBaddvars(d_cmodel,
                d_nSlacks,
                d_nSlacks,
-               vbeg,
-               vind,
-               vval,
+               vbeg.memptr(),
+               vbeg.memptr(),
+               vval.memptr(),
                nullptr,
                nullptr,
                nullptr,

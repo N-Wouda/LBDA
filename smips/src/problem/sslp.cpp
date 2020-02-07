@@ -28,11 +28,11 @@ void Problem::sslp(size_t nServers, size_t nClients, size_t S)
     std::vector<double> l2(d_n2, 0);
     std::vector<double>
         u2(d_n2,
-           1e20);  // first nPairs second-stage variables are binary
+           arma::datum::inf);  // first nPairs second-stage variables are binary
 
     std::fill_n(&u2[nPairs],
                 nServers,
-                1e20);  // upper bounds of continuous variables
+                arma::datum::inf);  // upper bounds of continuous variables
 
     std::vector<double> fs_costs(d_n1, 0);
     std::vector<double> ss_costs(d_n2, 0);

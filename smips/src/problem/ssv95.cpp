@@ -24,7 +24,7 @@ void Problem::ssv95(size_t S,
     d_l2 = arma::zeros(d_n2);
     d_u1 = std::vector<double>(d_n1, 5.0);
 
-    double ub = ss_binary ? 1.0 : 1e20;
+    double ub = ss_binary ? 1.0 : arma::datum::inf;
     d_u2 = std::vector<double>(d_n2, ub);
 
     d_c = std::vector<double>{-1.5, -4};

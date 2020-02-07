@@ -20,8 +20,8 @@ void Problem::classic_ri()
 
     std::vector<double> l1(d_n1, 0.0);
     std::vector<double> l2(d_n2, 0.0);
-    std::vector<double> u1(d_n1, 1e20);
-    std::vector<double> u2(d_n2, 1e20);
+    std::vector<double> u1(d_n1, arma::datum::inf);
+    std::vector<double> u2(d_n2, arma::datum::inf);
 
     std::vector<double> fs_costs = {3., 3., 1., 1., 2., 4., 3., 1., 3., 2.};
     std::vector<double> ss_costs = {5., 9., 6., 6., 9.};

@@ -98,7 +98,7 @@ void Problem::sizes(size_t S)
     d_l1 = lb;
     d_l2 = lb;
 
-    std::vector<double> ub(nVars, 1e20);
+    std::vector<double> ub(nVars, arma::datum::inf);
     std::fill_n(ub.begin(), N, 1.0);
     d_u1 = ub;
     d_u2 = ub;

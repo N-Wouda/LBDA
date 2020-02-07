@@ -1,6 +1,6 @@
-#include "deqform.h"
+#include "deterministicequivalent.h"
 
-DeqForm::DeqForm(GRBEnv &env, Problem &problem) :
+DeterministicEquivalent::DeterministicEquivalent(GRBEnv &env, Problem &problem) :
     d_n1(problem.d_n1),
     d_model(GRBModel(env)),
     d_status(status::UNSOLVED),

@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.2)
 
 set(SOURCES
-		deqform.cpp
+		deterministicequivalent.cpp
 		destructor.cpp
 		initfirststage.cpp
 		initsecondstage.cpp
 		solve.cpp)
 
-add_library(deqform ${SOURCES})
+add_library(deterministicequivalent ${SOURCES})

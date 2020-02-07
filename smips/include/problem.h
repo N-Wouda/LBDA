@@ -66,7 +66,7 @@ public:
     arma::mat d_omega;
     arma::vec d_probs;
 
-    Problem(Data &generator, GRBEnv &env);
+    Problem(Data &generator, GRBEnv &env);  // 1
 
     Problem(size_t n1,
             size_t p1,
@@ -80,7 +80,7 @@ public:
             size_t fs_leq = 0,
             size_t fs_geq = 0,
             size_t ss_leq = 0,
-            size_t ss_geq = 0);
+            size_t ss_geq = 0);  // 2
 
     Problem(const Problem &other) = delete;
 

@@ -14,21 +14,20 @@ double LooseBenders::computeGomory(size_t s,
               cBasis.memptr() + d_problem.d_m2,
               basis.begin() + d_problem.d_n2);
 
-    auto &visited_bases = d_visited[s];
+    auto &visited = d_visited[s];
+    auto it = std::find(visited.begin(), visited.end(), basis);
 
-    auto it = std::find(visited_bases.begin(), visited_bases.end(), basis);
-
-    if (it != visited_bases.end())  // visited before
+    if (it != visited.end())
     {
         // find index and retrieve corresponding objective value
-        size_t idx = std::distance(visited_bases.begin(), it);
+        size_t idx = std::distance(visited.begin(), it);
         return d_objectives[s][idx];
     }
 
     d_gomory.update(rhs.memptr(), vBasis.memptr(), cBasis.memptr());
     double gom_obj = d_gomory.solve();
 
-    visited_bases.emplace_back(basis);
+    visited.emplace_back(basis);
     d_objectives[s].emplace_back(gom_obj);
 
     return gom_obj;

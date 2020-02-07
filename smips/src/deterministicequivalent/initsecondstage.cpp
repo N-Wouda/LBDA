@@ -1,19 +1,19 @@
-#include "deqform.h"
+#include "deterministicequivalent.h"
 
-void DeqForm::initSecondStage(size_t n1,
-                              size_t n2,
-                              size_t p2,
-                              size_t m2,
-                              size_t S,
-                              size_t ss_leq,
-                              size_t ss_geq,
-                              double *lb,
-                              double *ub,
-                              double *probs,
-                              double *q,
-                              arma::mat &Tmat,
-                              arma::mat &Wmat,
-                              arma::mat &omega)
+void DeterministicEquivalent::initSecondStage(size_t n1,
+                                              size_t n2,
+                                              size_t p2,
+                                              size_t m2,
+                                              size_t S,
+                                              size_t ss_leq,
+                                              size_t ss_geq,
+                                              double *lb,
+                                              double *ub,
+                                              double *probs,
+                                              double *q,
+                                              arma::mat &Tmat,
+                                              arma::mat &Wmat,
+                                              arma::mat &omega)
 {
     GRBLinExpr Tx[m2];
     for (size_t conIdx = 0; conIdx != m2; ++conIdx)

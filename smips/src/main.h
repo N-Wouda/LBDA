@@ -6,7 +6,7 @@
 #include "cuts/lpdual.h"
 #include "cuts/strongbenders.h"
 #include "data.h"
-#include "deqform.h"
+#include "deterministicequivalent.h"
 
 #include <gurobi_c++.h>
 

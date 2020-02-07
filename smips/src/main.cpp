@@ -17,8 +17,8 @@ int main()
     Problem problem(rand, env);
     problem.ssv95(11, true, true, true);
 
-    DeqForm DEF(env, problem);
-    auto ptr = DEF.solve(900.0);
+    DeterministicEquivalent detEqv(env, problem);
+    auto ptr = detEqv.solve(900.0);
     auto res = *ptr;
 
     std::cout << res;

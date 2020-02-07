@@ -1,5 +1,5 @@
-#ifndef DEQFORM_H
-#define DEQFORM_H
+#ifndef DETERMINISTICEQUIVALENT_H
+#define DETERMINISTICEQUIVALENT_H
 
 #include "problem.h"
 
@@ -8,7 +8,7 @@
 #include <iosfwd>
 #include <memory>
 
-class DeqForm
+class DeterministicEquivalent
 {
     enum class status
     {
@@ -58,9 +58,9 @@ class DeqForm
                          arma::mat &omega);
 
 public:
-    DeqForm(GRBEnv &env, Problem &problem);
+    DeterministicEquivalent(GRBEnv &env, Problem &problem);
 
-    ~DeqForm();
+    ~DeterministicEquivalent();
 
     std::unique_ptr<arma::vec> solve(double time_limit = 1e20);
 };

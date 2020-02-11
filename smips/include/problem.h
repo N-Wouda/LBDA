@@ -31,12 +31,12 @@ class Problem
 public:
     // TODO make these members private
     // size parameters
-    size_t d_m1;
-    size_t d_m2;
-    size_t d_n1;
-    size_t d_n2;
-    size_t d_p1;
-    size_t d_p2;
+    size_t d_m1;  // number of rows of A
+    size_t d_m2;  // number of rows of W (and T)
+    size_t d_n1;  // number of columns of A (and T)
+    size_t d_n2;  // number of columns of W
+    size_t d_p1;  // number of integer first-stage decision variables
+    size_t d_p2;  // idem (second stage)
     size_t d_q1;  // TODO unused?
     size_t d_q2;  // TODO unused?
     size_t d_S;

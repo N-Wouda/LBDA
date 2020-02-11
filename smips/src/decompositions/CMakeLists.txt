@@ -6,7 +6,6 @@ add_subdirectory(relaxation)
 
 add_library(decompositions empty.cpp)
 target_link_libraries(decompositions
-		cglp
 		gomory
 		lagrangian
 		relaxation)

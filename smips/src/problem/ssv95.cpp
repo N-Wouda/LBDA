@@ -9,16 +9,14 @@ void Problem::ssv95(size_t S,
     clearSub();
 
     d_n1 = 2;
-    d_m1 = 0;
     d_fs_leq = 0;
     d_fs_geq = 0;
-    d_p1 = fs_continuous ? 0 : 2;
+    d_nFirstStageIntVars = fs_continuous ? 0 : 2;
     d_n2 = 4;
-    d_p2 = 4;
-    d_m2 = 2;
+    d_nSecondStageIntVars = 4;
     d_ss_leq = 2;
     d_ss_geq = 0;
-    d_S = S * S;
+    d_nScenarios = S * S;
 
     d_l1 = arma::zeros(d_n1);
     d_l2 = arma::zeros(d_n2);
@@ -30,7 +28,7 @@ void Problem::ssv95(size_t S,
     d_c = std::vector<double>{-1.5, -4};
     d_q = std::vector<double>{-16, -19, -23, -28};
 
-    d_probs = std::vector<double>(d_S, 1.0 / d_S);
+    d_probs = std::vector<double>(nScenarios(), 1.0 / nScenarios());
 
     d_L = -320;
 
@@ -44,7 +42,7 @@ void Problem::ssv95(size_t S,
 
     d_Tmat = d_Tmat.t();
 
-    arma::mat omega(d_S, 2);
+    arma::mat omega(nScenarios(), 2);
 
     double jump = 10.0 / (S - 1);
     std::vector<double> omega_vals(S);

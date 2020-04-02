@@ -5,13 +5,13 @@
 LooseBenders::CutResult LooseBenders::computeCut(arma::vec const &x)
 {
     arma::vec Tx = d_problem.d_Tmat * x;
-    arma::vec dual = arma::zeros(d_problem.d_m2);  // cut coefficients
+    arma::vec dual = arma::zeros(d_problem.d_Tmat.n_cols);  // cut coeffs
 
     auto sub = SubProblem(d_env, d_problem);
 
     double gamma = 0;
 
-    for (size_t s = 0; s != d_problem.d_S; ++s)
+    for (size_t s = 0; s != d_problem.nScenarios(); ++s)
     {
         arma::vec omega = d_problem.d_omega.col(s);
 

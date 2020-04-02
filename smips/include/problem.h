@@ -23,6 +23,10 @@ class Problem
     // if yes)
     bool d_sub_initialized;
 
+    size_t d_nFirstStageIntVars = 0;    // TODO make constant!
+    size_t d_nSecondStageIntVars = 0;
+    size_t d_nScenarios = 0;
+
     void initSub();  // initializes the subproblem, and sets rhs = 0. Called by
                      // evaluate() when evaluate is called for the first time.
 
@@ -31,21 +35,15 @@ class Problem
 public:
     // TODO make these members private
     // size parameters
-    size_t d_m1;  // number of rows of A
-    size_t d_m2;  // number of rows of W (and T)
     size_t d_n1;  // number of columns of A (and T)
     size_t d_n2;  // number of columns of W
-    size_t d_p1;  // number of integer first-stage decision variables
-    size_t d_p2;  // idem (second stage)
-    size_t d_q1;  // TODO unused?
-    size_t d_q2;  // TODO unused?
-    size_t d_S;
 
-    double d_L;  // lb of Q
+    double d_L;  // lb of Q - TODO do we need this?
 
     // number of >= and <= constraints in the first and second stage
     size_t d_fs_leq;
     size_t d_fs_geq;
+
     size_t d_ss_leq;
     size_t d_ss_geq;
 
@@ -72,40 +70,45 @@ public:
 
     ~Problem();
 
-    // Initializes A, T, W, b, c, q (>= constraints)
-    void randomInstance(int A_low = 1,
-                        int A_high = 6,
-                        int T_low = 1,
-                        int T_high = 6,
-                        int W_low = 1,
-                        int W_high = 6,
-                        int c_low = 1,
-                        int c_high = 5,
-                        int b_low = 1,
-                        int b_high = 5,
-                        int q_low = 5,
-                        int q_high = 10);
-
     void enforceCcr(double penalty);  // TODO: enforce CCR assumption
-
-    // initializes d_omega
-    void setGaussianOmega(double mean, double sd);
-
-    void setBounds(arma::vec &l1, arma::vec &u1, arma::vec &l2, arma::vec &u2);
-
-    void sizes(size_t S);
 
     void ssv95(size_t S,
                bool fs_continuous,
                bool ss_binary,
                bool standard_T = true);
 
-    void sslp(size_t nServers, size_t nClients, size_t S);
-
-    void classic_ri();
-
     // evaluates cx + Q(x) (does not check feasibility)
     double evaluate(arma::vec const &x);
+
+    [[nodiscard]] size_t nFirstStageIntVars() const;
+
+    [[nodiscard]] size_t nSecondStageIntVars() const;
+
+    [[nodiscard]] size_t nScenarios() const;
+
+    [[nodiscard]] bool isMixedIntegerProblem() const;
+};
+
+inline size_t Problem::nFirstStageIntVars() const
+{
+    return d_nFirstStageIntVars;
+};
+
+inline size_t Problem::nSecondStageIntVars() const
+{
+    return d_nSecondStageIntVars;
+};
+
+inline size_t Problem::nScenarios() const
+{
+    return d_nScenarios;
+}
+
+inline bool Problem::isMixedIntegerProblem() const
+{
+    // TODO should this not be or? Either makes the problem an integer problem,
+    // right?
+    return nFirstStageIntVars() != 0 and nSecondStageIntVars() != 0;
 };
 
 #endif

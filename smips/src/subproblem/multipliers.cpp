@@ -22,8 +22,7 @@ SubProblem::Multipliers const SubProblem::multipliers()
 
         for (size_t var = 0; var != d_problem.d_n2; ++var)
         {
-            // if the variable is not at the upper
-            // bound, then the shadow price is zero
+            // if variable is not at the upper bound, the shadow price is zero
             if (vbasis[var] != -2)  // TODO magic number
                 pi_u[var] = 0;
             else
@@ -34,8 +33,10 @@ SubProblem::Multipliers const SubProblem::multipliers()
         delete[] vbasis;
     }
 
-    arma::vec lambda(d_model.get(GRB_DoubleAttr_Pi, d_constrs, d_problem.d_m2),
-                     d_problem.d_m2);
+    arma::vec lambda(d_model.get(GRB_DoubleAttr_Pi,
+                                 d_constrs,
+                                 d_problem.d_Wmat.n_cols),
+                     d_problem.d_Wmat.n_cols);
 
     return Multipliers{lambda, arma::vec{pi_u, d_problem.d_n2}};
 }

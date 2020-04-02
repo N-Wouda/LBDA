@@ -12,7 +12,7 @@ StrongBenders::CutResult StrongBenders::computeCut(arma::vec const &x)
     double gamma = 0;
     double lw = 0;
 
-    for (size_t s = 0; s != d_problem.d_S; ++s)
+    for (size_t s = 0; s != d_problem.nScenarios(); ++s)
     {
         arma::vec omega = d_problem.d_omega.col(s);
 

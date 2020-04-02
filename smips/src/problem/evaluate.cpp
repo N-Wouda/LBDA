@@ -12,11 +12,11 @@ double Problem::evaluate(arma::vec const &x)
 
     double Q = 0.0;
 
-    for (size_t s = 0; s != d_S; ++s)
+    for (size_t s = 0; s != nScenarios(); ++s)
     {
         arma::vec rhs = d_omega.col(s) - Tx;
 
-        d_sub.set(GRB_DoubleAttr_RHS, d_constrs, rhs.memptr(), d_m2);
+        d_sub.set(GRB_DoubleAttr_RHS, d_constrs, rhs.memptr(), d_Wmat.n_cols);
         d_sub.optimize();
 
         Q += d_probs[s] * d_sub.get(GRB_DoubleAttr_ObjVal);

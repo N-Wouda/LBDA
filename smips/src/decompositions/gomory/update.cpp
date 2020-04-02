@@ -14,7 +14,7 @@ void Gomory::update(double *rhs, int const *vBasis, int const *cBasis)
         if (cBasis[con] == 0)
             rhs[con] = -arma::datum::inf;
 
-    d_model.set(GRB_DoubleAttr_RHS, d_constrs, rhs, d_problem.d_m2);
+    d_model.set(GRB_DoubleAttr_RHS, d_constrs, rhs, d_problem.d_Wmat.n_cols);
 
     double lb[d_problem.d_n2];  // relax appropriate variable bounds.
     double ub[d_problem.d_n2];

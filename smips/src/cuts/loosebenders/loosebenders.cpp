@@ -8,8 +8,8 @@ LooseBenders::LooseBenders(GRBEnv &env,
     Cut(env, problem),
     d_alpha(alpha),
     d_gomory(env, problem),
-    d_visited(problem.d_S),
-    d_objectives(problem.d_S)
+    d_visited(problem.nScenarios()),
+    d_objectives(problem.nScenarios())
 {
     d_gomory.setTimeLimit(timeLimit);
 }

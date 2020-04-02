@@ -8,10 +8,10 @@ double LooseBenders::computeGomory(size_t s,
                                    arma::Col<int> const &cBasis)
 {
     // TODO overhaul this method
-    std::vector<int> basis(d_problem.d_n2 + d_problem.d_m2);
+    std::vector<int> basis(d_problem.d_n2 + d_problem.d_Wmat.n_cols);
     std::copy(vBasis.memptr(), vBasis.memptr() + d_problem.d_n2, basis.begin());
     std::copy(cBasis.memptr(),
-              cBasis.memptr() + d_problem.d_m2,
+              cBasis.memptr() + d_problem.d_Wmat.n_cols,
               basis.begin() + d_problem.d_n2);
 
     auto &visited = d_visited[s];

@@ -25,8 +25,8 @@ MasterProblem::MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem) :
               nullptr);
 
     char vtypes[d_n1];
-    std::fill_n(vtypes, problem.d_p1, GRB_INTEGER);
-    std::fill(vtypes + problem.d_p1, vtypes + d_n1, GRB_CONTINUOUS);
+    std::fill_n(vtypes, problem.nFirstStageIntVars(), GRB_INTEGER);
+    std::fill(vtypes + problem.nFirstStageIntVars(), vtypes + d_n1, GRB_CONTINUOUS);
 
     GRBaddvars(d_cmodel,  // first-stage (x) variables.
                d_n1,

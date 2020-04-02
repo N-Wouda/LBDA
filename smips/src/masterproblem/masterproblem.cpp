@@ -42,7 +42,7 @@ MasterProblem::MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem) :
 
     arma::Col<int> cind = arma::ones<arma::Col<int>>(d_n1);
 
-    for (size_t con = 0; con != problem.d_m1; ++con)  // constraints
+    for (size_t con = 0; con != problem.d_Amat.n_cols; ++con)  // constraints
         GRBaddconstr(d_cmodel,
                      d_n1,
                      cind.memptr(),

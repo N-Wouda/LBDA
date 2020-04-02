@@ -6,8 +6,7 @@ set(SOURCES
 		destructor.cpp
 		evaluate.cpp
 		initsub.cpp
-		problem1.cpp
-		problem2.cpp
+		problem.cpp
 		randominstance.cpp
 		setbounds.cpp
 		setgaussianomega.cpp

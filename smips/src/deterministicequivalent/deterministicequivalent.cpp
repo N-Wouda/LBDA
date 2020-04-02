@@ -8,7 +8,6 @@ DeterministicEquivalent::DeterministicEquivalent(GRBEnv &env, Problem &problem) 
 {
     initFirstStage(d_n1,
                    problem.d_p1,
-                   problem.d_m1,
                    problem.d_fs_leq,
                    problem.d_fs_geq,
                    problem.d_l1.memptr(),

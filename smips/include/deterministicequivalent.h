@@ -33,7 +33,6 @@ class DeterministicEquivalent
 
     void initFirstStage(size_t n1,
                         size_t p1,
-                        size_t m1,
                         size_t fs_leq,
                         size_t fs_geq,
                         double *lb,

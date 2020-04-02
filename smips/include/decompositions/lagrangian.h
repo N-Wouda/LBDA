@@ -10,10 +10,6 @@
 
 class Lagrangian : public Relaxation
 {
-    size_t d_m2;
-    size_t d_n1;
-    size_t d_n2;
-
     GRBConstr *d_constrs;
     GRBVar *d_z_vars;
 

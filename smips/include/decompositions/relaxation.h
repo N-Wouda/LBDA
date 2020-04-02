@@ -1,16 +1,18 @@
 #ifndef RELAXATION_H
 #define RELAXATION_H
 
-#include <gurobi_c++.h>
+#include "problem.h"
 
+#include <gurobi_c++.h>
 
 class Relaxation  // TODO think about name
 {
 protected:
     GRBModel d_model;
+    Problem const &d_problem;
 
 public:
-    explicit Relaxation(GRBEnv &env);
+    explicit Relaxation(GRBEnv &env, Problem const &problem);
 
     Relaxation(Relaxation const &other) = default;
 

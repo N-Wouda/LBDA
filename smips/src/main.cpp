@@ -1,5 +1,6 @@
 #include "main.h"
 
+#include <cassert>
 
 int main()
 {
@@ -33,6 +34,7 @@ int main()
 
     std::cout << res;
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
+    assert(problem.evaluate(res) + 50.814 <= 0.001);
 
     arma::vec alpha = arma::zeros(problem.d_m2);
 
@@ -43,6 +45,7 @@ int main()
 
     std::cout << res;
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
+    assert(problem.evaluate(res) + 59.8893 <= 0.001);
 
     // TODO fix valgrind here (it's probably a small issue).
     Benders sb = lshaped;
@@ -52,6 +55,7 @@ int main()
 
     std::cout << res;
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
+    assert(problem.evaluate(res) + 59.8893 <= 0.001);
 
     GRBfreeenv(c_env);
 }

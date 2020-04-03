@@ -1,7 +1,7 @@
-#include "decompositions/lagrangian.h"
+#include "cuts/strongbenders.h"
 
 
-void Lagrangian::update(arma::vec &rhs, arma::vec &pi)
+void StrongBenders::update(arma::vec &rhs, arma::vec &pi)
 {
     auto const &Amat = d_problem.Amat();
     d_model.set(GRB_DoubleAttr_Obj, d_z_vars, pi.memptr(), Amat.n_rows);

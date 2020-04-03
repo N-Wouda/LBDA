@@ -11,5 +11,4 @@ target_link_libraries(cuts
 		strongbenders
 		lpdual
 		cut
-		decompositions
 		sub)

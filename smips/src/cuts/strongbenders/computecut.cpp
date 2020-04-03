@@ -26,8 +26,8 @@ StrongBenders::CutResult StrongBenders::computeCut(arma::vec const &x)
 
         arma::vec pi = Tmat * info.lambda;
 
-        d_lr.update(omega, pi);
-        gamma += prob * d_lr.solve();
+        update(omega, pi);
+        gamma += prob * solve();
 
         beta -= prob * pi;
 

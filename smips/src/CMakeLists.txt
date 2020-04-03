@@ -6,7 +6,6 @@ include_directories(${GUROBI_INCLUDE_DIRS})
 add_subdirectory(benders)
 add_subdirectory(cuts)
 add_subdirectory(data)
-add_subdirectory(decompositions)
 add_subdirectory(deterministicequivalent)
 add_subdirectory(masterproblem)
 add_subdirectory(problem)
@@ -16,7 +15,6 @@ add_executable(smips main.cpp)
 target_link_libraries(smips
 		benders
 		cuts
-		decompositions
 		deterministicequivalent
 		problem
 		data

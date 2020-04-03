@@ -6,6 +6,5 @@ set(SOURCES
 
 add_library(benders ${HEADERS} ${SOURCES})
 target_link_libraries(benders
-		decompositions
 		master
 		sub)

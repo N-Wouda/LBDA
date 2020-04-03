@@ -1,6 +1,6 @@
-#include "decompositions/gomory.h"
+#include "cuts/loosebenders.h"
 
-void Gomory::update(double *rhs, int const *vBasis, int const *cBasis)
+void LooseBenders::update(double *rhs, int const *vBasis, int const *cBasis)
 {
     // <= constraints - relax if the constraint is non-binding.
     for (size_t con = 0; con != d_problem.d_ss_leq; ++con)
@@ -23,14 +23,11 @@ void Gomory::update(double *rhs, int const *vBasis, int const *cBasis)
 
     for (size_t var = 0; var != Wmat.n_rows; ++var)
     {
-        // lb = -infinity if if var not at lower bound
+        // (negative) infinity if the bound is not tight.
         lb[var] = (vBasis[var] == -1) ? d_problem.d_l2[var] : -arma::datum::inf;
-
-        // ub =  infinity if x[var] not at upper bound
         ub[var] = (vBasis[var] == -2) ? d_problem.d_u2[var] : arma::datum::inf;
     }
 
-    // Sets the bounds to their appropriate values.
     d_model.set(GRB_DoubleAttr_LB, d_vars, lb, Wmat.n_rows);
     d_model.set(GRB_DoubleAttr_UB, d_vars, ub, Wmat.n_rows);
 }

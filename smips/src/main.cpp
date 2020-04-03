@@ -36,7 +36,7 @@ int main()
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
     assert(problem.evaluate(res) + 50.814 <= 0.001);
 
-    arma::vec alpha = arma::zeros(problem.d_Tmat.n_cols);
+    arma::vec alpha = arma::zeros(problem.Tmat().n_cols);
 
     Benders lbda = lshaped;
     LooseBenders lbdaCut{env, problem, alpha, 1.0};

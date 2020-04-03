@@ -4,6 +4,7 @@
 SubProblem::Multipliers const SubProblem::multipliers()
 {
     // TODO clean this up
+    auto const &Wmat = d_problem.Wmat();
 
     // computing shadow prices of upper bounds of y variables
     double *pi_u;
@@ -11,16 +12,16 @@ SubProblem::Multipliers const SubProblem::multipliers()
     // No complete recourse. Dirty fix: ignore the part of the dual objective
     // corresponding to the upper bounds (so we underestimate QLP)
     if (d_model.get(GRB_IntAttr_Status) == GRB_INFEASIBLE)
-        pi_u = new double[d_problem.d_n2]();
+        pi_u = new double[Wmat.n_rows]();
     else
     {
         // basis information
-        int *vbasis = d_model.get(GRB_IntAttr_VBasis, d_vars, d_problem.d_n2);
+        int *vbasis = d_model.get(GRB_IntAttr_VBasis, d_vars, Wmat.n_rows);
 
-        // largest value of obj coef for which current basis remains optimal
-        pi_u = d_model.get(GRB_DoubleAttr_SAObjUp, d_vars, d_problem.d_n2);
+        // largest value of obj coeff for which current basis remains optimal
+        pi_u = d_model.get(GRB_DoubleAttr_SAObjUp, d_vars, Wmat.n_rows);
 
-        for (size_t var = 0; var != d_problem.d_n2; ++var)
+        for (size_t var = 0; var != Wmat.n_rows; ++var)
         {
             // if variable is not at the upper bound, the shadow price is zero
             if (vbasis[var] != -2)  // TODO magic number
@@ -33,10 +34,8 @@ SubProblem::Multipliers const SubProblem::multipliers()
         delete[] vbasis;
     }
 
-    arma::vec lambda(d_model.get(GRB_DoubleAttr_Pi,
-                                 d_constrs,
-                                 d_problem.d_Wmat.n_cols),
-                     d_problem.d_Wmat.n_cols);
+    auto const *lambda = d_model.get(GRB_DoubleAttr_Pi, d_constrs, Wmat.n_cols);
 
-    return Multipliers{lambda, arma::vec{pi_u, d_problem.d_n2}};
+    return Multipliers{arma::vec{lambda, Wmat.n_cols},
+                       arma::vec{pi_u, Wmat.n_rows}};
 }

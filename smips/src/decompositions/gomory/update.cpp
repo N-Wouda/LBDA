@@ -14,12 +14,14 @@ void Gomory::update(double *rhs, int const *vBasis, int const *cBasis)
         if (cBasis[con] == 0)
             rhs[con] = -arma::datum::inf;
 
-    d_model.set(GRB_DoubleAttr_RHS, d_constrs, rhs, d_problem.d_Wmat.n_cols);
+    auto const &Wmat = d_problem.Wmat();
 
-    double lb[d_problem.d_n2];  // relax appropriate variable bounds.
-    double ub[d_problem.d_n2];
+    d_model.set(GRB_DoubleAttr_RHS, d_constrs, rhs, Wmat.n_cols);
 
-    for (size_t var = 0; var != d_problem.d_n2; ++var)
+    double lb[Wmat.n_rows];  // relax appropriate variable bounds.
+    double ub[Wmat.n_rows];
+
+    for (size_t var = 0; var != Wmat.n_rows; ++var)
     {
         // lb = -infinity if if var not at lower bound
         lb[var] = (vBasis[var] == -1) ? d_problem.d_l2[var] : -arma::datum::inf;
@@ -29,6 +31,6 @@ void Gomory::update(double *rhs, int const *vBasis, int const *cBasis)
     }
 
     // Sets the bounds to their appropriate values.
-    d_model.set(GRB_DoubleAttr_LB, d_vars, lb, d_problem.d_n2);
-    d_model.set(GRB_DoubleAttr_UB, d_vars, ub, d_problem.d_n2);
+    d_model.set(GRB_DoubleAttr_LB, d_vars, lb, Wmat.n_rows);
+    d_model.set(GRB_DoubleAttr_UB, d_vars, ub, Wmat.n_rows);
 }

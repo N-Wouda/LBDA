@@ -22,11 +22,14 @@ Lagrangian::Lagrangian(GRBEnv &env, Problem const &problem) :
     // TODO: include first-stage constraints
 
     // adding second-stage variables (y)
+    auto const &Wmat = problem.Wmat();
+    auto const &Tmat = d_problem.Tmat();
+
     // variable types
-    char yTypes[d_problem.d_n2];
+    char yTypes[Wmat.n_rows];
     std::fill_n(yTypes, problem.nSecondStageIntVars(), GRB_INTEGER);
     std::fill_n(yTypes + problem.nSecondStageIntVars(),
-                d_problem.d_n2 - problem.nSecondStageIntVars(),
+                Wmat.n_rows - problem.nSecondStageIntVars(),
                 GRB_CONTINUOUS);
 
     GRBVar *y_vars = d_model.addVars(problem.d_l2.memptr(),
@@ -34,12 +37,10 @@ Lagrangian::Lagrangian(GRBEnv &env, Problem const &problem) :
                                      problem.d_q.memptr(),
                                      yTypes,
                                      nullptr,
-                                     d_problem.d_n2);
+                                     Wmat.n_rows);
 
     size_t ss_leq = problem.d_ss_leq;
     size_t ss_geq = problem.d_ss_geq;
-
-    auto const &Tmat = d_problem.Tmat();
 
     // constraint senses
     char senses[Tmat.n_cols];
@@ -53,7 +54,6 @@ Lagrangian::Lagrangian(GRBEnv &env, Problem const &problem) :
 
     // constraint lhs
     GRBLinExpr TxWy[Tmat.n_cols];
-    auto const &Wmat = problem.Wmat();
 
     for (size_t conIdx = 0; conIdx != Tmat.n_cols; ++conIdx)
     {

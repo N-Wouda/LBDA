@@ -15,25 +15,27 @@ void MasterProblem::addCut(Cut::CutResult &cutResult)
               GRB_CONTINUOUS,
               nullptr);
 
-    // slack variable index (there are d_n1 + 1 + nSlacks variables in the
-    // Gurobi model)
-    size_t slackIdx = d_n1 + d_nSlacks;
+    size_t const n1 = d_problem.Amat().n_rows;
 
-    int cind[d_n1 + 2];
-    std::iota(cind, cind + d_n1 + 1, 0);
+    // slack variable index (there are n1 + 1 + nSlacks variables in the
+    // Gurobi model)
+    size_t slackIdx = n1 + d_nSlacks;
+
+    int cind[n1 + 2];
+    std::iota(cind, cind + n1 + 1, 0);
 
     // refers to the last variable (i.e. the slack)
-    cind[d_n1 + 1] = slackIdx;
-    double cval[d_n1 + 1];
+    cind[n1 + 1] = slackIdx;
+    double cval[n1 + 1];
 
-    for (size_t var = 0; var != d_n1; ++var)
+    for (size_t var = 0; var != n1; ++var)
         cval[var + 1] = -cutResult.beta[var];
 
     cval[0] = 1;
-    cval[d_n1 + 1] = -1;  // >= constraint, so slack features with -1
+    cval[n1 + 1] = -1;  // >= constraint, so slack features with -1
 
     GRBaddconstr(d_cmodel,
-                 d_n1 + 2,
+                 n1 + 2,
                  cind,
                  cval,
                  GRB_EQUAL,
@@ -43,7 +45,7 @@ void MasterProblem::addCut(Cut::CutResult &cutResult)
     // add cut to internal storage of master
     // TODO place cuts, not these.
     d_xCoeffs.emplace_back(cutResult.beta.memptr(),
-                           cutResult.beta.memptr() + d_n1);
+                           cutResult.beta.memptr() + n1);
 
     d_cuts.emplace_back(cutResult.gamma);
 }

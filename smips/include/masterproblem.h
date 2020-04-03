@@ -11,6 +11,10 @@
 
 class MasterProblem
 {
+    // Reference to the problem instance. This cannot be const, as Gurobi's API
+    // expects non-const pointers to data.
+    Problem &d_problem;
+
     // TODO is this useful?
     // GRBVar *d_xVars;
     // GRBVar d_theta;
@@ -27,7 +31,6 @@ class MasterProblem
     // std::vector<std::vector<double>> d_beta;
     // std::vector<double> d_gamma;
 
-    size_t d_n1;  // TODO make this reference problem?
     size_t d_nSlacks;
 
 public:
@@ -58,8 +61,6 @@ public:
     [[nodiscard]] std::vector<double> const &cuts() const;
 
     [[nodiscard]] std::vector<std::vector<double>> const &xCoeffs() const;
-
-    [[nodiscard]] size_t n1() const;
 
     Solution const solve();
 };

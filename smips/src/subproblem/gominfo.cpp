@@ -3,15 +3,13 @@
 
 SubProblem::GomInfo const SubProblem::gomInfo()
 {
-    // clang-format off
-    return GomInfo
-    {
-        arma::vec(d_model.get(GRB_DoubleAttr_Pi, d_constrs, d_problem.d_Wmat.n_cols),
-                  d_problem.d_Wmat.n_cols),
-        arma::Col<int>(d_model.get(GRB_IntAttr_VBasis, d_vars, d_problem.d_n2),
-                       d_problem.d_n2),
-        arma::Col<int>(d_model.get(GRB_IntAttr_CBasis, d_constrs, d_problem.d_Wmat.n_cols),
-                       d_problem.d_Wmat.n_cols)
-    };
-    // clang-format on
+    auto const &Wmat = d_problem.Wmat();
+
+    auto const *lambda = d_model.get(GRB_DoubleAttr_Pi, d_constrs, Wmat.n_cols);
+    auto const *vBasis = d_model.get(GRB_IntAttr_VBasis, d_vars, Wmat.n_rows);
+    auto const *cBasis = d_model.get(GRB_IntAttr_CBasis, d_constrs, Wmat.n_cols);
+
+    return GomInfo{arma::vec(lambda, Wmat.n_cols),
+                   arma::Col<int>(vBasis, Wmat.n_rows),
+                   arma::Col<int>(cBasis, Wmat.n_cols)};
 }

@@ -4,8 +4,10 @@
 
 StrongBenders::CutResult StrongBenders::computeCut(arma::vec const &x)
 {
-    arma::vec Tx = d_problem.d_Tmat * x;
-    arma::vec beta = arma::zeros(d_problem.d_Tmat.n_rows);
+    auto const &Tmat = d_problem.Tmat();
+
+    arma::vec Tx = Tmat * x;
+    arma::vec beta = arma::zeros(Tmat.n_rows);
 
     auto sub = SubProblem(d_env, d_problem);
 
@@ -14,15 +16,15 @@ StrongBenders::CutResult StrongBenders::computeCut(arma::vec const &x)
 
     for (size_t s = 0; s != d_problem.nScenarios(); ++s)
     {
-        arma::vec omega = d_problem.d_omega.col(s);
+        arma::vec omega = d_problem.scenarios().col(s);
 
         sub.update(omega - Tx);
         sub.solve();
 
         auto const info = sub.multipliers();
-        double const prob = d_problem.d_probs[s];
+        double const prob = d_problem.d_probabilities[s];
 
-        arma::vec pi = d_problem.d_Tmat * info.lambda;
+        arma::vec pi = Tmat * info.lambda;
 
         d_lr.update(omega, pi);
         gamma += prob * d_lr.solve();

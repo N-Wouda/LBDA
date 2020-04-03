@@ -7,20 +7,22 @@ double LooseBenders::computeGomory(size_t s,
                                    arma::Col<int> const &vBasis,
                                    arma::Col<int> const &cBasis)
 {
+    auto const &Wmat = d_problem.Wmat();
+
     // TODO overhaul this method
-    std::vector<int> basis(d_problem.d_n2 + d_problem.d_Wmat.n_cols);
-    std::copy(vBasis.memptr(), vBasis.memptr() + d_problem.d_n2, basis.begin());
+    std::vector<int> basis(Wmat.n_rows + Wmat.n_cols);
+    std::copy(vBasis.memptr(), vBasis.memptr() + Wmat.n_rows, basis.begin());
     std::copy(cBasis.memptr(),
-              cBasis.memptr() + d_problem.d_Wmat.n_cols,
-              basis.begin() + d_problem.d_n2);
+              cBasis.memptr() + Wmat.n_cols,
+              basis.begin() + Wmat.n_rows);
 
     auto &visited = d_visited[s];
-    auto it = std::find(visited.begin(), visited.end(), basis);
+    auto iterator = std::find(visited.begin(), visited.end(), basis);
 
-    if (it != visited.end())
+    if (iterator != visited.end())
     {
         // find index and retrieve corresponding objective value
-        size_t idx = std::distance(visited.begin(), it);
+        size_t idx = std::distance(visited.begin(), iterator);
         return d_objectives[s][idx];
     }
 

@@ -1,59 +1,55 @@
 #include "deterministicequivalent.h"
 
-void DeterministicEquivalent::initSecondStage(size_t n1,
-                                              size_t n2,
-                                              size_t p2,
-                                              size_t m2,
-                                              size_t S,
-                                              size_t ss_leq,
-                                              size_t ss_geq,
-                                              double const *lb,
-                                              double const *ub,
-                                              double const *probs,
-                                              double const *q,
-                                              arma::mat const &Tmat,
-                                              arma::mat const &Wmat,
-                                              arma::mat const &omega)
+void DeterministicEquivalent::initSecondStage()
 {
-    GRBLinExpr Tx[m2];
-    for (size_t conIdx = 0; conIdx != m2; ++conIdx)
-        Tx[conIdx].addTerms(Tmat.colptr(conIdx), d_xVars, n1);
+    auto const &Tmat = d_problem.Tmat();
+    auto const &Wmat = d_problem.Wmat();
+
+    GRBLinExpr Tx[Tmat.n_cols];
+    for (size_t conIdx = 0; conIdx != Tmat.n_cols; ++conIdx)
+        Tx[conIdx].addTerms(Tmat.colptr(conIdx), d_xVars, Tmat.n_rows);
 
     // variable types
-    char vTypes2[n2];
-    std::fill_n(vTypes2, p2, GRB_INTEGER);
-    std::fill_n(vTypes2 + p2, n2 - p2, GRB_CONTINUOUS);
+    char vTypes2[Wmat.n_rows];
+    std::fill_n(vTypes2, d_problem.nSecondStageIntVars(), GRB_INTEGER);
+    std::fill_n(vTypes2 + d_problem.nSecondStageIntVars(),
+                Wmat.n_rows - d_problem.nSecondStageIntVars(),
+                GRB_CONTINUOUS);
 
     // constraint senses
-    char senses2[m2];
-    std::fill(senses2, senses2 + ss_leq, GRB_LESS_EQUAL);
-    std::fill(senses2 + ss_leq, senses2 + ss_leq + ss_geq, GRB_GREATER_EQUAL);
-    std::fill(senses2 + ss_leq + ss_geq, senses2 + m2, GRB_EQUAL);
+    char senses2[Tmat.n_cols];
+    std::fill(senses2, senses2 + d_problem.d_ss_leq, GRB_LESS_EQUAL);
+    std::fill(senses2 + d_problem.d_ss_leq,
+              senses2 + d_problem.d_ss_leq + d_problem.d_ss_geq,
+              GRB_GREATER_EQUAL);
+    std::fill(senses2 + d_problem.d_ss_leq + d_problem.d_ss_geq,
+              senses2 + Tmat.n_cols,
+              GRB_EQUAL);
 
-    // for each scenario: add variables and constraints
-    for (size_t s = 0; s != S; ++s)
+    for (size_t scenario = 0; scenario != d_problem.nScenarios(); ++scenario)
     {
-        double const prob = probs[s];
-        double costs[n2];
-
-        for (size_t var = 0; var != n2; ++var)
-            costs[var] = prob * q[var];
-
-        double const *rhsOmega = omega.colptr(s);
+        double const prob = d_problem.d_probabilities[scenario];
+        arma::vec const costs = prob * d_problem.d_q;
 
         // add variables
-        GRBVar *yVars = d_model.addVars(lb, ub, costs, vTypes2, nullptr, n2);
+        GRBVar *yVars = d_model.addVars(d_problem.d_l2.memptr(),
+                                        d_problem.d_u2.memptr(),
+                                        costs.memptr(),
+                                        vTypes2,
+                                        nullptr,
+                                        Wmat.n_rows);
 
         // lhs expression of second-stage constraints, including Wy
         // TODO: I've removed a duplication for TxWy here, which did not compile
-        for (size_t conIdx = 0; conIdx != m2; ++conIdx)
-            Tx[conIdx].addTerms(Wmat.colptr(conIdx), yVars, n2);
+        for (size_t conIdx = 0; conIdx != Wmat.n_cols; ++conIdx)
+            Tx[conIdx].addTerms(Wmat.colptr(conIdx), yVars, Wmat.n_rows);
 
+        auto const omega = d_problem.scenarios().colptr(scenario);
         GRBConstr *constrs = d_model.addConstrs(Tx,
                                                 senses2,
-                                                rhsOmega,
+                                                omega,
                                                 nullptr,
-                                                m2);
+                                                Wmat.n_cols);
 
         delete[] yVars;
         delete[] constrs;

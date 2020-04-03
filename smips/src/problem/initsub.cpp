@@ -2,16 +2,18 @@
 
 void Problem::initSub()
 {
-    char vTypes[d_n2];
+    char vTypes[d_Wmat.n_rows];
     std::fill(vTypes, vTypes + nSecondStageIntVars(), GRB_INTEGER);
-    std::fill(vTypes + nSecondStageIntVars(), vTypes + d_n2, GRB_CONTINUOUS);
+    std::fill(vTypes + nSecondStageIntVars(),
+              vTypes + d_Wmat.n_rows,
+              GRB_CONTINUOUS);
 
     GRBVar *vars = d_sub.addVars(d_l2.memptr(),
                                  d_u2.memptr(),
                                  d_q.memptr(),
                                  vTypes,
                                  nullptr,
-                                 d_n2);
+                                 d_Wmat.n_rows);
 
     // constraint senses
     char senses[d_Wmat.n_cols];

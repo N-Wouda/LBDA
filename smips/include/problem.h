@@ -25,7 +25,13 @@ class Problem
 
     size_t d_nFirstStageIntVars = 0;    // TODO make constant!
     size_t d_nSecondStageIntVars = 0;
-    size_t d_nScenarios = 0;
+
+    arma::mat d_Amat;
+    arma::mat d_Tmat;
+    arma::mat d_Wmat;
+
+    // Each column in d_omegas correspond to a single scenario (omega).
+    arma::mat d_omegas;
 
     void initSub();  // initializes the subproblem, and sets rhs = 0. Called by
                      // evaluate() when evaluate is called for the first time.
@@ -34,9 +40,6 @@ class Problem
 
 public:
     // TODO make these members private
-    // size parameters
-    size_t d_n2;  // number of columns of W
-
     double d_L;  // lb of Q - TODO do we need this?
 
     // number of >= and <= constraints in the first and second stage
@@ -55,13 +58,7 @@ public:
     arma::vec d_b;
     arma::vec d_q;
 
-    arma::mat d_Amat;
-    arma::mat d_Tmat;
-    arma::mat d_Wmat;
-
-    // rows of d_omega correspond to scenarios
-    arma::mat d_omega;
-    arma::vec d_probs;
+    arma::vec d_probabilities;
 
     Problem(Data &generator, GRBEnv &env);
 
@@ -88,10 +85,13 @@ public:
     [[nodiscard]] bool isMixedIntegerProblem() const;
 
     [[nodiscard]] arma::mat const &Amat() const;
+    [[nodiscard]] arma::mat &Amat();
 
     [[nodiscard]] arma::mat const &Wmat() const;
 
     [[nodiscard]] arma::mat const &Tmat() const;
+
+    [[nodiscard]] arma::mat const &scenarios() const;
 };
 
 inline size_t Problem::nFirstStageIntVars() const
@@ -106,7 +106,7 @@ inline size_t Problem::nSecondStageIntVars() const
 
 inline size_t Problem::nScenarios() const
 {
-    return d_nScenarios;
+    return d_omegas.n_cols;
 }
 
 inline bool Problem::isMixedIntegerProblem() const
@@ -121,6 +121,11 @@ inline arma::mat const &Problem::Amat() const
     return d_Amat;
 }
 
+inline arma::mat &Problem::Amat()
+{
+    return d_Amat;
+}
+
 inline arma::mat const &Problem::Wmat() const
 {
     return d_Wmat;
@@ -129,6 +134,11 @@ inline arma::mat const &Problem::Wmat() const
 inline arma::mat const &Problem::Tmat() const
 {
     return d_Tmat;
+}
+
+inline arma::mat const &Problem::scenarios() const
+{
+    return d_omegas;
 }
 
 #endif

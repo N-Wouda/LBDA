@@ -7,20 +7,17 @@ void DeterministicEquivalent::initSecondStage(size_t n1,
                                               size_t S,
                                               size_t ss_leq,
                                               size_t ss_geq,
-                                              double *lb,
-                                              double *ub,
-                                              double *probs,
-                                              double *q,
-                                              arma::mat &Tmat,
-                                              arma::mat &Wmat,
-                                              arma::mat &omega)
+                                              double const *lb,
+                                              double const *ub,
+                                              double const *probs,
+                                              double const *q,
+                                              arma::mat const &Tmat,
+                                              arma::mat const &Wmat,
+                                              arma::mat const &omega)
 {
     GRBLinExpr Tx[m2];
     for (size_t conIdx = 0; conIdx != m2; ++conIdx)
-    {
-        double *row = Tmat.colptr(conIdx);
-        Tx[conIdx].addTerms(row, d_xVars, n1);
-    }
+        Tx[conIdx].addTerms(Tmat.colptr(conIdx), d_xVars, n1);
 
     // variable types
     char vTypes2[n2];
@@ -42,7 +39,7 @@ void DeterministicEquivalent::initSecondStage(size_t n1,
         for (size_t var = 0; var != n2; ++var)
             costs[var] = prob * q[var];
 
-        double *rhsOmega = omega.colptr(s);
+        double const *rhsOmega = omega.colptr(s);
 
         // add variables
         GRBVar *yVars = d_model.addVars(lb, ub, costs, vTypes2, nullptr, n2);
@@ -50,10 +47,7 @@ void DeterministicEquivalent::initSecondStage(size_t n1,
         // lhs expression of second-stage constraints, including Wy
         // TODO: I've removed a duplication for TxWy here, which did not compile
         for (size_t conIdx = 0; conIdx != m2; ++conIdx)
-        {
-            double *row = Wmat.colptr(conIdx);
-            Tx[conIdx].addTerms(row, yVars, n2);
-        }
+            Tx[conIdx].addTerms(Wmat.colptr(conIdx), yVars, n2);
 
         GRBConstr *constrs = d_model.addConstrs(Tx,
                                                 senses2,

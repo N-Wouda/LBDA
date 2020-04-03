@@ -41,6 +41,7 @@ void MasterProblem::addCut(Cut::CutResult &cutResult)
                  nullptr);
 
     // add cut to internal storage of master
+    // TODO place cuts, not these.
     d_xCoeffs.emplace_back(cutResult.beta.memptr(),
                            cutResult.beta.memptr() + d_n1);
 

@@ -8,10 +8,11 @@ Lagrangian::Lagrangian(Lagrangian const &other) :
 {
     GRBVar *vars = d_model.getVars();
 
-    d_z_vars = new GRBVar[d_problem.d_n1];  // deallocated in destructor
+    auto const &Amat = d_problem.Amat();
 
-    // We only need the first d_n1
-    std::copy_n(vars, d_problem.d_n1, d_z_vars);
+    // We only need the first n1, those associated with the first-stage problem.
+    d_z_vars = new GRBVar[Amat.n_rows];
+    std::copy_n(vars, Amat.n_rows, d_z_vars);
 
     delete[] vars;
 }

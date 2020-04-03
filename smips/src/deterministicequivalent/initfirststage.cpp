@@ -4,11 +4,11 @@ void DeterministicEquivalent::initFirstStage(size_t n1,
                                              size_t p1,
                                              size_t fs_leq,
                                              size_t fs_geq,
-                                             double *lb,
-                                             double *ub,
-                                             double *c,
-                                             double *rhs,
-                                             arma::mat &Amat)
+                                             double const *lb,
+                                             double const *ub,
+                                             double const *c,
+                                             double const *rhs,
+                                             arma::mat const &Amat)
 {
     // variables
     char vTypes[Amat.n_rows];

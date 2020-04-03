@@ -1,12 +1,12 @@
 #include "deterministicequivalent.h"
 
-DeterministicEquivalent::DeterministicEquivalent(GRBEnv &env, Problem &problem) :
-    d_n1(problem.d_n1),
+DeterministicEquivalent::DeterministicEquivalent(GRBEnv &env,
+                                                 Problem const &problem) :
+    d_problem(problem),
     d_model(GRBModel(env)),
-    d_status(status::UNSOLVED),
-    d_isMip(problem.isMixedIntegerProblem())
+    d_status(status::UNSOLVED)
 {
-    initFirstStage(d_n1,
+    initFirstStage(d_problem.Amat().n_rows,
                    problem.nFirstStageIntVars(),
                    problem.d_fs_leq,
                    problem.d_fs_geq,
@@ -16,7 +16,7 @@ DeterministicEquivalent::DeterministicEquivalent(GRBEnv &env, Problem &problem) 
                    problem.d_b.memptr(),
                    problem.d_Amat);
 
-    initSecondStage(d_n1,
+    initSecondStage(d_problem.Amat().n_rows,
                     problem.d_n2,
                     problem.nSecondStageIntVars(),
                     problem.d_Wmat.n_cols,

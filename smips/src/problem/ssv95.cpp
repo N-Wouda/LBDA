@@ -8,7 +8,7 @@ void Problem::ssv95(size_t S,
 {
     clearSub();
 
-    d_n1 = 2;
+    size_t const n1 = 2;
     d_fs_leq = 0;
     d_fs_geq = 0;
     d_nFirstStageIntVars = fs_continuous ? 0 : 2;
@@ -18,9 +18,9 @@ void Problem::ssv95(size_t S,
     d_ss_geq = 0;
     d_nScenarios = S * S;
 
-    d_l1 = arma::zeros(d_n1);
+    d_l1 = arma::zeros(n1);
     d_l2 = arma::zeros(d_n2);
-    d_u1 = std::vector<double>(d_n1, 5.0);
+    d_u1 = std::vector<double>(n1, 5.0);
 
     double ub = ss_binary ? 1.0 : arma::datum::inf;
     d_u2 = std::vector<double>(d_n2, ub);
@@ -58,5 +58,6 @@ void Problem::ssv95(size_t S,
             omega(s, 1) = omega_vals[s2];
         }
 
+    d_Amat = arma::mat(n1, 0);
     d_omega = omega.t();
 }

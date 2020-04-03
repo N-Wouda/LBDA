@@ -35,7 +35,6 @@ class Problem
 public:
     // TODO make these members private
     // size parameters
-    size_t d_n1;  // number of columns of A (and T)
     size_t d_n2;  // number of columns of W
 
     double d_L;  // lb of Q - TODO do we need this?
@@ -87,6 +86,12 @@ public:
     [[nodiscard]] size_t nScenarios() const;
 
     [[nodiscard]] bool isMixedIntegerProblem() const;
+
+    [[nodiscard]] arma::mat const &Amat() const;
+
+    [[nodiscard]] arma::mat const &Wmat() const;
+
+    [[nodiscard]] arma::mat const &Tmat() const;
 };
 
 inline size_t Problem::nFirstStageIntVars() const
@@ -110,5 +115,20 @@ inline bool Problem::isMixedIntegerProblem() const
     // right?
     return nFirstStageIntVars() != 0 and nSecondStageIntVars() != 0;
 };
+
+inline arma::mat const &Problem::Amat() const
+{
+    return d_Amat;
+}
+
+inline arma::mat const &Problem::Wmat() const
+{
+    return d_Wmat;
+}
+
+inline arma::mat const &Problem::Tmat() const
+{
+    return d_Tmat;
+}
 
 #endif

@@ -3,11 +3,13 @@
 Lagrangian::Lagrangian(GRBEnv &env, Problem const &problem) :
     Relaxation(env, problem)
 {
+    auto const &Amat = problem.Amat();
+
     // adding first-stage variables (z)
-    char zTypes[d_problem.d_n1];
+    char zTypes[Amat.n_rows];
     std::fill_n(zTypes, problem.nFirstStageIntVars(), GRB_INTEGER);
     std::fill_n(zTypes + problem.nFirstStageIntVars(),
-                d_problem.d_n1 - problem.nFirstStageIntVars(),
+                Amat.n_rows - problem.nFirstStageIntVars(),
                 GRB_CONTINUOUS);
 
     d_z_vars = d_model.addVars(problem.d_l1.memptr(),
@@ -15,7 +17,7 @@ Lagrangian::Lagrangian(GRBEnv &env, Problem const &problem) :
                                nullptr,
                                zTypes,
                                nullptr,
-                               d_problem.d_n1);  // cost coeffs set by update()
+                               Amat.n_rows);
 
     // TODO: include first-stage constraints
 
@@ -37,32 +39,30 @@ Lagrangian::Lagrangian(GRBEnv &env, Problem const &problem) :
     size_t ss_leq = problem.d_ss_leq;
     size_t ss_geq = problem.d_ss_geq;
 
+    auto const &Tmat = d_problem.Tmat();
+
     // constraint senses
-    char senses[d_problem.d_Tmat.n_cols];
+    char senses[Tmat.n_cols];
     std::fill(senses, senses + ss_leq, GRB_LESS_EQUAL);
     std::fill(senses + ss_leq, senses + ss_leq + ss_geq, GRB_GREATER_EQUAL);
-    std::fill(senses + ss_leq + ss_geq, senses + d_problem.d_Tmat.n_cols, GRB_EQUAL);
+    std::fill(senses + ss_leq + ss_geq, senses + Tmat.n_cols, GRB_EQUAL);
 
     // constraint rhs
-    double rhs[d_problem.d_Tmat.n_cols];
-    std::fill(rhs, rhs + d_problem.d_Tmat.n_cols, 0.0);
+    double rhs[Tmat.n_cols];
+    std::fill(rhs, rhs + Tmat.n_cols, 0.0);
 
     // constraint lhs
-    GRBLinExpr TxWy[d_problem.d_Tmat.n_cols];
+    GRBLinExpr TxWy[Tmat.n_cols];
+    auto const &Wmat = problem.Wmat();
 
-    for (size_t conIdx = 0; conIdx != d_problem.d_Tmat.n_cols; ++conIdx)
+    for (size_t conIdx = 0; conIdx != Tmat.n_cols; ++conIdx)
     {
-        TxWy[conIdx].addTerms(problem.d_Tmat.colptr(conIdx),
-                              d_z_vars,
-                              d_problem.d_Tmat.n_rows);
-
-        TxWy[conIdx].addTerms(problem.d_Wmat.colptr(conIdx),
-                              y_vars,
-                              d_problem.d_Wmat.n_rows);
+        TxWy[conIdx].addTerms(Tmat.colptr(conIdx), d_z_vars, Tmat.n_rows);
+        TxWy[conIdx].addTerms(Wmat.colptr(conIdx), y_vars, Wmat.n_rows);
     }
 
     // add constraints
-    d_constrs = d_model.addConstrs(TxWy, senses, rhs, nullptr, d_problem.d_Tmat.n_cols);
+    d_constrs = d_model.addConstrs(TxWy, senses, rhs, nullptr, Tmat.n_cols);
     d_model.update();
 
     delete[] y_vars;

@@ -11,28 +11,28 @@ void Problem::ssv95(size_t S,
     size_t const n1 = 2;
     size_t const n2 = 4;
 
-    d_fs_leq = 0;
-    d_fs_geq = 0;
+    d_nFirstStageLeqConstraints = 0;
+    d_nFirstStageGeqConstraints = 0;
 
-    d_ss_leq = 2;
-    d_ss_geq = 0;
+    d_nSecondStageLeqConstraints = 2;
+    d_nSecondStageGeqConstraints = 0;
 
     d_nFirstStageIntVars = fs_continuous ? 0 : 2;
     d_nSecondStageIntVars = 4;
 
     size_t nScenarios = S * S;
 
-    d_l1 = arma::zeros(n1);
-    d_l2 = arma::zeros(n2);
-    d_u1 = std::vector<double>(n1, 5.0);
+    d_firstStageLowerBound = arma::zeros(n1);
+    d_secondStageLowerBound = arma::zeros(n2);
+    d_firstStageUpperBound = std::vector<double>(n1, 5.0);
 
     double ub = ss_binary ? 1.0 : arma::datum::inf;
-    d_u2 = std::vector<double>(n2, ub);
+    d_secondStageUpperBound = std::vector<double>(n2, ub);
 
-    d_c = std::vector<double>{-1.5, -4};
-    d_q = std::vector<double>{-16, -19, -23, -28};
+    d_firstStageCoeffs = std::vector<double>{-1.5, -4};
+    d_secondStageCoeffs = std::vector<double>{-16, -19, -23, -28};
 
-    d_probabilities = std::vector<double>(nScenarios, 1.0 / nScenarios);
+    d_scenarioProbabilities = std::vector<double>(nScenarios, 1.0 / nScenarios);
 
     d_L = -320;
 
@@ -63,5 +63,5 @@ void Problem::ssv95(size_t S,
         }
 
     d_Amat = arma::mat(n1, 0);
-    d_omegas = omega.t();
+    d_scenarios = omega.t();
 }

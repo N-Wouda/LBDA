@@ -22,7 +22,7 @@ StrongBenders::CutResult StrongBenders::computeCut(arma::vec const &x)
         sub.solve();
 
         auto const info = sub.multipliers();
-        double const prob = d_problem.d_probabilities[s];
+        double const prob = d_problem.d_scenarioProbabilities[s];
 
         arma::vec pi = Tmat * info.lambda;
 

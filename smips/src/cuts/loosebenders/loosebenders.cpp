@@ -16,17 +16,19 @@ LooseBenders::LooseBenders(GRBEnv &env,
     vTypes.head(problem.nSecondStageIntVars()).fill(GRB_INTEGER);
     vTypes.tail(Wmat.n_rows - problem.nSecondStageIntVars()).fill(GRB_CONTINUOUS);
 
-    d_vars = d_model.addVars(d_problem.d_l2.memptr(),
-                             d_problem.d_u2.memptr(),
-                             problem.d_q.memptr(),
+    d_vars = d_model.addVars(d_problem.d_secondStageLowerBound.memptr(),
+                             d_problem.d_secondStageUpperBound.memptr(),
+                             problem.d_secondStageCoeffs.memptr(),
                              vTypes.memptr(),
                              nullptr,
                              Wmat.n_rows);
 
     arma::Col<char> senses(Wmat.n_cols);
     senses.fill(GRB_GREATER_EQUAL);
-    senses.head(d_problem.d_ss_leq).fill(GRB_LESS_EQUAL);
-    senses.tail(Wmat.n_cols - d_problem.d_ss_leq - d_problem.d_ss_geq)
+    senses.head(d_problem.d_nSecondStageLeqConstraints).fill(GRB_LESS_EQUAL);
+    senses
+        .tail(Wmat.n_cols - d_problem.d_nSecondStageLeqConstraints
+              - d_problem.d_nSecondStageGeqConstraints)
         .fill(GRB_EQUAL);
 
     GRBLinExpr lhs[Wmat.n_cols];

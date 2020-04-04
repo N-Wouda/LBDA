@@ -18,26 +18,31 @@ void DeterministicEquivalent::initSecondStage()
 
     // constraint senses
     char senses2[Tmat.n_cols];
-    std::fill(senses2, senses2 + d_problem.d_ss_leq, GRB_LESS_EQUAL);
-    std::fill(senses2 + d_problem.d_ss_leq,
-              senses2 + d_problem.d_ss_leq + d_problem.d_ss_geq,
+    std::fill(senses2,
+              senses2 + d_problem.d_nSecondStageLeqConstraints,
+              GRB_LESS_EQUAL);
+    std::fill(senses2 + d_problem.d_nSecondStageLeqConstraints,
+              senses2 + d_problem.d_nSecondStageLeqConstraints
+                  + d_problem.d_nSecondStageGeqConstraints,
               GRB_GREATER_EQUAL);
-    std::fill(senses2 + d_problem.d_ss_leq + d_problem.d_ss_geq,
+    std::fill(senses2 + d_problem.d_nSecondStageLeqConstraints
+                  + d_problem.d_nSecondStageGeqConstraints,
               senses2 + Tmat.n_cols,
               GRB_EQUAL);
 
     for (size_t scenario = 0; scenario != d_problem.nScenarios(); ++scenario)
     {
-        double const prob = d_problem.d_probabilities[scenario];
-        arma::vec const costs = prob * d_problem.d_q;
+        double const prob = d_problem.d_scenarioProbabilities[scenario];
+        arma::vec const costs = prob * d_problem.d_secondStageCoeffs;
 
         // add variables
-        GRBVar *yVars = d_model.addVars(d_problem.d_l2.memptr(),
-                                        d_problem.d_u2.memptr(),
-                                        costs.memptr(),
-                                        vTypes2,
-                                        nullptr,
-                                        Wmat.n_rows);
+        GRBVar *yVars = d_model
+                            .addVars(d_problem.d_secondStageLowerBound.memptr(),
+                                     d_problem.d_secondStageUpperBound.memptr(),
+                                     costs.memptr(),
+                                     vTypes2,
+                                     nullptr,
+                                     Wmat.n_rows);
 
         // lhs expression of second-stage constraints, including Wy
         // TODO: I've removed a duplication for TxWy here, which did not compile

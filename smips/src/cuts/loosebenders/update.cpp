@@ -3,13 +3,15 @@
 void LooseBenders::update(double *rhs, int const *vBasis, int const *cBasis)
 {
     // <= constraints - relax if the constraint is non-binding.
-    for (size_t con = 0; con != d_problem.d_ss_leq; ++con)
+    for (size_t con = 0; con != d_problem.d_nSecondStageLeqConstraints; ++con)
         if (cBasis[con] == 0)
             rhs[con] = arma::datum::inf;
 
     // >= constraints
-    for (size_t con = d_problem.d_ss_leq;
-         con != d_problem.d_ss_leq + d_problem.d_ss_geq;
+    for (size_t con = d_problem.d_nSecondStageLeqConstraints;
+         con
+         != d_problem.d_nSecondStageLeqConstraints
+                + d_problem.d_nSecondStageGeqConstraints;
          ++con)
         if (cBasis[con] == 0)
             rhs[con] = -arma::datum::inf;
@@ -24,8 +26,10 @@ void LooseBenders::update(double *rhs, int const *vBasis, int const *cBasis)
     for (size_t var = 0; var != Wmat.n_rows; ++var)
     {
         // (negative) infinity if the bound is not tight.
-        lb[var] = (vBasis[var] == -1) ? d_problem.d_l2[var] : -arma::datum::inf;
-        ub[var] = (vBasis[var] == -2) ? d_problem.d_u2[var] : arma::datum::inf;
+        lb[var] = (vBasis[var] == -1) ? d_problem.d_secondStageLowerBound[var]
+                                      : -arma::datum::inf;
+        ub[var] = (vBasis[var] == -2) ? d_problem.d_secondStageUpperBound[var]
+                                      : arma::datum::inf;
     }
 
     d_model.set(GRB_DoubleAttr_LB, d_vars, lb, Wmat.n_rows);

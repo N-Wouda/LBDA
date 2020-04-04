@@ -10,15 +10,15 @@ SubProblem::SubProblem(GRBEnv &env, Problem const &problem) :
     char vTypes[Wmat.n_rows];
     std::fill(vTypes, vTypes + Wmat.n_rows, GRB_CONTINUOUS);
 
-    d_vars = d_model.addVars(problem.d_l2.memptr(),
-                             problem.d_u2.memptr(),
-                             problem.d_q.memptr(),
+    d_vars = d_model.addVars(problem.d_secondStageLowerBound.memptr(),
+                             problem.d_secondStageUpperBound.memptr(),
+                             problem.d_secondStageCoeffs.memptr(),
                              vTypes,
                              nullptr,
                              Wmat.n_rows);
 
-    size_t const ss_leq = problem.d_ss_leq;
-    size_t const ss_geq = problem.d_ss_geq;
+    size_t const ss_leq = problem.d_nSecondStageLeqConstraints;
+    size_t const ss_geq = problem.d_nSecondStageGeqConstraints;
 
     // constraint senses
     char senses[Wmat.n_cols];

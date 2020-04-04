@@ -21,10 +21,10 @@ LpDual::CutResult LpDual::computeCut(arma::vec const &x)
         sub.solve();
 
         auto const info = sub.multipliers();
-        double const prob = d_problem.d_probabilities[scenario];
+        double const prob = d_problem.d_scenarioProbabilities[scenario];
 
         gamma += prob * arma::dot(info.lambda, omega);
-        gamma += prob * arma::dot(info.pi_u, d_problem.d_u2);
+        gamma += prob * arma::dot(info.pi_u, d_problem.d_secondStageUpperBound);
 
         dual -= prob * info.lambda;
     }

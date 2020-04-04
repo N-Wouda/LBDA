@@ -21,7 +21,7 @@ LooseBenders::CutResult LooseBenders::computeCut(arma::vec const &x)
         sub.solve();
 
         auto const info = sub.gomInfo();
-        double const prob = d_problem.d_probabilities[scenario];
+        double const prob = d_problem.d_scenarioProbabilities[scenario];
 
         // Gomory is lambda^T (omega - alpha) + psi(omega - alpha), so we add
         // lambda^T alpha.

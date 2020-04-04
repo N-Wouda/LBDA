@@ -19,19 +19,17 @@ class Problem
     // useful to quickly update rhs of d_sub (heap allocated)
     GRBConstr *d_constrs;
 
-    // is d_sub initialized. (destructor will only call delete[] on d_constrs
-    // if yes)
-    bool d_sub_initialized;
+    bool d_isSubProblemInitialised;
 
-    size_t d_nFirstStageIntVars = 0;    // TODO make constant!
+    size_t d_nFirstStageIntVars = 0;  // TODO make constant!
     size_t d_nSecondStageIntVars = 0;
 
     arma::mat d_Amat;
     arma::mat d_Tmat;
     arma::mat d_Wmat;
 
-    // Each column in d_omegas correspond to a single scenario (omega).
-    arma::mat d_omegas;
+    // Each column corresponds to a single scenario (omega).
+    arma::mat d_scenarios;
 
     void initSub();  // initializes the subproblem, and sets rhs = 0. Called by
                      // evaluate() when evaluate is called for the first time.
@@ -43,22 +41,22 @@ public:
     double d_L;  // lb of Q - TODO do we need this?
 
     // number of >= and <= constraints in the first and second stage
-    size_t d_fs_leq;
-    size_t d_fs_geq;
+    size_t d_nFirstStageLeqConstraints;
+    size_t d_nFirstStageGeqConstraints;
 
-    size_t d_ss_leq;
-    size_t d_ss_geq;
+    size_t d_nSecondStageLeqConstraints;
+    size_t d_nSecondStageGeqConstraints;
 
-    arma::vec d_l1;
-    arma::vec d_u1;
-    arma::vec d_l2;
-    arma::vec d_u2;
+    arma::vec d_firstStageLowerBound;
+    arma::vec d_firstStageUpperBound;
+    arma::vec d_secondStageLowerBound;
+    arma::vec d_secondStageUpperBound;
 
-    arma::vec d_c;
-    arma::vec d_b;
-    arma::vec d_q;
+    arma::vec d_firstStageCoeffs;
+    arma::vec d_secondStageCoeffs;
 
-    arma::vec d_probabilities;
+    arma::vec d_scenarioProbabilities;
+    arma::vec d_firstStageRhs;
 
     Problem(Data &generator, GRBEnv &env);
 
@@ -106,7 +104,7 @@ inline size_t Problem::nSecondStageIntVars() const
 
 inline size_t Problem::nScenarios() const
 {
-    return d_omegas.n_cols;
+    return d_scenarios.n_cols;
 }
 
 inline bool Problem::isMixedIntegerProblem() const
@@ -138,7 +136,7 @@ inline arma::mat const &Problem::Tmat() const
 
 inline arma::mat const &Problem::scenarios() const
 {
-    return d_omegas;
+    return d_scenarios;
 }
 
 #endif

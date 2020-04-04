@@ -2,7 +2,8 @@
 
 MasterProblem::MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem) :
     d_problem(problem),
-    d_nSlacks(problem.d_fs_leq + problem.d_fs_geq)
+    d_nSlacks(problem.d_nFirstStageLeqConstraints
+              + problem.d_nFirstStageGeqConstraints)
 {
     auto &Amat = d_problem.Amat();
 
@@ -38,9 +39,9 @@ MasterProblem::MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem) :
                nullptr,
                nullptr,
                nullptr,
-               d_problem.d_c.memptr(),
-               d_problem.d_l1.memptr(),
-               d_problem.d_u1.memptr(),
+               d_problem.d_firstStageCoeffs.memptr(),
+               d_problem.d_firstStageLowerBound.memptr(),
+               d_problem.d_firstStageUpperBound.memptr(),
                vTypes,
                nullptr);
 
@@ -52,7 +53,7 @@ MasterProblem::MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem) :
                      cind.memptr(),
                      Amat.colptr(con),
                      GRB_EQUAL,
-                     d_problem.d_b(con),
+                     d_problem.d_firstStageRhs(con),
                      nullptr);
 
     // Add slack variables.
@@ -61,8 +62,8 @@ MasterProblem::MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem) :
                                                          d_nSlacks);
 
     arma::vec vval(d_nSlacks);
-    vval.head(d_problem.d_fs_leq).fill(1);
-    vval.tail(d_nSlacks - d_problem.d_fs_leq).fill(-1);
+    vval.head(d_problem.d_nFirstStageLeqConstraints).fill(1);
+    vval.tail(d_nSlacks - d_problem.d_nFirstStageLeqConstraints).fill(-1);
 
     GRBaddvars(d_cmodel,
                d_nSlacks,

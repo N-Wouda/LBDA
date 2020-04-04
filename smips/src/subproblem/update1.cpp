@@ -2,5 +2,8 @@
 
 void SubProblem::update(arma::vec &rhs)
 {
-    d_model.set(GRB_DoubleAttr_RHS, d_constrs, rhs.memptr(), d_problem.Wmat().n_cols);
+    d_model.set(GRB_DoubleAttr_RHS,
+                d_constrs,
+                rhs.memptr(),
+                d_problem.Wmat().n_cols);
 }

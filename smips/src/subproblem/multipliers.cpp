@@ -28,7 +28,7 @@ SubProblem::Multipliers const SubProblem::multipliers()
                 pi_u[var] = 0;
             else
                 // else: equal to the reduced costs
-                pi_u[var] = d_problem.d_q[var] - pi_u[var];
+                pi_u[var] = d_problem.d_secondStageCoeffs[var] - pi_u[var];
         }
 
         delete[] vbasis;

@@ -3,11 +3,11 @@
 double Problem::evaluate(arma::vec const &x)
 {
     // computing cx
-    double cx = arma::dot(d_c, x);
+    double cx = arma::dot(d_firstStageCoeffs, x);
     arma::vec Tx = d_Tmat * x;
 
     // computing Q(x)
-    if (not d_sub_initialized)
+    if (not d_isSubProblemInitialised)
         initSub();  // initialize subproblem, rhs = 0.0
 
     double Q = 0.0;
@@ -19,7 +19,8 @@ double Problem::evaluate(arma::vec const &x)
         d_sub.set(GRB_DoubleAttr_RHS, d_constrs, rhs.memptr(), d_Wmat.n_cols);
         d_sub.optimize();
 
-        Q += d_probabilities[scenario] * d_sub.get(GRB_DoubleAttr_ObjVal);
+        Q += d_scenarioProbabilities[scenario]
+             * d_sub.get(GRB_DoubleAttr_ObjVal);
     }
 
     return cx + Q;

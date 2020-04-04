@@ -13,8 +13,8 @@ StrongBenders::StrongBenders(GRBEnv &env, Problem const &problem) :
                 Amat.n_rows - problem.nFirstStageIntVars(),
                 GRB_CONTINUOUS);
 
-    d_z_vars = d_model.addVars(problem.d_l1.memptr(),
-                               problem.d_u1.memptr(),
+    d_z_vars = d_model.addVars(problem.d_firstStageLowerBound.memptr(),
+                               problem.d_firstStageUpperBound.memptr(),
                                nullptr,
                                zTypes,
                                nullptr,
@@ -33,15 +33,15 @@ StrongBenders::StrongBenders(GRBEnv &env, Problem const &problem) :
                 Wmat.n_rows - problem.nSecondStageIntVars(),
                 GRB_CONTINUOUS);
 
-    GRBVar *y_vars = d_model.addVars(problem.d_l2.memptr(),
-                                     problem.d_u2.memptr(),
-                                     problem.d_q.memptr(),
+    GRBVar *y_vars = d_model.addVars(problem.d_secondStageLowerBound.memptr(),
+                                     problem.d_secondStageUpperBound.memptr(),
+                                     problem.d_secondStageCoeffs.memptr(),
                                      yTypes,
                                      nullptr,
                                      Wmat.n_rows);
 
-    size_t ss_leq = problem.d_ss_leq;
-    size_t ss_geq = problem.d_ss_geq;
+    size_t ss_leq = problem.d_nSecondStageLeqConstraints;
+    size_t ss_geq = problem.d_nSecondStageGeqConstraints;
 
     // constraint senses
     char senses[Tmat.n_cols];

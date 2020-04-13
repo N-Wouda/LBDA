@@ -35,7 +35,11 @@ SubProblem::Multipliers const SubProblem::multipliers()
     }
 
     auto const *lambda = d_model.get(GRB_DoubleAttr_Pi, d_constrs, Wmat.n_cols);
+    auto const multipliers = Multipliers{arma::vec{lambda, Wmat.n_cols},
+                                         arma::vec{pi_u, Wmat.n_rows}};
 
-    return Multipliers{arma::vec{lambda, Wmat.n_cols},
-                       arma::vec{pi_u, Wmat.n_rows}};
+    delete[] lambda;
+    delete[] pi_u;
+
+    return multipliers;
 }

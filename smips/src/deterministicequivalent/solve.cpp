@@ -25,8 +25,10 @@ std::unique_ptr<arma::vec> DeterministicEquivalent::solve(double time_limit)
     d_runTime = d_model.get(GRB_DoubleAttr_Runtime);
 
     auto const &Amat = d_problem.Amat();
+    auto const *xPtr = d_model.get(GRB_DoubleAttr_X, d_xVars, Amat.n_rows);
 
-    arma::vec xVals(d_model.get(GRB_DoubleAttr_X, d_xVars, Amat.n_rows),
-                    Amat.n_rows);
-    return std::make_unique<arma::vec>(xVals);
+    auto result = std::make_unique<arma::vec>(xPtr, Amat.n_rows);
+    delete[] xPtr;
+
+    return result;
 }

@@ -4,6 +4,7 @@
 
 int main()
 {
+    // TODO check all output numbers (verification).
     Data rand(31415);
 
     GRBEnv env;
@@ -24,37 +25,37 @@ int main()
 
     std::cout << res;
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
+    assert(std::abs(problem.evaluate(res)) - 50.814 <= 0.001);
 
     MasterProblem master{env, c_env, problem};
 
-    Benders lshaped(master);
     LpDual lpCut{env, problem};
-    ptr = lshaped.solve(lpCut);
+    ptr = solve(master, lpCut);
     res = *ptr;
 
     std::cout << res;
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
-    assert(problem.evaluate(res) + 50.814 <= 0.001);
+    assert(std::abs(problem.evaluate(res)) - 59.8893 <= 0.001);
 
     arma::vec alpha = arma::zeros(problem.Tmat().n_cols);
 
-    Benders lbda = lshaped;
     LooseBenders lbdaCut{env, problem, alpha, 1.0};
-    ptr = lbda.solve(lbdaCut);
+    auto master2 = MasterProblem(master);
+    ptr = solve(master2, lbdaCut);
     res = *ptr;
 
     std::cout << res;
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
-    assert(problem.evaluate(res) + 59.8893 <= 0.001);
+    assert(std::abs(problem.evaluate(res)) - 60.9787 <= 0.001);
 
-    Benders sb = lshaped;
     StrongBenders sbCut{env, problem};
-    ptr = sb.solve(sbCut);
+    auto master3 = MasterProblem(master);
+    ptr = solve(master3, sbCut);
     res = *ptr;
 
     std::cout << res;
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
-    assert(problem.evaluate(res) + 59.8893 <= 0.001);
+    assert(std::abs(problem.evaluate(res)) - 59.8893 <= 0.001);
 
     GRBfreeenv(c_env);
 }

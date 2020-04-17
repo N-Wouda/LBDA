@@ -38,7 +38,7 @@ class Problem
 
 public:
     // TODO make these members private
-    double d_L;  // lb of Q - TODO do we need this?
+    double d_L;  // lb of Q
 
     // number of >= and <= constraints in the first and second stage
     size_t d_nFirstStageLeqConstraints;
@@ -80,8 +80,6 @@ public:
 
     [[nodiscard]] size_t nScenarios() const;
 
-    [[nodiscard]] bool isMixedIntegerProblem() const;
-
     [[nodiscard]] arma::mat const &Amat() const;
     [[nodiscard]] arma::mat &Amat();
 
@@ -106,13 +104,6 @@ inline size_t Problem::nScenarios() const
 {
     return d_scenarios.n_cols;
 }
-
-inline bool Problem::isMixedIntegerProblem() const
-{
-    // TODO should this not be or? Either makes the problem an integer problem,
-    // right?
-    return nFirstStageIntVars() != 0 and nSecondStageIntVars() != 0;
-};
 
 inline arma::mat const &Problem::Amat() const
 {

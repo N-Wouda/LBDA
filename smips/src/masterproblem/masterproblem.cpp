@@ -1,6 +1,6 @@
 #include "masterproblem.h"
 
-MasterProblem::MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem) :
+MasterProblem::MasterProblem(GRBenv *c_env, Problem &problem) :
     d_problem(problem),
     d_nSlacks(problem.d_nFirstStageLeqConstraints
               + problem.d_nFirstStageGeqConstraints)

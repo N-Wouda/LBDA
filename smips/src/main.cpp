@@ -27,7 +27,7 @@ int main()
     std::cout << "\ncx + Q(x) = " << problem.evaluate(res) << '\n';
     assert(std::abs(problem.evaluate(res)) - 50.814 <= 0.001);
 
-    MasterProblem master{env, c_env, problem};
+    MasterProblem master{c_env, problem};
 
     LpDual lpCut{env, problem};
     ptr = solve(master, lpCut);

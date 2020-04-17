@@ -1,7 +1,7 @@
 #ifndef MASTERPROBLEM_H
 #define MASTERPROBLEM_H
 
-#include "cuts/cut.h"
+#include "decompositions/decomposition.h"
 #include "problem.h"
 
 #include <armadillo>
@@ -11,26 +11,21 @@
 
 class MasterProblem
 {
-    // Reference to the problem instance. This cannot be const, as Gurobi's API
-    // expects non-const pointers to data.
+    /**
+     * Reference to the problem instance. Cannot be declared const, as
+     * Gurobi expects non-const pointers to some of the Problem data.
+     */
     Problem &d_problem;
 
-    // TODO is this useful?
-    // GRBVar *d_xVars;
-    // GRBVar d_theta;
-    // GRBModel d_model;
+    /**
+     * Pointer to the Gurobi (C) model. The C API gives access to advanced
+     * simplex routines. TODO do we need these?
+     */
     GRBmodel *d_cmodel;
 
-    // internal storage: only valid for regular l-shaped and lbda cuts
-    std::vector<std::vector<double>> d_xCoeffs;
-    std::vector<double> d_cuts;
-
-    // slack variable identities slack = kappa * theta - beta * x - gamma
-    // TODO is this useful?
-    // std::vector<double> d_kappa;
-    // std::vector<std::vector<double>> d_beta;
-    // std::vector<double> d_gamma;
-
+    /**
+     * Number of slack variables in the Gurobi model instance.
+     */
     size_t d_nSlacks;
 
 public:
@@ -40,28 +35,29 @@ public:
         double theta;
     };
 
-    MasterProblem(GRBEnv &env, GRBenv *c_env, Problem &problem);
+    MasterProblem(GRBenv *c_env, Problem &problem);
 
     MasterProblem(MasterProblem const &other);
 
     ~MasterProblem();
 
     /**
-     * Determines if the proposed cut is violated by the current solution.
+     * Determines if the proposed decomposition is violated by the current solution.
      */
-    static bool isValidCut(Cut::CutResult const &cutResult,
+    static bool isValidCut(Decomposition::Cut const &cut,
                            MasterProblem::Solution const &sol,
                            double tol);
 
     /**
-     * Adds cut <code>theta >= beta^T x + gamma</code>.
+     * Adds decomposition <code>theta >= beta^T x + gamma</code>.
      */
-    void addCut(Cut::CutResult &cutResult);
+    void addCut(Decomposition::Cut &cut);
 
-    [[nodiscard]] std::vector<double> const &cuts() const;
-
-    [[nodiscard]] std::vector<std::vector<double>> const &xCoeffs() const;
-
+    /**
+     * Solves the current instance of the master problem. This method returns
+     * the first-stage decisions (x), and an estimate for the expected second-
+     * stage costs (Q(x); theta).
+     */
     Solution const solve();
 };
 

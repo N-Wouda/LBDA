@@ -1,11 +1,10 @@
 #include "masterproblem.h"
 
-void MasterProblem::addCut(Cut::CutResult &cutResult)
+void MasterProblem::addCut(Decomposition::Cut &cut)
 {
     ++d_nSlacks;
 
-    // slack
-    GRBaddvar(d_cmodel,
+    GRBaddvar(d_cmodel,  // new slack variable
               0,
               nullptr,
               nullptr,
@@ -17,35 +16,19 @@ void MasterProblem::addCut(Cut::CutResult &cutResult)
 
     size_t const n1 = d_problem.Amat().n_rows;
 
-    // slack variable index (there are n1 + 1 + nSlacks variables in the
-    // Gurobi model)
-    size_t slackIdx = n1 + d_nSlacks;
+    auto cind = arma::regspace<arma::Col<int>>(0, n1 + 2);
+    cind[n1 + 1] = n1 + d_nSlacks;  // refers to the new slack variable.
 
-    int cind[n1 + 2];
-    std::iota(cind, cind + n1 + 1, 0);
-
-    // refers to the last variable (i.e. the slack)
-    cind[n1 + 1] = slackIdx;
-    double cval[n1 + 1];
-
-    for (size_t var = 0; var != n1; ++var)
-        cval[var + 1] = -cutResult.beta[var];
-
-    cval[0] = 1;
+    arma::vec cval(n1 + 2);
+    cval.subvec(1, n1) = -cut.beta;
+    cval[0] = 1;        // TODO magic numbers
     cval[n1 + 1] = -1;  // >= constraint, so slack features with -1
 
     GRBaddconstr(d_cmodel,
                  n1 + 2,
-                 cind,
-                 cval,
+                 cind.memptr(),
+                 cval.memptr(),
                  GRB_EQUAL,
-                 cutResult.gamma,
+                 cut.gamma,
                  nullptr);
-
-    // add cut to internal storage of master
-    // TODO place cuts, not these.
-    d_xCoeffs.emplace_back(cutResult.beta.memptr(),
-                           cutResult.beta.memptr() + n1);
-
-    d_cuts.emplace_back(cutResult.gamma);
 }

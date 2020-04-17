@@ -1,15 +1,17 @@
 #include "solve.h"
 
 
-std::unique_ptr<arma::vec> solve(MasterProblem &master, Cut &cut, double tol)
+std::unique_ptr<arma::vec> solve(MasterProblem &master,
+                                 Decomposition &decomposition,
+                                 double tol)
 {
     while (true)
     {
         auto sol = master.solve();
-        auto cutResult = cut.computeCut(*sol.x);
+        auto cut = decomposition.computeCut(*sol.x);
 
-        if (MasterProblem::isValidCut(cutResult, sol, tol))
-            master.addCut(cutResult);
+        if (MasterProblem::isValidCut(cut, sol, tol))
+            master.addCut(cut);
         else
             return std::move(sol.x);
     }

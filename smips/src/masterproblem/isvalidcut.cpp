@@ -1,10 +1,9 @@
 #include "masterproblem.h"
 
 
-bool MasterProblem::isValidCut(Cut::CutResult const &cutResult,
+bool MasterProblem::isValidCut(Decomposition::Cut const &cut,
                                MasterProblem::Solution const &sol,
                                double tol)
 {
-    return cutResult.gamma + arma::dot(*sol.x, cutResult.beta)
-           >= sol.theta + tol;
+    return cut.gamma + arma::dot(*sol.x, cut.beta) >= sol.theta + tol;
 }

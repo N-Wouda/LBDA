@@ -14,7 +14,7 @@ SubProblem::Multipliers const SubProblem::multipliers()
     if (d_model.get(GRB_IntAttr_Status) != GRB_INFEASIBLE)
     {
         auto *vBasisPtr = d_model.get(GRB_IntAttr_VBasis, d_vars, Wmat.n_rows);
-        auto vBasis = arma::Col<int>(vBasisPtr, Wmat.n_rows);
+        auto const vBasis = arma::Col<int>(vBasisPtr, Wmat.n_rows);
 
         // SAObjUp is the largest objective value for which the current basis
         // remains optimal.

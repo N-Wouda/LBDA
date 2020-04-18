@@ -4,7 +4,6 @@ find_package(Gurobi REQUIRED)
 include_directories(${GUROBI_INCLUDE_DIRS})
 
 add_subdirectory(decompositions)
-add_subdirectory(data)
 add_subdirectory(deterministicequivalent)
 add_subdirectory(masterproblem)
 add_subdirectory(problem)
@@ -16,5 +15,4 @@ target_link_libraries(smips
 		deterministicequivalent
 		problem
 		master
-		data
 		${GUROBI_LIBRARIES})

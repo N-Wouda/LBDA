@@ -1,9 +1,9 @@
 #include "deterministicequivalent.h"
 
 
-std::unique_ptr<arma::vec> DeterministicEquivalent::solve(double time_limit)
+std::unique_ptr<arma::vec> DeterministicEquivalent::solve(double timeLimit)
 {
-    d_model.set(GRB_DoubleParam_TimeLimit, time_limit);
+    d_model.set(GRB_DoubleParam_TimeLimit, timeLimit);
     d_model.optimize();
 
     int status = d_model.get(GRB_IntAttr_Status);

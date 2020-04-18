@@ -4,18 +4,15 @@ void LooseBenders::update(arma::vec &rhs,
                           arma::Col<int> const &vBasis,
                           arma::Col<int> const &cBasis)
 {
-    // TODO clean this up
-    // <= constraints - relax if the constraint is non-binding.
-    for (size_t con = 0; con != d_problem.d_nSecondStageLeqConstraints; ++con)
-        if (cBasis[con] == GRB_BASIC)
-            rhs[con] = arma::datum::inf;
+    size_t const ss_leq = d_problem.d_nSecondStageLeqConstraints;
+    size_t const ss_geq = d_problem.d_nSecondStageGeqConstraints;
 
+    // Relax <= and >= constraints if they are non-binding.
+    rhs(arma::find(cBasis.head(ss_leq) == GRB_BASIC)).fill(arma::datum::inf);
+
+    // TODO clean this up
     // >= constraints
-    for (size_t con = d_problem.d_nSecondStageLeqConstraints;
-         con
-         != d_problem.d_nSecondStageLeqConstraints
-                + d_problem.d_nSecondStageGeqConstraints;
-         ++con)
+    for (size_t con = ss_leq; con != ss_leq + ss_geq; ++con)
         if (cBasis[con] == GRB_BASIC)
             rhs[con] = -arma::datum::inf;
 

@@ -1,7 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include "data.h"
 #include "decompositions/loosebenders.h"
 #include "decompositions/lpdual.h"
 #include "decompositions/strongbenders.h"

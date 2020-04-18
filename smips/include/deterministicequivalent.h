@@ -31,7 +31,7 @@ public:
 
     ~DeterministicEquivalent();
 
-    std::unique_ptr<arma::vec> solve(double time_limit = 1e20);
+    std::unique_ptr<arma::vec> solve(double timeLimit = 1e20);
 };
 
 #endif

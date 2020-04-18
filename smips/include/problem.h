@@ -1,8 +1,6 @@
 #ifndef PROBLEM_H
 #define PROBLEM_H
 
-#include "data.h"
-
 #include <armadillo>
 #include <gurobi_c++.h>
 #include <iosfwd>
@@ -10,16 +8,14 @@
 
 class Problem
 {
-    Data d_gen;  // used to generate (random) data
-
-    // TODO this is not the place - should move to the actual solver stuff.
+    // TODO this is not the place - should move to the actual solver stuff?
     GRBModel d_sub;  // subproblem, used for evaluation of cx + Q(x) (more
                      // precisely, of v(omega, x)).
 
     // useful to quickly update rhs of d_sub (heap allocated)
     GRBConstr *d_constrs;
 
-    bool d_isSubProblemInitialised;
+    bool d_isSubProblemInitialised = false;
 
     size_t d_nFirstStageIntVars = 0;  // TODO make constant!
     size_t d_nSecondStageIntVars = 0;
@@ -38,7 +34,7 @@ class Problem
 
 public:
     // TODO make these members private
-    double d_L;  // lb of Q
+    double d_L = 0;  // lb of Q - TODO is this a sensible default?
 
     // number of >= and <= constraints in the first and second stage
     size_t d_nFirstStageLeqConstraints;
@@ -58,7 +54,7 @@ public:
     arma::vec d_scenarioProbabilities;
     arma::vec d_firstStageRhs;
 
-    Problem(Data &generator, GRBEnv &env);
+    Problem(GRBEnv &env);
 
     Problem(const Problem &other) = delete;
 

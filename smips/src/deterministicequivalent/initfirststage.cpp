@@ -2,6 +2,7 @@
 
 void DeterministicEquivalent::initFirstStage()
 {
+    // TODO clean this up
     auto const &Amat = d_problem.Amat();
 
     // variables

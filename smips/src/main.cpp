@@ -5,8 +5,6 @@
 int main(int argc, char **argv)
 {
     // TODO check all output numbers (verification).
-    Data rand(31415);
-
     GRBEnv env;
     env.set(GRB_IntParam_OutputFlag, 0);
     env.set(GRB_IntParam_Threads, 1);
@@ -16,7 +14,7 @@ int main(int argc, char **argv)
     GRBsetintparam(c_env, "OutputFlag", 0);
     GRBsetintparam(c_env, "Threads", 1);
 
-    Problem problem(rand, env);
+    Problem problem(env);
     problem.ssv95(11, true, true, true);
 
     DeterministicEquivalent detEqv(env, problem);

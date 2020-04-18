@@ -8,7 +8,6 @@ add_subdirectory(data)
 add_subdirectory(deterministicequivalent)
 add_subdirectory(masterproblem)
 add_subdirectory(problem)
-add_subdirectory(solve)
 add_subdirectory(subproblem)
 
 add_executable(smips main.cpp)
@@ -16,6 +15,6 @@ target_link_libraries(smips
         decompositions
 		deterministicequivalent
 		problem
-		solve
+		master
 		data
 		${GUROBI_LIBRARIES})

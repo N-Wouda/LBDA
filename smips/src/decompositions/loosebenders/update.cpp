@@ -4,9 +4,10 @@ void LooseBenders::update(arma::vec &rhs,
                           arma::Col<int> const &vBasis,
                           arma::Col<int> const &cBasis)
 {
+    // TODO clean this up
     // <= constraints - relax if the constraint is non-binding.
     for (size_t con = 0; con != d_problem.d_nSecondStageLeqConstraints; ++con)
-        if (cBasis[con] == 0)  // TODO magic number
+        if (cBasis[con] == GRB_BASIC)
             rhs[con] = arma::datum::inf;
 
     // >= constraints
@@ -15,7 +16,7 @@ void LooseBenders::update(arma::vec &rhs,
          != d_problem.d_nSecondStageLeqConstraints
                 + d_problem.d_nSecondStageGeqConstraints;
          ++con)
-        if (cBasis[con] == 0)  // TODO magic number
+        if (cBasis[con] == GRB_BASIC)
             rhs[con] = -arma::datum::inf;
 
     auto const &Wmat = d_problem.Wmat();
@@ -26,9 +27,8 @@ void LooseBenders::update(arma::vec &rhs,
     arma::vec ub = d_problem.d_secondStageUpperBound;
 
     // Relax appropriate variable bounds if the bound is not tight.
-    // TODO magic numbers.
-    lb.elem(arma::find(vBasis != -1)).fill(-arma::datum::inf);
-    ub.elem(arma::find(vBasis != -2)).fill(arma::datum::inf);
+    lb.elem(arma::find(vBasis != GRB_NONBASIC_LOWER)).fill(-arma::datum::inf);
+    ub.elem(arma::find(vBasis != GRB_NONBASIC_UPPER)).fill(arma::datum::inf);
 
     d_model.set(GRB_DoubleAttr_LB, d_vars, lb.memptr(), Wmat.n_rows);
     d_model.set(GRB_DoubleAttr_UB, d_vars, ub.memptr(), Wmat.n_rows);

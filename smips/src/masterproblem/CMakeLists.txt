@@ -4,7 +4,6 @@ set(SOURCES
 		addcut.cpp
 		copyconstructor.cpp
         destructor.cpp
-		isvalidcut.cpp
 		masterproblem.cpp
 		solve.cpp
         )

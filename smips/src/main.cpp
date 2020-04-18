@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-int main()
+int main(int argc, char **argv)
 {
     // TODO check all output numbers (verification).
     Data rand(31415);
@@ -30,7 +30,7 @@ int main()
     MasterProblem master{c_env, problem};
 
     LpDual lpCut{env, problem};
-    ptr = solve(master, lpCut);
+    ptr = master.solve(lpCut);
     res = *ptr;
 
     std::cout << res;
@@ -41,7 +41,7 @@ int main()
 
     LooseBenders lbdaCut{env, problem, alpha, 1.0};
     auto master2 = MasterProblem(master);
-    ptr = solve(master2, lbdaCut);
+    ptr = master2.solve(lbdaCut);
     res = *ptr;
 
     std::cout << res;
@@ -50,7 +50,7 @@ int main()
 
     StrongBenders sbCut{env, problem};
     auto master3 = MasterProblem(master);
-    ptr = solve(master3, sbCut);
+    ptr = master3.solve(sbCut);
     res = *ptr;
 
     std::cout << res;

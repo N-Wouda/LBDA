@@ -21,7 +21,7 @@ void MasterProblem::addCut(Decomposition::Cut &cut)
 
     arma::vec cval(n1 + 2);
     cval.subvec(1, n1) = -cut.beta;
-    cval[0] = 1;        // TODO magic numbers
+    cval[0] = 1;        // TODO magic numbers (maybe?)
     cval[n1 + 1] = -1;  // >= constraint, so slack features with -1
 
     GRBaddconstr(d_cmodel,
